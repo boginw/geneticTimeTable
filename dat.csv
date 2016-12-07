@@ -1,0 +1,25 @@
+### SUBJECTS ###
+# Format: Navn, antal timer for første klasse trin, timer for næste, tredje, ... niente
+Math,100,200,300,400,500,600,700,800,900
+Geography,100,200,300,400,500,600,700,800,900
+Biology,100,200,300,400,500,600,700,800,900
+Physics/Chemics,100,200,300,400,500,600,700,800,900
+Danish,100,200,300,400,500,600,700,800,900
+English,100,200,300,400,500,600,700,800,900
+Christianity,100,200,300,400,500,600,700,800,900
+History,100,200,300,400,500,600,700,800,900
+German,100,200,300,400,500,600,700,800,900
+French,100,200,300,400,500,600,700,800,900
+Social Studies,100,200,300,400,500,600,700,800,900
+Sports,100,200,300,400,500,600,700,800,900
+Music,100,200,300,400,500,600,700,800,900
+Visual Arts,100,200,300,400,500,600,700,800,900
+Design,100,200,300,400,500,600,700,800,900
+### TEACHER ###
+# Format: Navn, er klasseleder, hvis ja så for hvilken klasse, liste over de fag læreren må undervise i, hvor mange timer læreren max må undervise i om ugen
+Verner Frank,0,0,[Math;Geography;Biology;Physics/Chemics;Danish;English;Christianity;History;German;French;Social Studies;Sports;Music;Visual Arts;Design],-1
+Verner Frank,1,5,[Math;Geography;Biology],-1
+Finn Storm,0,0,[Physics/Chemics;Danish;English;Christianity],5
+Thorbjorn Toft,1,8,[History;German;French],5
+Johan Rohde,0,0,[Social Studies;Sports;Music;Visual Arts;Design],5
+Sofus Eskildsen,1,2,[Danish;English;Christianity;History],8
