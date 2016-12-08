@@ -192,6 +192,18 @@ class *findClass(char *className, class classes[MAX_CLASSES], int classCount){
     return NULL;
 }
 
+teacher *findTeacher(char *teacherName, teacher teachers[MAX_TEACHERS], int teacherCount){
+    int i;
+    for (i = 0; i < teacherCount; i++){
+
+        if(strcmp(teacherName, teachers[i].name) == 0){
+            return &teachers[i];
+        }
+    }
+
+    return NULL;
+}
+
 int findRoomsFromString(char *roomString, room* roomsFound[MAX_ROOMS], room* rooms, int roomCount){
     int len = strlen(roomString);
     int i;
