@@ -69,6 +69,7 @@ typedef struct lecture{
 } lecture;
 
 #include "fileParse.c"
+#include "lectureControl.c"
 
 int generateAllCombinations(void *items, size_t size, int sizeOfVariable, void **finalItems);
 void swapn(void *a, void *b, size_t n);
@@ -87,7 +88,7 @@ int main(int argc, char const *argv[]){
 
 	subject subjects[MAX_SUBJECTS];
 	int subjectCount = 0;
-	
+
 	class classes[MAX_CLASSES];
 	int classCount = 0;
 
@@ -152,7 +153,13 @@ int main(int argc, char const *argv[]){
     	   "----------------------------------------------------------------\n");
     for (i = 0; i < 20; i++){
 	    r_lecture = randomLecture(rooms,roomCount,subjects,subjectCount, classes,classCount,teachers,teacherCount);
-	    printLecture(r_lecture);
+	    if(checkLecture(r_lecture)){
+	    	/*accept state*/
+	    	printLecture(r_lecture);
+		  }else{
+		  	/*reject state*/
+		  	printf("Lecture rejected !\n");
+		  }
     }
 
     printf("----------------------------------------------------------------\n");
@@ -166,10 +173,10 @@ int main(int argc, char const *argv[]){
  * @param l lecture to print
  */
 void printLecture(lecture l){
-	printf("| %-7s | %-16s | %-25s | %3s |\n", 
-		l.l_room->name, 
-		l.l_subject->name, 
-		l.l_teacher->name, 
+	printf("| %-7s | %-16s | %-25s | %3s |\n",
+		l.l_room->name,
+		l.l_subject->name,
+		l.l_teacher->name,
 		l.l_class->name
 	);
 }
@@ -220,13 +227,13 @@ int randomNumber(int min, int max){
 		for (i = 0; i < size-1; i++){
 			swapn(
 				&(tempItems[i*sizeOfVariable]),
-				&(tempItems[(i+1)*sizeOfVariable]), 
+				&(tempItems[(i+1)*sizeOfVariable]),
 				sizeOfVariable
 			);
 
 			memcpy(
-				&(allCombinations[(k++)*size*sizeOfVariable]), 
-				tempItems, 
+				&(allCombinations[(k++)*size*sizeOfVariable]),
+				tempItems,
 				sizeOfVariable*size
 			);
 		}
