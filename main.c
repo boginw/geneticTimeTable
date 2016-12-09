@@ -110,7 +110,7 @@ int main(int argc, char const *argv[]){
 		}
 	}
 
-	srand(time(NULL));
+	srand(time(NULL) * 100);
 
 	init(rooms,&roomCount,subjects,&subjectCount, classes,&classCount,teachers,&teacherCount);
 
@@ -144,7 +144,7 @@ int main(int argc, char const *argv[]){
 
 	    printf("\nSubjects:\n");
 	    for (i = 0; i < subjectCount; i++){
-	    	printf("%2d => %15s, roomRequire: %s\n", i+1, subjects[i].name, (subjects[i].roomRequireLength != 0 ? subjects[i].roomRequire[0]->name : "*"));
+	    	printf("%2d => %17s, roomRequire: %s\n", i+1, subjects[i].name, (subjects[i].roomRequireLength != 0 ? subjects[i].roomRequire[0]->name : "*"));
 	    }
 
 	    printf("\nTeachers:\n");
@@ -171,6 +171,7 @@ int main(int argc, char const *argv[]){
     	   "---------------------------------------------------------------------------------\n");
     for (i = 0; i < 20; i++){
 	    r_lecture = randomLecture(rooms,roomCount,subjects,subjectCount, classes,classCount,teachers,teacherCount);
+
 	    if(checkLecture(r_lecture)){
 	    	/*accept state*/
 	    	printLecture(r_lecture);
@@ -233,14 +234,16 @@ lecture randomLecture(room *rooms, int roomCount, subject *subjects, int subject
 		r_lecture.l_room = &rooms[randomNumber(0,roomCount-1)];
 	}
 
-
-	while(r_lecture.l_teacher = &teachers[randomNumber(1,teacherCount)-1]){
-		for (i = 0; i < r_lecture.l_teacher->canTeachLength; i++){
+	while((r_lecture.l_teacher = &teachers[randomNumber(1,teacherCount)-1])){
+		/*printf("%-17s %s\n", r_lecture.l_subject->name, r_lecture.l_teacher->name);*/
+		for(i = 0; i < r_lecture.l_teacher->canTeachLength; i++){
 			if(strcmp(r_lecture.l_teacher->canTeach[i]->name, r_lecture.l_subject->name) == 0){
 				shouldBreak = 1;
 				break;
 			}
 		}
+
+		/*sleep(1);*/
 		if(shouldBreak){
 			shouldBreak = 0;
 			break;

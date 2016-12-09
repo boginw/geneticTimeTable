@@ -53,7 +53,7 @@ Design,[],1,0,0,0,90,120,120,60,0,0
 ### TEACHER ###
 # Format: Navn, er klasseleder, hvis ja så for hvilken klasse, liste over de fag læreren må undervise i, hvor mange timer læreren max må undervise i om ugen
 Verner Frank,1,1A,[Math;Geography;Biology;Social Studies],-1
-Finn Storm,0,0,[Physics/Chemics;Danish;English;Christianity],5
-Thorbjorn Toft,1,2B,[History;German;French,Visual Arts],5
+Finn Storm,0,0,[Physics/Chemistry;Danish;English;Christianity],5
+Thorbjorn Toft,1,2B,[History;German;French;Visual Arts],5
 Johan Rohde,1,2A,[French;Math;Sports;Music;Visual Arts;Design],5
 Sofus Eskildsen,1,1B,[Danish;English;Christianity;History],8
