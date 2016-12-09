@@ -4,7 +4,7 @@
 #	newlines are ignored
 #	all values are seperated by ,
 #	arrays can be creates by encapsulating them in []
-#	inside an array values are seperated by ;	
+#	inside an array values are seperated by ;
 #
 # CURRENT ORDERING REQUIREMENTS
 #	* ROOM
@@ -33,22 +33,22 @@ Room 6
 
 
 ### SUBJECT ###
-# Format: Navn, hvis der er krav for et specifikt rum, antal timer for første klasse trin, timer for næste, tredje, ... niente
-Math,[],100,200,300,400,500,600,700,800,900,1000,1100
-Geography,[],100,200,300,400,500,600,700,800,900,1000,1100
-Biology,[],100,200,300,400,500,600,700,800,900,1000,1100
-Physics/Chemics,[Room 6],100,200,300,400,500,600,700,800,900,1000,1100
-Danish,[],100,200,300,400,500,600,700,800,900,1000,1100
-English,[],100,200,300,400,500,600,700,800,900,1000,1100
-Christianity,[],100,200,300,400,500,600,700,800,900,1000,1100
-History,[],100,200,300,400,500,600,700,800,900,1000,1100
-German,[],100,200,300,400,500,600,700,800,900,1000,1100
-French,[],100,200,300,400,500,600,700,800,900,1000,1100
-Social Studies,[],100,200,300,400,500,600,700,800,900,1000,1100
-Sports,[],100,200,300,400,500,600,700,800,900,1000,1100
-Music,[],100,200,300,400,500,600,700,800,900,1000,1100
-Visual,[] Arts,100,200,300,400,500,600,700,800,900,1000,1100
-Design,[],100,200,300,400,500,600,700,800,900,1000,1100
+# Format: Navn, hvis der er krav for et specifikt rum, antal timer for bh., første klasse trin, timer for næste, tredje, ... niente
+Math,[],0,150,150,150,150,150,150,150,150,150
+Geography,[],0,0,0,0,0,0,0,60,30,30
+Biology,[],0,0,0,0,0,0,0,60,60,30
+Physics/Chemistry,[Room 6],0,0,0,0,0,0,0,60,60,90
+Danish,[],0,330,300,270,210,210,210,210,210,210
+English,[],0,30,30,60,60,90,90,90,90,90
+Christianity,[],0,60,30,30,30,30,60,0,30,30
+History,[],0,0,0,30,60,60,60,60,60,30
+German,[],0,0,0,0,0,30,60,90,90,90
+French,[],0,0,0,0,0,30,60,90,90,90
+Social Studies,[],0,0,0,0,0,0,0,0,60,60
+Sports,[],0,60,60,60,90,90,90,60,60,60
+Music,[],0,60,60,60,60,60,30,0,0,0
+Visual,[] Arts,0,30,60,60,60,30,0,0,0,0
+Design,[],0,0,0,0,90,120,120,60,0,0
 
 
 ### TEACHER ###
