@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <unistd.h>
 
 #define MAX_NAME_LENGTH   255
 #define MAX_YEAR           10
@@ -13,6 +14,7 @@
 
 #define SCHOOL_DAYS_YEAR  190
 #define WEEK_LENGTH         5
+#define MAX_LECTURES       10
 #define MUTATION_CHANCE     1
 
 /**
@@ -53,11 +55,8 @@ typedef struct teacher{
 } teacher;
 
 typedef struct datetime{
-	int day;
-	int month;
-	int year;
+	int dayOfWeek;
 	int hour;
-	int minute;
 } datetime;
 
 typedef struct lecture{
@@ -95,9 +94,20 @@ int main(int argc, char const *argv[]){
 	int teacherCount = 0;
 
 	int i;
+	int j;
+
+	char *requirements;
+
 
 	lecture r_lecture;
 	/* VARIABLES END */
+	requirements = calloc(5 * 20, sizeof(char));
+
+	if(argc > 1){
+		if(strcmp(argv[1],"--debug") == 0){
+			debug = 1;
+		}
+	}
 
 	srand(time(NULL));
 
@@ -138,7 +148,15 @@ int main(int argc, char const *argv[]){
 
 	    printf("\nTeachers:\n");
 	    for (i = 0; i < teacherCount; i++){
-	    	printf("%2d => %15s, isClassleader: %s\n", i+1, teachers[i].name, (teachers[i].isClassleader ? teachers[i].leaderOfClass->name : "no"));
+			strcpy(requirements, "");
+			for (j = 0; j < teachers[i].canTeachLength; j++){
+				if(j!=0)
+					strcat(requirements,", ");
+				
+				strcat(requirements,teachers[i].canTeach[j]->name);
+			}
+
+	    	printf("%2d => %15s, isClassleader: %s, %s\n", i+1, teachers[i].name, (teachers[i].isClassleader ? teachers[i].leaderOfClass->name : "no"), requirements);
 	    }
     }
 
@@ -148,15 +166,17 @@ int main(int argc, char const *argv[]){
 	}*/
 
 
-    printf("                         Random lectures:\n"
-    	   "----------------------------------------------------------------\n");
+    printf("\n                                  Random lectures:\n"
+    	   "---------------------------------------------------------------------------------\n");
     for (i = 0; i < 20; i++){
 	    r_lecture = randomLecture(rooms,roomCount,subjects,subjectCount, classes,classCount,teachers,teacherCount);
 	    printLecture(r_lecture);
     }
 
-    printf("----------------------------------------------------------------\n");
+    printf("---------------------------------------------------------------------------------\n");
 
+
+    free(requirements);
 	return 0;
 }
 
@@ -166,22 +186,59 @@ int main(int argc, char const *argv[]){
  * @param l lecture to print
  */
 void printLecture(lecture l){
-	printf("| %-7s | %-16s | %-25s | %3s |\n", 
+	char *requirements = calloc((l.l_subject->roomRequireLength) * 7, sizeof(char));
+	int i;
+	for (i = 0; i < l.l_subject->roomRequireLength; i++){
+		if(i!=0)
+			strcat(requirements,", ");
+		strcat(requirements,l.l_subject->roomRequire[i]->name);
+	}
+
+	printf("| %-7s | %-16s | %-25s | %3s | %-14s |\n", 
 		l.l_room->name, 
 		l.l_subject->name, 
 		l.l_teacher->name, 
-		l.l_class->name
+		l.l_class->name,
+		(l.l_subject->roomRequireLength != 0 ? requirements : "*")
 	);
+
+	free(requirements);
 }
 
 
 lecture randomLecture(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+	int i;
+	int year;
+	int shouldBreak = 0;
 	lecture r_lecture;
 
-	r_lecture.l_room 	= &rooms[randomNumber(0,roomCount-1)];
-	r_lecture.l_subject = &subjects[randomNumber(0,subjectCount-1)];
+
 	r_lecture.l_class 	= &classes[randomNumber(0,classCount-1)];
-	r_lecture.l_teacher	= &teachers[randomNumber(0,teacherCount-1)];
+	sscanf(r_lecture.l_class->name,"%d%*c",&year);
+
+	while((r_lecture.l_subject = &subjects[randomNumber(0,subjectCount-1)]) && r_lecture.l_subject->perYear[year] == 0){
+		r_lecture.l_subject = &subjects[randomNumber(0,subjectCount-1)];
+	}
+
+	if(r_lecture.l_subject->roomRequireLength > 0){
+		r_lecture.l_room = r_lecture.l_subject->roomRequire[randomNumber(0,r_lecture.l_subject->roomRequireLength-1)];
+	}else{
+		r_lecture.l_room = &rooms[randomNumber(0,roomCount-1)];
+	}
+
+
+	while(r_lecture.l_teacher = &teachers[randomNumber(1,teacherCount)-1]){
+		for (i = 0; i < r_lecture.l_teacher->canTeachLength; i++){
+			if(strcmp(r_lecture.l_teacher->canTeach[i]->name, r_lecture.l_subject->name) == 0){
+				shouldBreak = 1;
+				break;
+			}
+		}
+		if(shouldBreak){
+			shouldBreak = 0;
+			break;
+		}
+	}
 
 	return r_lecture;
 }
