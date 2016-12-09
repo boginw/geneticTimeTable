@@ -226,7 +226,6 @@ int findRoomsFromString(char *roomString, room* roomsFound[MAX_ROOMS], room* roo
 }
 
 
-
 int findSubjectsFromString(char *subjectString, subject* subjectsFound[MAX_SUBJECTS], subject* subjects, int subjectCount){
     int len = strlen(subjectString);
     int i;
