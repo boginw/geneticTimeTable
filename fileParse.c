@@ -14,13 +14,17 @@ class *findClass(char *className, class classes[MAX_CLASSES], int classCount);
 
 int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, class *classes, int *classCount, teacher *teachers, int *teacherCount){
     FILE *dataFile;
-    int i,lines,res;
+    int i,j,lines,res;
     
     char buffer[200];
     char inlineBuffer[200];
     char shortBuffer[20];
     char lastType[15];
-    
+
+    char *requirements;
+
+    requirements = calloc(5 * 20, sizeof(char));
+
     if(!(dataFile = fopen("dat.sched", "r"))){
         printf("DATAFILE DOES NOT EXIST...\n");
         exit(0);
@@ -56,6 +60,9 @@ int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, clas
                     &classes[*classCount].maxWorkHoursPerDay
                 );
 
+
+                sscanf(classes[*classCount].name,"%d%*c",&classes[*classCount].year);
+
                 classes[*classCount].classRoom = findRoom(inlineBuffer, rooms, *roomCount);
 
                 *classCount+=1;
@@ -78,9 +85,53 @@ int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, clas
         }
     }
 
+    if(debug){
+        printf("\nParsing complete\n"
+               "%3d Rooms\n"
+               "%3d Subjects\n"
+               "%3d Classes\n"
+               "%3d Teachers\n",
+               *roomCount,
+               *subjectCount,
+               *classCount,
+               *teacherCount
+        );
+
+        /* dumping info for demo purposes */
+        printf("\nDUMPING DATA....\n\n");
+
+        printf("Rooms:\n");
+        for (i = 0; i < *roomCount; i++){
+            printf("%d => %s\n", i+1, rooms[i].name);
+        }
+
+        printf("\nClasses:\n");
+        for (i = 0; i < *classCount; i++){
+            printf("%d => %s, Classroom: %s\n", i+1, classes[i].name, classes[i].classRoom->name);
+        }
+
+        printf("\nSubjects:\n");
+        for (i = 0; i < *subjectCount; i++){
+            printf("%2d => %17s, roomRequire: %s\n", i+1, subjects[i].name, (subjects[i].roomRequireLength != 0 ? subjects[i].roomRequire[0]->name : "*"));
+        }
+
+        printf("\nTeachers:\n");
+        for (i = 0; i < *teacherCount; i++){
+            strcpy(requirements, "");
+            for (j = 0; j < teachers[i].canTeachLength; j++){
+                if(j!=0)
+                    strcat(requirements,", ");
+
+                strcat(requirements,teachers[i].canTeach[j]->name);
+            }
+
+            printf("%2d => %15s, isClassleader: %s, %s\n", i+1, teachers[i].name, (teachers[i].isClassleader ? teachers[i].leaderOfClass->name : "no"), requirements);
+        }
+    }
+
     res = res + 1;
 
-
+    free(requirements);
     fclose(dataFile);
 
     return 1;
