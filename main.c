@@ -169,7 +169,7 @@ int main(int argc, char const *argv[]){
 
     printf("\n                                  Random lectures:\n"
     	   "---------------------------------------------------------------------------------\n");
-    for (i = 0; i < 20; i++){
+    for (i = 0; i < 200; i++){
 	    r_lecture = randomLecture(rooms,roomCount,subjects,subjectCount, classes,classCount,teachers,teacherCount);
 
 	    if(checkLecture(r_lecture)){
@@ -202,7 +202,7 @@ void printLecture(lecture l){
 		strcat(requirements,l.l_subject->roomRequire[i]->name);
 	}
 
-	printf("| %-7s | %-16s | %-25s | %3s | %-14s |\n",
+	printf("| %-7s | %-17s | %-25s | %3s | %-14s |\n",
 		l.l_room->name,
 		l.l_subject->name,
 		l.l_teacher->name,
@@ -219,7 +219,6 @@ lecture randomLecture(room *rooms, int roomCount, subject *subjects, int subject
 	int year;
 	int shouldBreak = 0;
 	lecture r_lecture;
-
 
 	r_lecture.l_class 	= &classes[randomNumber(0,classCount-1)];
 	sscanf(r_lecture.l_class->name,"%d%*c",&year);

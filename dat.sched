@@ -30,6 +30,7 @@ Room 6
 1B,Room 2,7
 2A,Room 3,8
 2B,Room 4,8
+9C,Room 5,8
 
 ### SUBJECT ###
 # Format: Navn, hvis der er krav for et specifikt rum, antal timer for bh., første klasse trin, timer for næste, tredje, ... niente
