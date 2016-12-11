@@ -50,3 +50,7 @@ void printLecture(lecture l){
 
 	free(requirements);
 }
+
+void printTimeTable(timetable t){
+	
+}

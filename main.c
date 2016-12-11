@@ -11,7 +11,7 @@
 #define MAX_ROOMS          10
 #define MAX_CLASSES        10
 #define MAX_TEACHERS       10
-#define MAX_TIMETABLES     25
+#define MAX_TIMETABLES     10
 #define MAX_INDUVIDUALS    25
 
 #define SCHOOL_DAYS_YEAR  190
@@ -77,20 +77,21 @@ typedef struct schoolDay{
 
 typedef struct timetable{
 	schoolDay day[WEEK_LENGTH];
-	subject   t_sub[MAX_SUBJECTS];
 } timetable;
 
 typedef struct induvidual{
-	timetable t[MAX_TIMETABLES];
+	timetable t[MAX_CLASSES];
 } induvidual;
 
+
 int randomNumber(int min, int max);
-#include "fileParse.c"
-#include "lectureControl.c"
-#include "print.c"
 void swapn(void *a, void *b, size_t n);
 int factorial(int n);
 int generateAllCombinations(void *items, size_t size, int sizeOfVariable, void **finalItems);
+
+#include "fileParse.c"
+#include "lectureControl.c"
+#include "print.c"
 
 /* GENETIC FUNCTIONS*/
 int shouldMutate();
@@ -98,22 +99,26 @@ int shouldMutate();
 int main(int argc, char const *argv[]){
 	/* VARIABLES BEGIN */
 	room rooms[MAX_ROOMS];
+	/*room b_rooms[MAX_ROOMS];*/
 	int roomCount = 0;
 
 	subject subjects[MAX_SUBJECTS];
+	/*subject b_subjects[MAX_SUBJECTS];*/
 	int subjectCount = 0;
 
 	class classes[MAX_CLASSES];
+	/*class b_classes[MAX_CLASSES];*/
 	int classCount = 0;
 
 	teacher teachers[MAX_TEACHERS];
+	/*teacher b_teachers[MAX_TEACHERS];*/
 	int teacherCount = 0;
 
-	/*induvidual induviduals[MAX_INDUVIDUALS];*/
-
+	/* needs a better structure... 510000 bytes atm.. */
+	induvidual induviduals[MAX_INDUVIDUALS];
 
 	int i;
-	/*int t,c,d,l;*/
+	int c,d,l;
 	clock_t start_t, end_t;
 
 
@@ -128,24 +133,7 @@ int main(int argc, char const *argv[]){
 		}
 	}
 
-	init(rooms,&roomCount,subjects,&subjectCount, classes,&classCount,teachers,&teacherCount);
-
-    /* Create initial population */
-    /*for (i = 0; i < MAX_INDUVIDUALS; i++){
-	    for (t = 0; t < MAX_TIMETABLES; t++){
-	    	for (c = 0; c < classCount; c++){
-	    		for (d = 0; d < WEEK_LENGTH; d++){
-	    			for (l = 0; l < MAX_LECTURES; l++){
-						r_lecture = randomLectureForClass(rooms,roomCount,subjects,subjectCount,teachers,teacherCount, &classes[c]);
-						printf("%-10d%s\n", induviduals[i].t[t].day[d].lectureLength, r_lecture.l_subject->name);
-						r_lecture.l_datetime.dayOfWeek = d;
-						r_lecture.l_datetime.hour = l;
-						induviduals[i].t[t].day[d].lectures[induviduals[i].t[t].day[d].lectureLength++] = r_lecture;
-	    			}
-	    		}
-	    	}
-	    }
-    }*/
+	init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount);
 
     if(argc > 1){
 		if(strcmp(argv[1],"--bench") == 0){
@@ -154,7 +142,7 @@ int main(int argc, char const *argv[]){
 			start_t = clock();
 
 		    for (i = 0; i < 100; i++){
-			    r_lecture = randomLecture(rooms,roomCount,subjects,subjectCount, classes,classCount,teachers,teacherCount);
+			    r_lecture = randomLecture(rooms,roomCount,subjects,subjectCount,classes,classCount,teachers,teacherCount);
 
 			    if(checkLecture(r_lecture)){
 			    	/*accept state*/
@@ -174,6 +162,27 @@ int main(int argc, char const *argv[]){
 		    printf("%f lectures per seconds\n", 100.0/((end_t-start_t/1000.0)));
 		}
 	}
+
+
+    /* Create initial population */
+    for (i = 0; i < MAX_INDUVIDUALS; i++){
+
+    	for (c = 0; c < classCount; c++){
+
+    		for (d = 0; d < WEEK_LENGTH; d++){
+
+    			for (l = 0; l < MAX_LECTURES; l++){
+					r_lecture = randomLectureForClass(rooms,roomCount,subjects,subjectCount,teachers,teacherCount, &classes[c]);
+					/*printf("%-10d%s\n", induviduals[i].t[c].day[d].lectureLength, r_lecture.l_subject->name);*/
+					r_lecture.l_datetime.dayOfWeek = d;
+					r_lecture.l_datetime.hour = l;
+					induviduals[i].t[c].day[d].lectures[induviduals[i].t[c].day[d].lectureLength++] = r_lecture;
+    			}
+    		}
+	    }
+    }
+
+
 
 	return 0;
 }
