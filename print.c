@@ -1,5 +1,6 @@
 void printLecture(lecture l);
 char *autoPadding(char *header, int width);
+char *initials(char *name);
 
 /**
  * Returns a padded header instead of left alligned
@@ -52,5 +53,67 @@ void printLecture(lecture l){
 }
 
 void printTimeTable(timetable t){
-	
+	char rows[MAX_LECTURES*3][1024];
+	int i,j;
+	char temp[20];
+
+	for (j = 0; j < MAX_LECTURES; j++){
+		for (i = 0; i < WEEK_LENGTH; i++){
+			if(i == 0){
+				sprintf(temp,"| %-6d |",
+					j);
+				strcat(rows[j*3+0],"|        |");
+				strcat(rows[j*3+1],temp);
+				strcat(rows[j*3+2],"|--------|");
+			}
+
+			if(j < t.day[i].lectureLength){
+				sprintf(temp,"| %-16s |",
+					t.day[i].lectures[j].l_subject->name);
+
+				strcat(rows[j*3+0],temp);
+
+				sprintf(temp,"| %-16s |",
+					t.day[i].lectures[j].l_teacher->name);
+
+				strcat(rows[j*3+1],temp);
+
+				strcat(rows[j*3+2],"|------------------|");
+
+				
+			}else{
+				strcat(rows[j*3+0],"|                  |");
+				strcat(rows[j*3+1],"|                  |");
+				strcat(rows[j*3+2],"|                  |");
+			}
+
+			if(i+1 == WEEK_LENGTH){
+				strcat(rows[j*3+0],"\n");
+				strcat(rows[j*3+1],"\n");
+				strcat(rows[j*3+2],"\n");
+			}
+		}
+	}
+
+	printf("\n--------------------------------------------------------------------------------------------------------------\n"
+		     "| Tid    ||      Mandag      ||      Tirsdag     ||      Onsdag      ||     Torsdag      ||      Fredag      |\n"
+		     "--------------------------------------------------------------------------------------------------------------\n");
+	for (i = 0; i < MAX_LECTURES*3; i++){
+		printf("%s", rows[i]);
+	}
+}
+
+char *initials(char *name){
+	char *inital = malloc(3*sizeof(char));
+	int i=0;
+	int n=0;
+    while(name[i]!='\0'){
+       if(name[i]==' '){
+            i++;
+            inital[n++] = *(name+i);
+       }
+       i++;
+   }
+
+   return inital;
 }

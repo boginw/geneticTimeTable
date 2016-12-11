@@ -3,6 +3,7 @@
 #include <time.h>
 #include <string.h>
 #include <unistd.h>
+#include <ctype.h>
 
 #define MAX_NAME_LENGTH   255
 #define MAX_YEAR            9
@@ -118,6 +119,7 @@ int main(int argc, char const *argv[]){
 	induvidual induviduals[MAX_INDUVIDUALS];
 
 	int i;
+	int rnd = 0;
 	int c,d,l;
 	clock_t start_t, end_t;
 
@@ -170,8 +172,8 @@ int main(int argc, char const *argv[]){
     	for (c = 0; c < classCount; c++){
 
     		for (d = 0; d < WEEK_LENGTH; d++){
-
-    			for (l = 0; l < MAX_LECTURES; l++){
+    			rnd = randomNumber(0,MAX_LECTURES);
+    			for (l = 0; l < rnd; l++){
 					r_lecture = randomLectureForClass(rooms,roomCount,subjects,subjectCount,teachers,teacherCount, &classes[c]);
 					/*printf("%-10d%s\n", induviduals[i].t[c].day[d].lectureLength, r_lecture.l_subject->name);*/
 					r_lecture.l_datetime.dayOfWeek = d;
@@ -182,6 +184,8 @@ int main(int argc, char const *argv[]){
 	    }
     }
 
+
+   	printTimeTable(induviduals[0].t[0]);
 
 
 	return 0;
