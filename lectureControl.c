@@ -62,6 +62,11 @@ lecture randomLectureForClass(room *rooms, int roomCount, subject *subjects, int
 
 	r_lecture.l_class = curClass;
 
+	if(randomNumber(0,100) <= FREE_LECTURE_CH){
+		r_lecture.free = 1;
+		return r_lecture;
+	}
+
 	while((r_lecture.l_subject = &subjects[randomNumber(0,subjectCount-1)]) && r_lecture.l_subject->perYear[r_lecture.l_class->year+1] == 0){
 		r_lecture.l_subject = &subjects[randomNumber(0,subjectCount-1)];
 	}
@@ -87,6 +92,9 @@ lecture randomLectureForClass(room *rooms, int roomCount, subject *subjects, int
 			break;
 		}
 	}
+
+	r_lecture.free = 0;
+
 
 	return r_lecture;
 }

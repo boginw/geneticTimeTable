@@ -20,6 +20,7 @@
 #define WEEK_LENGTH         5
 #define MAX_LECTURES       10
 #define MUTATION_CHANCE     1
+#define FREE_LECTURE_CH    30
 
 /**
  * ASSUMPTIONS:
@@ -65,6 +66,7 @@ typedef struct datetime{
 } datetime;
 
 typedef struct lecture{
+	int     free;
 	room    *l_room;
 	class   *l_class;
 	subject *l_subject;
@@ -126,8 +128,7 @@ int main(int argc, char const *argv[]){
 	/* needs a better structure... 510000 bytes atm.. */
 	induvidual induviduals[MAX_INDUVIDUALS];
 
-	int i;
-	int rnd = 0;
+	int i,j;
 	int c,d,l;
 	int seed = time(NULL) * 100;
 
@@ -185,8 +186,7 @@ int main(int argc, char const *argv[]){
     	for (c = 0; c < classCount; c++){
 			induviduals[i].t[c].forClass = &classes[c];
     		for (d = 0; d < WEEK_LENGTH; d++){
-    			rnd = randomNumber(0,MAX_LECTURES);
-    			for (l = 0; l < rnd; l++){
+    			for (l = 0; l < MAX_LECTURES; l++){
 					r_lecture = randomLectureForClass(rooms,roomCount,subjects,subjectCount,teachers,teacherCount, &classes[c]);
 					r_lecture.l_datetime.dayOfWeek = d;
 					r_lecture.l_datetime.hour = l;
@@ -197,6 +197,21 @@ int main(int argc, char const *argv[]){
     	conflicts(&induviduals[i],classCount);
     }
 
+    /* Conflicts preview */
+    for (j = 0; j < 10000; j++){
+
+    	for (i = 0; i < MAX_INDUVIDUALS-2; i+=2){
+    		induviduals[i] = crossover(induviduals[i], induviduals[randomNumber(0,MAX_INDUVIDUALS-1)],classCount);
+    		induviduals[i+1] = crossover(induviduals[i+1], induviduals[randomNumber(0,MAX_INDUVIDUALS-1)],classCount);
+    	}
+
+	    qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
+
+    	for (i = 0; i < 22; i++){
+    		printf("\b");
+    	}
+    	printf("Best conflicts: %3d", induviduals[0].conflicts);
+	}
 
 	/* Uncomment for demo of schedules */
 	for (i = 0; i < classCount; i++){
@@ -209,7 +224,6 @@ int main(int argc, char const *argv[]){
     for (i = 0; i < MAX_INDUVIDUALS; i++){
     	printf("Ind: %2d, conflicts: %d\n", i, induviduals[i].conflicts);
     }
-
     /* Dump csv files in folder schedules */
     /*dumpCSV(&induviduals[0],classCount,intervalLabels);*/
 
