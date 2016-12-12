@@ -68,20 +68,21 @@ void printTimeTable(timetable t){
 			}
 
 			if(j < t.day[i].lectureLength){
-				sprintf(temp,"| %-16s |",
+				sprintf(temp,"| %-s |",
 					t.day[i].lectures[j].l_subject->name);
 
 				strcat(rows[j*3+0],temp);
 
-				sprintf(temp,"| %-16s |",
+				sprintf(temp,"| %-s |",
 					t.day[i].lectures[j].l_teacher->name);
 
 				strcat(rows[j*3+1],temp);
 
 				strcat(rows[j*3+2],"|------------------|");
 
-				
+
 			}else{
+
 				strcat(rows[j*3+0],"|                  |");
 				strcat(rows[j*3+1],"|                  |");
 				strcat(rows[j*3+2],"|                  |");
