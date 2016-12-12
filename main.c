@@ -6,6 +6,7 @@
 #include <ctype.h>
 
 #define MAX_NAME_LENGTH   255
+#define MAX_LABEL_LENGTH   12
 #define MAX_YEAR            9
 
 #define MAX_SUBJECTS       20
@@ -78,10 +79,13 @@ typedef struct schoolDay{
 
 typedef struct timetable{
 	schoolDay day[WEEK_LENGTH];
+	class *forClass;
 } timetable;
 
 typedef struct induvidual{
 	timetable t[MAX_CLASSES];
+	int fitness;
+	int conflicts;
 } induvidual;
 
 
@@ -93,12 +97,16 @@ int generateAllCombinations(void *items, size_t size, int sizeOfVariable, void *
 #include "fileParse.c"
 #include "lectureControl.c"
 #include "print.c"
+#include "scheduleControl.c"
 
 /* GENETIC FUNCTIONS*/
 int shouldMutate();
 
 int main(int argc, char const *argv[]){
 	/* VARIABLES BEGIN */
+
+	char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH];
+
 	room rooms[MAX_ROOMS];
 	/*room b_rooms[MAX_ROOMS];*/
 	int roomCount = 0;
@@ -121,13 +129,15 @@ int main(int argc, char const *argv[]){
 	int i;
 	int rnd = 0;
 	int c,d,l;
-	clock_t start_t, end_t;
+	int seed = time(NULL) * 100;
 
+	clock_t start_t, end_t;
 
 	lecture r_lecture;
 	/* VARIABLES END */
 
-	srand(time(NULL) * 100);
+
+	srand(seed);
 
 	if(argc > 1){
 		if(strcmp(argv[1],"--debug") == 0){
@@ -135,15 +145,18 @@ int main(int argc, char const *argv[]){
 		}
 	}
 
-	init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount);
+	if(debug)
+		printf("Seed: %d\n", seed);
 
-    if(argc > 1){
+	init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount,intervalLabels);
+
+	if(argc > 1){
 		if(strcmp(argv[1],"--bench") == 0){
-		    printf("\n                                  Random lectures:\n"
-		    	   "---------------------------------------------------------------------------------\n");
+			printf("\n                                  Random lectures:\n"
+				   "---------------------------------------------------------------------------------\n");
 			start_t = clock();
 
-		    for (i = 0; i < 100; i++){
+			for (i = 0; i < 100; i++){
 			    r_lecture = randomLecture(rooms,roomCount,subjects,subjectCount,classes,classCount,teachers,teacherCount);
 
 			    if(checkLecture(r_lecture)){
@@ -153,39 +166,50 @@ int main(int argc, char const *argv[]){
 				  	/*reject state*/
 				  	printf("Lecture rejected !\n");
 				  }
-		    }
+			}
 
-		    end_t = clock();
+			end_t = clock();
 
 
-		    printf("---------------------------------------------------------------------------------\n");
+			printf("---------------------------------------------------------------------------------\n");
 
-		    printf("%f\n", (end_t-start_t)/1000.0);
-		    printf("%f lectures per seconds\n", 100.0/((end_t-start_t/1000.0)));
+			printf("%f\n", (end_t-start_t)/1000.0);
+			printf("%f lectures per seconds\n", 100.0/((end_t-start_t/1000.0)));
 		}
 	}
 
 
     /* Create initial population */
     for (i = 0; i < MAX_INDUVIDUALS; i++){
-
+		induviduals[i].fitness = 0;
     	for (c = 0; c < classCount; c++){
-
+			induviduals[i].t[c].forClass = &classes[c];
     		for (d = 0; d < WEEK_LENGTH; d++){
     			rnd = randomNumber(0,MAX_LECTURES);
     			for (l = 0; l < rnd; l++){
 					r_lecture = randomLectureForClass(rooms,roomCount,subjects,subjectCount,teachers,teacherCount, &classes[c]);
-					/*printf("%-10d%s\n", induviduals[i].t[c].day[d].lectureLength, r_lecture.l_subject->name);*/
 					r_lecture.l_datetime.dayOfWeek = d;
 					r_lecture.l_datetime.hour = l;
 					induviduals[i].t[c].day[d].lectures[induviduals[i].t[c].day[d].lectureLength++] = r_lecture;
     			}
     		}
 	    }
+    	conflicts(&induviduals[i]);
     }
 
 
-   	printTimeTable(induviduals[0].t[0]);
+	/* Uncomment for demo of schedules */
+	/*for (i = 0; i < classCount; i++){
+    	printf("\n\nClass %s, conflicts: %d\n", induviduals[0].t[i].forClass->name, induviduals[0].conflicts);
+    	printTimeTable(induviduals[0].t[i],intervalLabels);
+    }*/
+
+    /* Conflicts preview */
+    qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
+    for (i = 0; i < MAX_INDUVIDUALS; i++){
+    	printf("Ind: %2d, conflicts: %d\n", i, induviduals[i].conflicts);
+    }
+
 
 
 	return 0;

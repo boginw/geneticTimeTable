@@ -1,6 +1,7 @@
 void printLecture(lecture l);
 char *autoPadding(char *header, int width);
 char *initials(char *name);
+void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]);
 
 /**
  * Returns a padded header instead of left alligned
@@ -52,53 +53,74 @@ void printLecture(lecture l){
 	free(requirements);
 }
 
-void printTimeTable(timetable t){
-	char rows[MAX_LECTURES*3][1024];
+void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
+	char rows[MAX_LECTURES*4][1024];
+
 	int i,j;
 	char temp[20];
+	char timeTemp0[5];
+	char timeTemp1[5];
 
 	for (j = 0; j < MAX_LECTURES; j++){
+		strcpy(rows[j*4+0],"");
+		strcpy(rows[j*4+1],"");
+		strcpy(rows[j*4+2],"");
+		strcpy(rows[j*4+3],"");
+
 		for (i = 0; i < WEEK_LENGTH; i++){
 			if(i == 0){
-				sprintf(temp,"| %-6d |",
-					j);
-				strcat(rows[j*3+0],"|        |");
-				strcat(rows[j*3+1],temp);
-				strcat(rows[j*3+2],"|--------|");
+				sscanf(labels[j],"%[^,],%[^,]",timeTemp0,timeTemp1);
+
+				strcat(rows[j*4+0],"|        |");
+				sprintf(temp,"| %5s  |",
+					timeTemp0);
+				strcat(rows[j*4+1],temp);
+				
+				sprintf(temp,"| %5s  |",
+					timeTemp1);
+				strcat(rows[j*4+2],temp);
+				
+				strcat(rows[j*4+3],"|--------|");
 			}
 
 			if(j < t.day[i].lectureLength){
-				sprintf(temp,"| %-16s |",
+				sprintf(temp,"| %-17s |",
 					t.day[i].lectures[j].l_subject->name);
 
-				strcat(rows[j*3+0],temp);
+				strcat(rows[j*4+0],temp);
 
-				sprintf(temp,"| %-16s |",
+				sprintf(temp,"| %-17s |",
 					t.day[i].lectures[j].l_teacher->name);
 
-				strcat(rows[j*3+1],temp);
+				strcat(rows[j*4+1],temp);
 
-				strcat(rows[j*3+2],"|------------------|");
+				sprintf(temp,"| %17s |",
+					t.day[i].lectures[j].l_room->name);
 
-				
+				strcat(rows[j*4+2],temp);
+
+				strcat(rows[j*4+3],"|-------------------|");
+
 			}else{
-				strcat(rows[j*3+0],"|                  |");
-				strcat(rows[j*3+1],"|                  |");
-				strcat(rows[j*3+2],"|                  |");
+				strcat(rows[j*4+0],"|                   |");
+				strcat(rows[j*4+1],"|                   |");
+				strcat(rows[j*4+2],"|                   |");
+				strcat(rows[j*4+3],"|                   |");
 			}
 
 			if(i+1 == WEEK_LENGTH){
-				strcat(rows[j*3+0],"\n");
-				strcat(rows[j*3+1],"\n");
-				strcat(rows[j*3+2],"\n");
+				strcat(rows[j*4+0],"\n");
+				strcat(rows[j*4+1],"\n");
+				strcat(rows[j*4+2],"\n");
+				strcat(rows[j*4+3],"\n");
 			}
 		}
 	}
 
-	printf("\n--------------------------------------------------------------------------------------------------------------\n"
-		     "| Tid    ||      Mandag      ||      Tirsdag     ||      Onsdag      ||     Torsdag      ||      Fredag      |\n"
-		     "--------------------------------------------------------------------------------------------------------------\n");
-	for (i = 0; i < MAX_LECTURES*3; i++){
+	printf("\n-------------------------------------------------------------------------------------------------------------------\n"
+		     "| Tid    ||       Mandag      ||      Tirsdag      ||      Onsdag       ||      Torsdag      ||      Fredag       |\n"
+		     "-------------------------------------------------------------------------------------------------------------------\n");
+	for (i = 0; i < MAX_LECTURES*4; i++){
 		printf("%s", rows[i]);
 	}
 }
