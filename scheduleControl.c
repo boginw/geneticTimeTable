@@ -98,7 +98,7 @@ induvidual crossover(induvidual p1, induvidual p2, int classCount){
 	int i,p,c,d,l;
 	induvidual n;
 	int first;
-	int *cp = calloc(MAX_LECTURES, sizeof(int)); 
+	int *cp = calloc(MAX_LECTURES, sizeof(int));
 	/*// check probability of crossover operation*/
 	if( randomNumber(0,100) > crossover_probability ){
 		/*// no crossover, just copy first parent*/
@@ -110,10 +110,10 @@ induvidual crossover(induvidual p1, induvidual p2, int classCount){
 
 	/* TODO - is it safe to assume everything running? */
 	/* make new code by combining parent codes*/
-	
+
 	for (c = 0; c < classCount; c++){
 		/* determine crossover point (randomly) */
-		
+
 		for (d = 0; d < WEEK_LENGTH; d++){
 			first = randomNumber(0,1);
 			memset(cp,0,MAX_LECTURES*sizeof(int));
@@ -139,10 +139,10 @@ induvidual crossover(induvidual p1, induvidual p2, int classCount){
 				}
 			}
 
-		}	
+		}
 	}
 
-	conflicts(&n,classCount); 
+	conflicts(&n,classCount);
 	free(cp);
 	return n;
 }

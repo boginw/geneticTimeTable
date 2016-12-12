@@ -72,28 +72,28 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 				sscanf(labels[j],"%[^,],%[^,]",timeTemp0,timeTemp1);
 
 				strcat(rows[j*4+0],"|        |");
-				sprintf(temp,"| %5s  |",
+				sprintf(temp,"| %s  |",
 					timeTemp0);
 				strcat(rows[j*4+1],temp);
 
-				sprintf(temp,"| %5s  |",
+				sprintf(temp,"| %s  |",
 					timeTemp1);
 				strcat(rows[j*4+2],temp);
 
 				strcat(rows[j*4+3],"|--------|");
 			}
 			if(j < t.day[i].lectureLength && !t.day[i].lectures[j].free){
-				sprintf(temp,"| %-17s |",
+				sprintf(temp,"| %s |",
 					t.day[i].lectures[j].l_subject->name);
 
 				strcat(rows[j*4+0],temp);
 
-				sprintf(temp,"| %-17s |",
+				sprintf(temp,"| %s |",
 					t.day[i].lectures[j].l_teacher->name);
 
 				strcat(rows[j*4+1],temp);
 
-				sprintf(temp,"| %17s |",
+				sprintf(temp,"| %s |",
 					t.day[i].lectures[j].l_room->name);
 
 				strcat(rows[j*4+2],temp);
