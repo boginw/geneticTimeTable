@@ -155,6 +155,7 @@ int main(int argc, char const *argv[]){
 	}
 
 	init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount,intervalLabels);
+
 	tempPerYear = malloc(subjectCount * sizeof(int));
 
 
@@ -198,7 +199,7 @@ int main(int argc, char const *argv[]){
 
     /* Conflicts preview */
     for (j = 0; j < 10000; j++){
-    	
+
     	for (i = 0; i < MAX_INDUVIDUALS-2; i+=2){
     		induviduals[i] = crossover(induviduals[i], induviduals[i+1],classCount);
     		induviduals[i+1] = crossover(induviduals[i+1], induviduals[i+2],classCount);
@@ -213,12 +214,21 @@ int main(int argc, char const *argv[]){
 	    	}
 	    }
 	}
-	
+
 	/* Uncomment for demo of schedules */
-	/*for (i = 0; i < classCount; i++){
-    	printf("\n\nClass %s, conflicts: %d\n", induviduals[0].t[i].forClass->name, induviduals[0].conflicts);
-    	printTimeTable(induviduals[0].t[i],intervalLabels);
-    }*/
+	for (i = 0; i < classCount; i++){
+
+      printf("\n\nClass %s, conflicts: %d\n", induviduals[0].t[i].forClass->name, induviduals[0].conflicts);
+
+    	printTimeTable(induviduals[0].t[i], intervalLabels);
+    }
+
+
+    /* Conflicts preview */
+    qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
+    for (i = 0; i < MAX_INDUVIDUALS; i++){
+    	printf("Ind: %2d, conflicts: %d\n", i, induviduals[i].conflicts);
+    }
     /* Dump csv files in folder schedules */
     /*dumpCSV(&induviduals[0],classCount,intervalLabels);*/
 
