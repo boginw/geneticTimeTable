@@ -48,7 +48,7 @@ void conflicts(induvidual *ind, int classCount){
 		}
 	}
 
-	ind->conflicts = conflicts / 8;
+	ind->conflicts = conflicts;
 	free(dubRoom);
 	free(dubTeacher);
 }
@@ -88,7 +88,7 @@ int conflictsQsort(const void * a, const void * b){
 	const induvidual *oa = a;
 	const induvidual *ob = b;
 
-	return (oa->conflicts - ob->conflicts);
+	return (ob->conflicts - oa->conflicts);
 }
 
 

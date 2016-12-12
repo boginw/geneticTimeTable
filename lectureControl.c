@@ -94,6 +94,7 @@ lecture randomLectureForClassAndSubject(room *rooms, int roomCount, teacher *tea
 	}
 
 	r_lecture.free = 0;
+	r_lecture.init = 0;
 
 
 	return r_lecture;
@@ -136,7 +137,7 @@ lecture randomLectureForClass(room *rooms, int roomCount, subject *subjects, int
 	}
 
 	r_lecture.free = 0;
-
+	r_lecture.init = 0;
 
 	return r_lecture;
 }

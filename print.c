@@ -58,8 +58,8 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 
 	int i,j;
 	char temp[20];
-	char timeTemp0[5];
-	char timeTemp1[5];
+	char timeTemp0[6];
+	char timeTemp1[6];
 
 	for (j = 0; j < MAX_LECTURES; j++){
 		strcpy(rows[j*4+0],"");
@@ -69,7 +69,7 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 
 		for (i = 0; i < WEEK_LENGTH; i++){
 			if(i == 0){
-				sscanf(labels[j],"%[^,],%[^,]",timeTemp0,timeTemp1);
+				sscanf(labels[j]," %[^,],%s",timeTemp0,timeTemp1);
 
 				strcat(rows[j*4+0],"|        |");
 				sprintf(temp,"| %5s  |",

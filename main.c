@@ -66,6 +66,7 @@ typedef struct datetime{
 } datetime;
 
 typedef struct lecture{
+	int     init;
 	int     free;
 	room    *l_room;
 	class   *l_class;
@@ -95,6 +96,7 @@ int randomNumber(int min, int max);
 void swapn(void *a, void *b, size_t n);
 int factorial(int n);
 int generateAllCombinations(void *items, size_t size, int sizeOfVariable, void **finalItems);
+int isEmpty(int *array, size_t size);
 
 #include "fileParse.c"
 #include "lectureControl.c"
@@ -135,7 +137,7 @@ int main(int argc, char const *argv[]){
 	lecture r_lecture;
 
 	int *tempPerYear;
-	int subjectIndex = 0;
+	int subjectIndex;
 
 	/* VARIABLES END */
 
@@ -163,71 +165,81 @@ int main(int argc, char const *argv[]){
     	for (c = 0; c < classCount; c++){
 			induviduals[i].t[c].forClass = &classes[c];
 
+			/* Get all the required hours for class */
 			for (s = 0; s < subjectCount; s++){
-
     			tempPerYear[s] = subjects[s].perYear[classes[c].year] / (SCHOOL_DAYS_YEAR / WEEK_LENGTH);
     		}
+    		
+    		while(!isEmpty(tempPerYear,subjectCount)){
+	    		for (d = 0; d < WEEK_LENGTH; d++){
 
-    		for (d = 0; d < WEEK_LENGTH; d++){
+	    			for (l = 0; l < MAX_LECTURES; l++){
 
-    			for (l = 0; l < MAX_LECTURES; l++){
-    				/* Get all the required hours for class */
-    				for (s = 0; s < subjectCount; s++){
+	    				subjectIndex = randomNumber(0,subjectCount-1);
 
-    					if(tempPerYear[s] != 0){
-    						subjectIndex = s;
-    						break;
-    					}
-    					subjectIndex = -1;
-    				}
-
-    				if(subjectIndex == -1){
-    					break;
-    				}
-
-					r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[s]);
-					r_lecture.l_datetime.dayOfWeek = d;
-					r_lecture.l_datetime.hour = l;
-					induviduals[i].t[c].day[d].lectures[induviduals[i].t[c].day[d].lectureLength++] = r_lecture;
-					tempPerYear[s]--;
-    			}
-    		}
+	    				if(tempPerYear[subjectIndex] != 0 && induviduals[i].t[c].day[d].lectures[induviduals[i].t[c].day[d].lectureLength].init != 1){
+							r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[subjectIndex]);
+							r_lecture.l_datetime.dayOfWeek = d;
+							r_lecture.l_datetime.hour = l;
+							r_lecture.init = 1;
+							tempPerYear[subjectIndex]--;
+							induviduals[i].t[c].day[d].lectures[induviduals[i].t[c].day[d].lectureLength++] = r_lecture;
+	    				}
+	    			}
+	    		}
+	    	}
 	    }
+
     	conflicts(&induviduals[i],classCount);
     }
+
+    printf("First conflicts: %3d\n", induviduals[0].conflicts);
+	qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
 
     /* Conflicts preview */
     for (j = 0; j < 10000; j++){
     	
     	for (i = 0; i < MAX_INDUVIDUALS-2; i+=2){
-    		induviduals[i] = crossover(induviduals[i], induviduals[randomNumber(0,MAX_INDUVIDUALS-1)],classCount);
-    		induviduals[i+1] = crossover(induviduals[i+1], induviduals[randomNumber(0,MAX_INDUVIDUALS-1)],classCount);
+    		induviduals[i] = crossover(induviduals[i], induviduals[i+1],classCount);
+    		induviduals[i+1] = crossover(induviduals[i+1], induviduals[i+2],classCount);
     	}
 
 	    qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
 
 	    if(j%100==0){
-	    	for (i = 0; i < 21; i++){
+	    	printf("Best conflicts: %3d", induviduals[0].conflicts);
+	    	for (i = 0; i < 19; i++){
 	    		printf("\b");
 	    	}
-	    	printf("Best conflicts: %3d", induviduals[0].conflicts);
 	    }
 	}
 	
 	/* Uncomment for demo of schedules */
-	for (i = 0; i < classCount; i++){
+	/*for (i = 0; i < classCount; i++){
     	printf("\n\nClass %s, conflicts: %d\n", induviduals[0].t[i].forClass->name, induviduals[0].conflicts);
     	printTimeTable(induviduals[0].t[i],intervalLabels);
-    }
+    }*/
     /* Dump csv files in folder schedules */
     /*dumpCSV(&induviduals[0],classCount,intervalLabels);*/
 
+
+    free(tempPerYear);
 	return 0;
 }
 
 void killTimetable(timetable *t){
 
 }
+
+int isEmpty(int *array, size_t size){
+	int i;
+	int empty = 0;
+	for (i = 0; i < size; i++){
+		empty += array[i] <= 0;
+	}
+	return empty == size;
+}
+
 
 int shouldMutate(){
 	int randomnumber;
