@@ -153,6 +153,7 @@ int main(int argc, char const *argv[]){
 	}
 
 	init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount,intervalLabels);
+
 	tempPerYear = malloc(subjectCount * sizeof(int));
 
 
@@ -210,15 +211,18 @@ int main(int argc, char const *argv[]){
 	    	for (i = 0; i < 21; i++){
 	    		printf("\b");
 	    	}
-	    	printf("Best conflicts: %3d", induviduals[0].conflicts);
+	    	printf("Best conflicts: %3d\n", induviduals[0].conflicts);
 	    }
 	}
 
 	/* Uncomment for demo of schedules */
 	for (i = 0; i < classCount; i++){
-    	printf("\n\nClass %s, conflicts: %d\n", induviduals[0].t[i].forClass->name, induviduals[0].conflicts);
-    	printTimeTable(induviduals[0].t[i],intervalLabels);
+
+      printf("\n\nClass %s, conflicts: %d\n", induviduals[0].t[i].forClass->name, induviduals[0].conflicts);
+
+    	printTimeTable(induviduals[0].t[i], intervalLabels);
     }
+
 
     /* Conflicts preview */
     qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
