@@ -60,7 +60,6 @@ int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, clas
                     &classes[*classCount].maxWorkHoursPerDay
                 );
 
-
                 sscanf(classes[*classCount].name,"%d%*c",&classes[*classCount].year);
 
                 classes[*classCount].classRoom = findRoom(inlineBuffer, rooms, *roomCount);
