@@ -139,3 +139,55 @@ char *initials(char *name){
 
    return inital;
 }
+
+void dumpCSV(induvidual *ind, int classCount, char (*labels)[MAX_LABEL_LENGTH]){
+	int c,l,d;
+	FILE *fp;
+	char temp[20];
+	char rows[MAX_LECTURES*3][1024];
+
+	for (c = 0; c < classCount; c++){
+		sprintf(temp,"./schedules/%s.csv",ind->t[c].forClass->name);
+		printf("%s\n", temp);
+		fp = fopen(temp, "w+");
+
+		fprintf(fp, "from,to,mon,teacher,room,tue,teacher,room,wed,teacher,room,thu,teacher,room,fri,teacher,room\n");
+		for (l = 0; l < MAX_LECTURES; l++){
+			for (d = 0; d < WEEK_LENGTH; d++){
+				if(d == 0){
+					strcat(rows[l],labels[l]);
+					strcat(rows[l],",");
+				}
+
+				if(l < ind->t[c].day[d].lectureLength){
+					sprintf(temp,"%s,",
+						ind->t[c].day[d].lectures[l].l_subject->name);
+
+					strcat(rows[l],temp);
+
+					sprintf(temp,"%s,",
+						ind->t[c].day[d].lectures[l].l_teacher->name);
+
+					strcat(rows[l],temp);
+
+					sprintf(temp,"%s",
+						ind->t[c].day[d].lectures[l].l_room->name);
+
+					strcat(rows[l],temp);
+
+				}else{
+					strcat(rows[l],",");
+				}
+
+				if(d+1 == WEEK_LENGTH){
+					strcat(rows[l],"\n");
+				}else{
+					strcat(rows[l],",");
+				}
+			}
+			fprintf(fp, "%s",rows[l]);
+		}
+
+		fclose(fp);
+	}
+}

@@ -194,7 +194,7 @@ int main(int argc, char const *argv[]){
     			}
     		}
 	    }
-    	conflicts(&induviduals[i]);
+    	conflicts(&induviduals[i],classCount);
     }
 
 
@@ -210,7 +210,8 @@ int main(int argc, char const *argv[]){
     	printf("Ind: %2d, conflicts: %d\n", i, induviduals[i].conflicts);
     }
 
-
+    /* Dump csv files in folder schedules */
+    /*dumpCSV(&induviduals[0],classCount,intervalLabels);*/
 
 	return 0;
 }
