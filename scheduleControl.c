@@ -35,6 +35,10 @@ void conflicts(induvidual *ind, int classCount){
 
 			/* Copy room and teacher to their respective array */
 			for (c = 0; c < classCount; c++){
+				if(ind->t[c].day[d].lectures[l].init != 1){
+					break;
+				}
+				
 				if(ind->t[c].day[d].lectures[l].free == 0){
 					dubRoom[c] = ind->t[c].day[d].lectures[l].l_room;
 					dubTeacher[c] = ind->t[c].day[d].lectures[l].l_teacher;
