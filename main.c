@@ -129,12 +129,14 @@ int main(int argc, char const *argv[]){
 	induvidual induviduals[MAX_INDUVIDUALS];
 
 	int i,j;
-	int c,d,l;
+	int c,d,l,s;
 	int seed = time(NULL) * 100;
 
-	clock_t start_t, end_t;
-
 	lecture r_lecture;
+
+	int *tempPerYear;
+	int subjectIndex = 0;
+
 	/* VARIABLES END */
 
 
@@ -146,51 +148,48 @@ int main(int argc, char const *argv[]){
 		}
 	}
 
-	if(debug)
+	if(debug){
 		printf("Seed: %d\n", seed);
+	}
 
 	init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount,intervalLabels);
-
-	if(argc > 1){
-		if(strcmp(argv[1],"--bench") == 0){
-			printf("\n                                  Random lectures:\n"
-				   "---------------------------------------------------------------------------------\n");
-			start_t = clock();
-
-			for (i = 0; i < 100; i++){
-			    r_lecture = randomLecture(rooms,roomCount,subjects,subjectCount,classes,classCount,teachers,teacherCount);
-
-			    if(checkLecture(r_lecture)){
-			    	/*accept state*/
-					printLecture(r_lecture);
-				  }else{
-				  	/*reject state*/
-				  	printf("Lecture rejected !\n");
-				  }
-			}
-
-			end_t = clock();
-
-
-			printf("---------------------------------------------------------------------------------\n");
-
-			printf("%f\n", (end_t-start_t)/1000.0);
-			printf("%f lectures per seconds\n", 100.0/((end_t-start_t/1000.0)));
-		}
-	}
+	tempPerYear = malloc(subjectCount * sizeof(int));
 
 
     /* Create initial population */
     for (i = 0; i < MAX_INDUVIDUALS; i++){
 		induviduals[i].fitness = 0;
+
     	for (c = 0; c < classCount; c++){
 			induviduals[i].t[c].forClass = &classes[c];
+
+			for (s = 0; s < subjectCount; s++){
+
+    			tempPerYear[s] = subjects[s].perYear[classes[c].year] / (SCHOOL_DAYS_YEAR / WEEK_LENGTH);
+    		}
+
     		for (d = 0; d < WEEK_LENGTH; d++){
+
     			for (l = 0; l < MAX_LECTURES; l++){
-					r_lecture = randomLectureForClass(rooms,roomCount,subjects,subjectCount,teachers,teacherCount, &classes[c]);
+    				/* Get all the required hours for class */
+    				for (s = 0; s < subjectCount; s++){
+
+    					if(subjects[s].perYear[classes[c].year] != 0){
+    						subjectIndex = s;
+    						break;
+    					}
+    					subjectIndex = -1;
+    				}
+
+    				if(subjectIndex == -1){
+    					break;
+    				}
+
+					r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[s]);
 					r_lecture.l_datetime.dayOfWeek = d;
 					r_lecture.l_datetime.hour = l;
 					induviduals[i].t[c].day[d].lectures[induviduals[i].t[c].day[d].lectureLength++] = r_lecture;
+					tempPerYear[s]--;
     			}
     		}
 	    }
@@ -206,11 +205,13 @@ int main(int argc, char const *argv[]){
     	}
 
 	    qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
-	    
-    	for (i = 0; i < 22; i++){
-    		printf("\b");
-    	}
-    	printf("Best conflicts: %3d", induviduals[0].conflicts);
+
+	    if(j%100==0){
+	    	for (i = 0; i < 21; i++){
+	    		printf("\b");
+	    	}
+	    	printf("Best conflicts: %3d", induviduals[0].conflicts);
+	    }
 	}
 	
 	/* Uncomment for demo of schedules */

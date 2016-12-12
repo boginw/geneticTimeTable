@@ -2,6 +2,7 @@ int isRoomCorrect(lecture *l);
 int isTeacherCorrect(lecture *l);
 lecture randomLecture(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
 lecture randomLectureForClass(room *rooms, int roomCount, subject *subjects, int subjectCount, teacher *teachers, int teacherCount, class *curClass);
+lecture randomLectureForClassAndSubject(room *rooms, int roomCount, teacher *teachers, int teacherCount, class *curClass, subject *curSubject);
 
 int checkLecture(lecture l){
 	if(!isRoomCorrect(&l)){
@@ -50,7 +51,50 @@ int isTeacherCorrect(lecture *l){
 lecture randomLecture(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
 	lecture r_lecture;
 
-	r_lecture = randomLectureForClass(rooms, roomCount, subjects, subjectCount, teachers, teacherCount, &classes[randomNumber(0,classCount-1)]);
+	while((r_lecture.l_subject = &subjects[randomNumber(0,subjectCount-1)]) && r_lecture.l_subject->perYear[r_lecture.l_class->year+1] == 0){
+		r_lecture.l_subject = &subjects[randomNumber(0,subjectCount-1)];
+	}
+
+	r_lecture = randomLectureForClassAndSubject(rooms, roomCount, teachers, teacherCount, &classes[randomNumber(0,classCount-1)], r_lecture.l_subject);
+
+	return r_lecture;
+}
+
+lecture randomLectureForClassAndSubject(room *rooms, int roomCount, teacher *teachers, int teacherCount, class *curClass, subject *curSubject){
+	int i;
+	int shouldBreak = 0;
+	lecture r_lecture;
+
+	r_lecture.l_class = curClass;
+	r_lecture.l_subject = curSubject;
+
+	/*if(randomNumber(0,100) <= FREE_LECTURE_CH){
+		r_lecture.free = 1;
+		return r_lecture;
+	}*/
+
+	if(r_lecture.l_subject->roomRequireLength > 0){
+		r_lecture.l_room = r_lecture.l_subject->roomRequire[randomNumber(0,r_lecture.l_subject->roomRequireLength-1)];
+	}else{
+		r_lecture.l_room = &rooms[randomNumber(0,roomCount-1)];
+	}
+
+	while((r_lecture.l_teacher = &teachers[randomNumber(1,teacherCount)-1])){
+		for(i = 0; i < r_lecture.l_teacher->canTeachLength; i++){
+			if(strcmp(r_lecture.l_teacher->canTeach[i]->name, r_lecture.l_subject->name) == 0){
+				shouldBreak = 1;
+				break;
+			}
+		}
+
+		if(shouldBreak){
+			shouldBreak = 0;
+			break;
+		}
+	}
+
+	r_lecture.free = 0;
+
 
 	return r_lecture;
 }
@@ -78,7 +122,6 @@ lecture randomLectureForClass(room *rooms, int roomCount, subject *subjects, int
 	}
 
 	while((r_lecture.l_teacher = &teachers[randomNumber(1,teacherCount)-1])){
-		/*printf("%-17s %s\n", r_lecture.l_subject->name, r_lecture.l_teacher->name);*/
 		for(i = 0; i < r_lecture.l_teacher->canTeachLength; i++){
 			if(strcmp(r_lecture.l_teacher->canTeach[i]->name, r_lecture.l_subject->name) == 0){
 				shouldBreak = 1;
@@ -86,7 +129,6 @@ lecture randomLectureForClass(room *rooms, int roomCount, subject *subjects, int
 			}
 		}
 
-		/*sleep(1);*/
 		if(shouldBreak){
 			shouldBreak = 0;
 			break;
