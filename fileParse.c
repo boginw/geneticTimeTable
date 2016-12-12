@@ -41,7 +41,7 @@ int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, clas
         if(sscanf(buffer,"### %s ###",lastType) != 0){
             if(debug)
                 printf("%s\n", lastType);
-        }else if(buffer[0] == '#' || buffer[0] == '\n' || strlen(buffer) == 0){
+        }else if(buffer[0] == '#' || buffer[0] == '\n' || strcmp(buffer,"\r\n")==0 || strlen(buffer) == 0){
             /* Found a comment... just ignore */
             continue;
         }else{
