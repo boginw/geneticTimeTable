@@ -174,7 +174,7 @@ int main(int argc, char const *argv[]){
     				/* Get all the required hours for class */
     				for (s = 0; s < subjectCount; s++){
 
-    					if(subjects[s].perYear[classes[c].year] != 0){
+    					if(tempPerYear[s] != 0){
     						subjectIndex = s;
     						break;
     					}
