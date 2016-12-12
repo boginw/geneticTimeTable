@@ -1,4 +1,8 @@
 int dubCount(void *a, size_t items, size_t size);
+void conflicts(induvidual *ind);
+int fitness(induvidual ind);
+int dubCount(void *a, size_t items, size_t size);
+int conflictsQsort(const void * a, const void * b);
 
 int fitness(induvidual ind){
 	return 0;
