@@ -51,6 +51,7 @@ void conflicts(induvidual *ind, int classCount){
  * @return       returns amount of dublicates/conflicts
  */
 int dubCount(void *a, size_t items, size_t size){
+	/* TODO: https://codereview.stackexchange.com/questions/149602/duplicate-counter-in-c */
 	int i,j;
 	int conflicts = 0;
     char *x = (char *)a;
