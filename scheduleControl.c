@@ -38,8 +38,6 @@ void conflicts(induvidual *ind, int classCount){
 				if(ind->t[c].day[d].lectures[l].free == 0){
 					dubRoom[c] = ind->t[c].day[d].lectures[l].l_room;
 					dubTeacher[c] = ind->t[c].day[d].lectures[l].l_teacher;
-				}else{
-					conflicts--;
 				}
 			}
 			if(classCount > 0){
@@ -98,19 +96,19 @@ induvidual crossover(induvidual p1, induvidual p2, int classCount){
 	int i,p,c,d,l;
 	induvidual n;
 	int first;
-	int *cp = calloc(MAX_LECTURES, sizeof(int));
-	/*// check probability of crossover operation*/
+	int *cp = calloc(MAX_LECTURES, sizeof(int)); 
+	/* check probability of crossover operation */
 	if( randomNumber(0,100) > crossover_probability ){
-		/*// no crossover, just copy first parent*/
+		/* no crossover, just copy first parent */
 		return p1;
 	}
 
-	/* new chromosome object, copy chromosome setup*/
+	/* new chromosome object, copy chromosome setup */
 	n = p1;
 
 	/* TODO - is it safe to assume everything running? */
-	/* make new code by combining parent codes*/
-
+	/* make new code by combining parent codes */
+	
 	for (c = 0; c < classCount; c++){
 		/* determine crossover point (randomly) */
 
