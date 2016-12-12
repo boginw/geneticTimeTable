@@ -1,4 +1,4 @@
-int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, class *classes, int *classCount, teacher *teachers, int *teacherCount);
+int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, class *classes, int *classCount, teacher *teachers, int *teacherCount, char (*labels)[MAX_LABEL_LENGTH]);
 int countLines(FILE *fp);
 
 /* PARSE FUNCTIONS */
@@ -12,10 +12,10 @@ room *findRoom(char *roomName, room rooms[MAX_ROOMS], int roomCount);
 class *findClass(char *className, class classes[MAX_CLASSES], int classCount);
 
 
-int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, class *classes, int *classCount, teacher *teachers, int *teacherCount){
+int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, class *classes, int *classCount, teacher *teachers, int *teacherCount, char (*labels)[MAX_LABEL_LENGTH]){
     FILE *dataFile;
     int i,j,lines,res;
-    
+    int labelCounter = 0;
     char buffer[200];
     char inlineBuffer[200];
     char shortBuffer[20];
@@ -79,6 +79,10 @@ int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, clas
                 teachers[*teacherCount].canTeachLength = findSubjectsFromString(inlineBuffer, teachers[*teacherCount].canTeach, subjects, *subjectCount);
 
                 *teacherCount+=1;
+            }else if(strcmp(lastType,"TIMEINTERVALS") == 0){
+                res = sscanf(buffer," %s ",
+                    labels[labelCounter++]
+                );
             }else{
                 printf("Warning: Uknown type on line %i\n", i+1);
             }
