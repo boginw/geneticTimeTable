@@ -98,11 +98,11 @@ typedef struct timetable{
 } timetable;
 
 /* Individet (STAVEFEJL ER GRATIS !) */
-typedef struct induvidual{
+typedef struct individuals{
     timetable t[MAX_CLASSES]; /* Et array af klasseskemaer for en hel skole */
     int fitness; /* fitness værdien for individet */
     int conflicts; /* antal konflikter på tværs af skolen i individet. */
-} induvidual;
+} individuals;
 
 
 int randomNumber(int min, int max);
@@ -125,7 +125,7 @@ int main(int argc, char const *argv[]){
     subject subjects[MAX_SUBJECTS]; /* Array af fag, bliver deklaret men IKKE initieret */
     class classes[MAX_CLASSES]; /* Array af klasser, bliver deklaret men IKKE initieret */
     teacher teachers[MAX_TEACHERS]; /* Array af lærer, bliver deklaret men IKKE initieret */
-    induvidual individuals[MAX_individuals]; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
+    individuals individuals[MAX_individuals]; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
 	int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
     int i,j; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
@@ -157,7 +157,7 @@ int main(int argc, char const *argv[]){
         individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     }
 
-    qsort(individuals, MAX_individuals, sizeof(induvidual), conflictsQsort);
+    qsort(individuals, MAX_individuals, sizeof(individuals), conflictsQsort);
     printf("First conflicts: %3d\n", individuals[0].conflicts);
 
     /* Conflicts preview */
@@ -167,7 +167,7 @@ int main(int argc, char const *argv[]){
             crossover(&individuals[i], &individuals[i+1], classCount);
         }
 
-        qsort(individuals, MAX_individuals, sizeof(induvidual), conflictsQsort);
+        qsort(individuals, MAX_individuals, sizeof(individuals), conflictsQsort);
 
         if(j%100==0){
             printf("Best conflicts: %3d", individuals[0].conflicts);
@@ -185,7 +185,7 @@ int main(int argc, char const *argv[]){
 
 
     /* Conflicts preview */
-    /*qsort(individuals, MAX_individuals, sizeof(induvidual), conflictsQsort);
+    /*qsort(individuals, MAX_individuals, sizeof(individuals), conflictsQsort);
     for (i = 0; i < MAX_individuals; i++){
         printf("Ind: %2d, conflicts: %d\n", i, individuals[i].conflicts);
     }*/

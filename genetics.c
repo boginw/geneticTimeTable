@@ -1,7 +1,7 @@
 
-induvidual crossover(induvidual *p1, induvidual *p2, int classCount){
+individuals crossover(individuals *p1, individuals *p2, int classCount){
 	int i,p,c,d,l;
-	induvidual n;
+	individuals n;
 	int first;
 	int *cp = calloc(MAX_LECTURES, sizeof(int));
 	/* check probability of crossover operation */
