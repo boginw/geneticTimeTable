@@ -102,6 +102,7 @@ typedef struct individual{
     timetable t[MAX_CLASSES]; /* Et array af klasseskemaer for en hel skole */
     int fitness; /* fitness værdien for individet */
     int conflicts; /* antal konflikter på tværs af skolen i individet. */
+    int mutations; /* antal mutationer foretaget */
 } individual;
 
 
@@ -159,7 +160,10 @@ int main(int argc, char const *argv[]){
 
     qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
     printf("First conflicts: %3d\n", individuals[0].conflicts);
-
+        for (i = 0; i < classCount; i++){
+        printf("\nClass %s, conflicts: %d\n", individuals[0].t[i].forClass->name, individuals[0].conflicts);
+        printTimeTable(individuals[0].t[i], intervalLabels);
+    }
     /* Conflicts preview */
     for (j = 0; j < 10000; j++){
 

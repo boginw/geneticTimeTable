@@ -97,17 +97,17 @@ void injectSerumX(individual *i){
 
 void addSugar(individual *i){
 	/* This layer mutates on the top level ie. the total school timetable */
-	printf("Adding sugar");
+	/*printf("Adding sugar");*/
 }
 
 
 void addSpice(individual *i){
 	/* This layer mutates on the top level ie. the total school timetable */
-	printf("Adding spice");
+	/*printf("Adding spice");*/
 }
 
 
 void addEverythingNice(individual *i){
 	/* This layer mutates on the top level ie. the total school timetable */
-	printf("Adding Everything Nice");
+	/*printf("Adding Everything Nice");*/
 }

@@ -41,8 +41,9 @@ void printLecture(lecture l){
 		strcat(requirements,l.l_subject->roomRequire[i]->name);
 	}
 
-	printf("| %d | %3s | %-7s | %-17s | %-25s | %-14s |\n",
+	printf("| %d - %d | %3s | %-7s | %-17s | %-25s | %-14s |\n",
 		l.l_datetime.dayOfWeek,
+		l.l_datetime.hour,
 		l.l_class->name,
 		l.l_room->name,
 		l.l_subject->name,
@@ -82,7 +83,7 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 
 				strcat(rows[j*4+3],"|--------|");
 			}
-			if(j < t.day[i].lectureLength && !t.day[i].lectures[j].free && t.day[i].lectures[j].init == 1){
+			if(!t.day[i].lectures[j].free && t.day[i].lectures[j].init == 1){
 				sprintf(temp,"| %-17s |",
 					t.day[i].lectures[j].l_subject->name);
 
@@ -104,7 +105,7 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 				strcat(rows[j*4+0],"|                   |");
 				strcat(rows[j*4+1],"|                   |");
 				strcat(rows[j*4+2],"|                   |");
-				if(j+1 < t.day[i].lectureLength && !t.day[i].lectures[j+1].free && t.day[i].lectures[j+1].init){
+				if(!t.day[i].lectures[j+1].free && t.day[i].lectures[j+1].init){
 					strcat(rows[j*4+3],"|-------------------|");
 				}else{
 					strcat(rows[j*4+3],"|                   |");
