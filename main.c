@@ -163,12 +163,13 @@ int main(int argc, char const *argv[]){
     /* Conflicts preview */
     for (j = 0; j < 10000; j++){
 
+        /* The selection, should be a function with better preformance */
         for (i = 0; i < MAX_individuals-2; i+=2){
             crossover(&individuals[i], &individuals[i+1], classCount);
         }
         for(i = 0; i < MAX_INDUVIDUALS; i++){
             if(shouldMutate()){
-                mutate(&induviduals[i]);
+                mutate(&individuals[i]);
             }
         }
 

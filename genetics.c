@@ -57,7 +57,7 @@ induvidual crossover(induvidual *p1, induvidual *p2, int classCount){
 }
 
 
-void mutate(individual *i){
+void mutate(induvidual *i){
 	/* TODO
 	 * vælg valg der skal muteres
 	 * vælge hvordan det skal muterer
