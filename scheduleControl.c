@@ -38,7 +38,7 @@ void conflicts(induvidual *ind, int classCount){
 		}
 	}
 
-	ind->conflicts = conflicts;
+	ind->conflicts = conflicts / 8;
 	free(dubRoom);
 	free(dubTeacher);
 }

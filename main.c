@@ -199,10 +199,10 @@ int main(int argc, char const *argv[]){
 
 
 	/* Uncomment for demo of schedules */
-	/*for (i = 0; i < classCount; i++){
+	for (i = 0; i < classCount; i++){
     	printf("\n\nClass %s, conflicts: %d\n", induviduals[0].t[i].forClass->name, induviduals[0].conflicts);
     	printTimeTable(induviduals[0].t[i],intervalLabels);
-    }*/
+    }
 
     /* Conflicts preview */
     qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
