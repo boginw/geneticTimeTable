@@ -124,19 +124,19 @@ int main(int argc, char const *argv[]){
     class classes[MAX_CLASSES]; /* Array af klasser, bliver deklaret men IKKE initieret */
     teacher teachers[MAX_TEACHERS]; /* Array af lærer, bliver deklaret men IKKE initieret */
     induvidual induviduals[MAX_INDUVIDUALS]; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
-  lecture r_lecture; /* variable til at midlertidig gemme random genereret lektion, indtil de bliver placerer i et klasseskema */
-  int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
+	lecture r_lecture; /* variable til at midlertidig gemme random genereret lektion, indtil de bliver placerer i et klasseskema */
+	int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
     int i,j; /* iteration counters */
-  int c,d,l,s; /* specifikke iteration counters, hvor c = klasser, d = dage, l = lektioner, s = fag */
+    int c,d,l,s; /* specifikke iteration counters, hvor c = klasser, d = dage, l = lektioner, s = fag */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
-  int *tempPerYear, subjectIndex; /* specifikke placeholders for data som skal bruges midlertidigt i genereringen */
+ 	int *tempPerYear, subjectIndex; /* specifikke placeholders for data som skal bruges midlertidigt i genereringen */
     /* VARIABLES END */
 
     srand(seed); /* Generationen af selve token til genbrug */
 
-  /*
-   * Tjekker efter debug mode
-  */
+  	/*
+   	 * Tjekker efter debug mode
+  	 */
     if(argc > 1){
         if(strcmp(argv[1],"--debug") == 0){
             debug = 1;
@@ -147,9 +147,9 @@ int main(int argc, char const *argv[]){
         printf("Seed: %d\n", seed);
     }
 
-  /*
-   * Initierer variablerner, ved at parse dat.sched igennem filParse.c funktionerne
-  */
+    /*
+     * Initierer variablerner, ved at parse dat.sched igennem filParse.c funktionerne
+     */
     init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount,intervalLabels);
 
     tempPerYear = malloc(subjectCount * sizeof(int)); /* intierer arrayet således at der er plads til alle fag */
