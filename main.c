@@ -122,14 +122,23 @@ int shouldMutate();
 int main(int argc, char const *argv[]){
     /* VARIABLES BEGIN */
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH]; /* Array af TIMEINTERVALS [se. dat.sched] */
-    room rooms[MAX_ROOMS]; /* Array af rum, bliver deklaret men IKKE initieret */
-    subject subjects[MAX_SUBJECTS]; /* Array af fag, bliver deklaret men IKKE initieret */
-    class classes[MAX_CLASSES]; /* Array af klasser, bliver deklaret men IKKE initieret */
-    teacher teachers[MAX_TEACHERS]; /* Array af lærer, bliver deklaret men IKKE initieret */
-    individual individuals[MAX_INDIVIDUALS]; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
+    room *rooms; /* Array af rum, bliver deklaret men IKKE initieret */
+    subject *subjects; /* Array af fag, bliver deklaret men IKKE initieret */
+    class *classes; /* Array af klasser, bliver deklaret men IKKE initieret */
+    teacher *teachers; /* Array af lærer, bliver deklaret men IKKE initieret */
+    individual *individuals; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
 	int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
     int i,j; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
+    rooms = calloc(MAX_ROOMS, sizeof(room));
+    subjects = calloc(MAX_SUBJECTS, sizeof(subject));
+    classes = calloc(MAX_CLASSES, sizeof(class));
+    teachers = calloc(MAX_TEACHERS, sizeof(teacher));
+    individuals = calloc(MAX_INDIVIDUALS, sizeof(individual));
+    if(rooms == NULL || subjects == NULL || classes == NULL || teachers == NULL || individuals == NULL){
+        printf("Not enough ram, sorry...\n");
+        exit(EXIT_FAILURE);
+    }
  	/* VARIABLES END */
     srand(seed); /* Generationen af selve token til genbrug */
 
@@ -157,6 +166,7 @@ int main(int argc, char const *argv[]){
         /* For hvert individ op til maks antal individer */
         individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     }
+
 
     qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
     printf("First conflicts: %3d\n", individuals[0].conflicts);
@@ -197,7 +207,11 @@ int main(int argc, char const *argv[]){
     }*/
     /* Dump csv files in folder schedules */
     /*dumpCSV(&individuals[0],classCount,intervalLabels);*/
-
+    free(rooms);
+    free(subjects);
+    free(classes);
+    free(teachers);
+    free(individuals);
     return 0;
 }
 
