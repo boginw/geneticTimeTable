@@ -1,7 +1,6 @@
-int conflictCount(const void *items, const size_t numberOfItems, const size_t itemSize);
-void conflicts(induvidual *ind, int classCount);
 int fitness(induvidual ind);
-int conflictCount(const void *items, const size_t numberOfItems, const size_t itemSize);
+void conflicts(induvidual *ind, int classCount);
+int dublicateCount(const void *items, const size_t numberOfItems, const size_t itemSize);
 int conflictsQsort(const void * a, const void * b);
 induvidual randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
 induvidual crossover(induvidual *p1, induvidual *p2, int classCount);
@@ -46,8 +45,8 @@ void conflicts(induvidual *ind, int classCount){
 			}
 			if(classCount > 0){
 				/* Check for dublicates in teachers and rooms */
-				conflicts += conflictCount(dubRoom,classCount,sizeof(room));
-				conflicts += conflictCount(dubTeacher,classCount,sizeof(teacher));
+				conflicts += dublicateCount(dubRoom,classCount,sizeof(room));
+				conflicts += dublicateCount(dubTeacher,classCount,sizeof(teacher));
 			}
 		}
 	}
@@ -62,24 +61,24 @@ void conflicts(induvidual *ind, int classCount){
  * @param	a		 array to check in
  * @param	items how many entries in array
  * @param	size	size of each entry
- * @return			 returns amount of dublicates/conflicts
+ * @return			 returns amount of dublicates
  */
-int conflictCount(const void *items, const size_t numberOfItems, const size_t itemSize){
+int dublicateCount(const void *items, const size_t numberOfItems, const size_t itemSize){
 	/* TODO: https://codereview.stackexchange.com/questions/149602/duplicate-counter-in-c */
 	int i,j;
-	int conflicts = 0;
+	int dublicates = 0;
 		char *x = (char *)items;
 
 		for (i = 0; i < numberOfItems - 1; i++){
 			for (j = i + 1; j < numberOfItems; j++){
 				/* Check if chunks are equal, if so count */
 				if(memcmp(&(x[i*itemSize]), &(x[j*itemSize]), itemSize) == 0){
-					conflicts++;
+					dublicates++;
 				}
 			}
 		}
 
-		return conflicts;
+		return dublicates;
 }
 
 /**
@@ -96,79 +95,37 @@ int conflictsQsort(const void * a, const void * b){
 }
 
 
-induvidual crossover(induvidual *p1, induvidual *p2, int classCount){
-	int i,p,c,d,l;
-	induvidual n;
-	int first;
-	int *cp = calloc(MAX_LECTURES, sizeof(int));
-	/* check probability of crossover operation */
-	if( randomNumber(0,100) > crossover_probability ){
-		/* no crossover, just copy first parent */
-		return *p1;
-	}
-
-	/* new chromosome object, copy chromosome setup */
-	n = *p1;
-
-	/* TODO - is it safe to assume everything running? */
-	/* make new code by combining parent codes */
-
-	for (c = 0; c < classCount; c++){
-		/* determine crossover point (randomly) */
-
-		for (d = 0; d < WEEK_LENGTH; d++){
-			first = randomNumber(0,1);
-			memset(cp,0,MAX_LECTURES*sizeof(int));
-			
-			for(i = crossover_points; i > 0; i--){
-				while( 1 ){
-					p = randomNumber(0,MAX_LECTURES-1);
-					if( !cp[ p ] ){
-						cp[ p ] = 1;
-						break;
-					}
-				}
-			}
-
-			for (l = 0; l < MAX_LECTURES; l++){
-				swapn(&p1->t[c].day[d].lectures[l], &p2->t[c].day[d].lectures[l], sizeof(lecture));
-
-				if(first){
-					n.t[c].day[d].lectures[l] = p1->t[c].day[d].lectures[l];
-				}else{
-					n.t[c].day[d].lectures[l] = p2->t[c].day[d].lectures[l];
-				}
-
-				if( cp[ l ] ){
-					/* change source chromosome */
-					first = !first;
-				}
-			}
-		}
-	}
-
-	conflicts(&n,classCount);
-	free(cp);
-	return n;
-}
-
 induvidual randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
-	int c,d,l;
-	induvidual ind;
-	lecture r_lecture;
-	ind.fitness = 0;
-	for (c = 0; c < classCount; c++){
-		ind.t[c].forClass = &classes[c];
-		for (d = 0; d < WEEK_LENGTH; d++){
-			for (l = 0; l < MAX_LECTURES; l++){
-				r_lecture = randomLectureForClass(rooms,roomCount,subjects,subjectCount,teachers,teacherCount, &classes[c]);
-				r_lecture.l_datetime.dayOfWeek = d;
-				r_lecture.l_datetime.hour = l;
-				ind.t[c].day[d].lectures[ ind.t[c].day[d].lectureLength++ ] = r_lecture;
-			}
-		}
-    }
-	conflicts(&ind,classCount);
+	int c,d,l,s;
+	int subjectIndex = 0;
+	induvidual r_individual;
+	int tempPerYear = malloc(subjectCount * sizeof(int)); /* intierer arrayet således at der er plads til alle fag */
 
-	return ind;
+	/* For hvert individ op til maks antal individer */
+	for (c = 0; c < classCount; c++){
+		r_individual.t[c].forClass = &classes[c];
+		/* Get all the required hours for class */
+		for (s = 0; s < subjectCount; s++){
+		    tempPerYear[s] = ceil(subjects[s].perYear[classes[c].year] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
+		}
+		while(!isEmpty(tempPerYear,subjectCount)){
+		    for (d = 0; d < WEEK_LENGTH; d++){
+		        for (l = 0; l < MAX_LECTURES; l++){
+		            subjectIndex = randomNumber(0,subjectCount-1);
+		            if(tempPerYear[subjectIndex] != 0 && r_individual.t[c].day[d].lectures[r_individual.t[c].day[d].lectureLength].init != 1){
+		                r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[subjectIndex]);
+		                r_lecture.l_datetime.dayOfWeek = d;
+		                r_lecture.l_datetime.hour = l;
+		                r_lecture.init = 1;
+		                tempPerYear[subjectIndex]--;
+		                r_individual.t[c].day[d].lectures[r_individual.t[c].day[d].lectureLength++] = r_lecture;
+		            }
+		        }
+		    }
+		}
+	}
+
+	free(tempPerYear);
+
+	return r_individual;
 }

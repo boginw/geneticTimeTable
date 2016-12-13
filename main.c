@@ -115,6 +115,7 @@ int shouldMutate();
 #include "lectureControl.c"
 #include "print.c"
 #include "scheduleControl.c"
+#include "genetics.c"
 
 int main(int argc, char const *argv[]){
     /* VARIABLES BEGIN */
@@ -127,9 +128,8 @@ int main(int argc, char const *argv[]){
 	lecture r_lecture; /* variable til at midlertidig gemme random genereret lektion, indtil de bliver placerer i et klasseskema */
 	int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
     int i,j; /* iteration counters */
-    int c,d,l,s; /* specifikke iteration counters, hvor c = klasser, d = dage, l = lektioner, s = fag */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
- 	int *tempPerYear, subjectIndex; /* specifikke placeholders for data som skal bruges midlertidigt i genereringen */
+ 	int *tempPerYear; /* specifikke placeholders for data som skal bruges midlertidigt i genereringen */
     /* VARIABLES END */
 
     srand(seed); /* Generationen af selve token til genbrug */
@@ -152,37 +152,11 @@ int main(int argc, char const *argv[]){
      */
     init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount,intervalLabels);
 
-    tempPerYear = malloc(subjectCount * sizeof(int)); /* intierer arrayet således at der er plads til alle fag */
-
-
     /* Create initial population */
     /* TODO: OMSKRIV DETTE TIL RECURSIVE FUNKTIONS KALD !!!!!! */
     for (i = 0; i < MAX_INDUVIDUALS; i++){
         /* For hvert individ op til maks antal individer */
-        for (c = 0; c < classCount; c++){
-            induviduals[i].t[c].forClass = &classes[c];
-            /* Get all the required hours for class */
-            for (s = 0; s < subjectCount; s++){
-                tempPerYear[s] = ceil(subjects[s].perYear[classes[c].year] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
-            }
-            while(!isEmpty(tempPerYear,subjectCount)){
-                for (d = 0; d < WEEK_LENGTH; d++){
-                    for (l = 0; l < MAX_LECTURES; l++){
-                        subjectIndex = randomNumber(0,subjectCount-1);
-                        if(tempPerYear[subjectIndex] != 0 && induviduals[i].t[c].day[d].lectures[induviduals[i].t[c].day[d].lectureLength].init != 1){
-                            r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[subjectIndex]);
-                            r_lecture.l_datetime.dayOfWeek = d;
-                            r_lecture.l_datetime.hour = l;
-                            r_lecture.init = 1;
-                            tempPerYear[subjectIndex]--;
-                            induviduals[i].t[c].day[d].lectures[induviduals[i].t[c].day[d].lectureLength++] = r_lecture;
-                        }
-                    }
-                }
-            }
-        }
-
-        conflicts(&induviduals[i],classCount);
+        r_individual = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     }
 
     qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
