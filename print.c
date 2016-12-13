@@ -15,8 +15,11 @@ char *autoPadding(char *header, int width){
     char *newHeader;
 
     int len = strlen(header);
-    newHeader = malloc(width * sizeof(char));
-
+    newHeader = calloc(width, sizeof(char));
+    if(newHeader == NULL){
+    	printf("Not enough ram, sorry...\n");
+      exit(EXIT_FAILURE);
+    }
     padding = width/2 -len / 2;
 
     for (i = 0; i < padding; i++){
@@ -33,8 +36,13 @@ char *autoPadding(char *header, int width){
  * @param l lecture to print
  */
 void printLecture(lecture l){
-	char *requirements = calloc((l.l_subject->roomRequireLength) * 7, sizeof(char));
+	char *requirements;
 	int i;
+	requirements = calloc((l.l_subject->roomRequireLength) * 7, sizeof(char));
+	if(requirements == NULL){
+    	printf("Not enough ram, sorry...\n");
+      exit(EXIT_FAILURE);
+    }
 	for (i = 0; i < l.l_subject->roomRequireLength; i++){
 		if(i!=0)
 			strcat(requirements,", ");
@@ -130,9 +138,14 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 }
 
 char *initials(char *name){
-	char *inital = malloc(3*sizeof(char));
+	char *inital;
 	int i=0;
 	int n=0;
+	inital = calloc(3,sizeof(char));
+	if(inital == NULL){
+		printf("Not enough ram, sorry...\n");
+    exit(EXIT_FAILURE);
+	}
     while(name[i]!='\0'){
        if(name[i]==' '){
             i++;
