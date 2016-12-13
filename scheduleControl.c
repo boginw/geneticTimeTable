@@ -99,7 +99,11 @@ induvidual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 	int c,d,l,s;
 	int subjectIndex = 0;
 	induvidual r_individual;
-	int tempPerYear = malloc(subjectCount * sizeof(int)); /* intierer arrayet således at der er plads til alle fag */
+	lecture r_lecture; /* variable til at midlertidig gemme random genereret lektion, indtil de bliver placerer i et klasseskema */
+	int *tempPerYear;
+	tempPerYear = malloc(subjectCount * sizeof(int)); /* intierer arrayet således at der er plads til alle fag */
+
+	memset(&r_individual,'\0',sizeof(induvidual));
 
 	/* For hvert individ op til maks antal individer */
 	for (c = 0; c < classCount; c++){
@@ -108,15 +112,20 @@ induvidual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 		for (s = 0; s < subjectCount; s++){
 		    tempPerYear[s] = ceil(subjects[s].perYear[classes[c].year] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
 		}
+
 		while(!isEmpty(tempPerYear,subjectCount)){
 		    for (d = 0; d < WEEK_LENGTH; d++){
 		        for (l = 0; l < MAX_LECTURES; l++){
 		            subjectIndex = randomNumber(0,subjectCount-1);
-		            if(tempPerYear[subjectIndex] != 0 && r_individual.t[c].day[d].lectures[r_individual.t[c].day[d].lectureLength].init != 1){
+
+		            if(tempPerYear[subjectIndex] != 0 && 
+							r_individual.t[c].day[d].lectures[r_individual.t[c].day[d].lectureLength].init != 1){
+
 		                r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[subjectIndex]);
 		                r_lecture.l_datetime.dayOfWeek = d;
 		                r_lecture.l_datetime.hour = l;
 		                r_lecture.init = 1;
+
 		                tempPerYear[subjectIndex]--;
 		                r_individual.t[c].day[d].lectures[r_individual.t[c].day[d].lectureLength++] = r_lecture;
 		            }
