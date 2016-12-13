@@ -134,6 +134,8 @@ induvidual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 		}
 	}
 
+	conflicts(&r_individual,classCount);
+
 	free(tempPerYear);
 
 	return r_individual;
