@@ -1,7 +1,7 @@
-int dubCount(void *a, size_t items, size_t size);
+int conflictCount(const void *items, const size_t numberOfItems, const size_t itemSize);
 void conflicts(induvidual *ind, int classCount);
 int fitness(induvidual ind);
-int dubCount(void *a, size_t items, size_t size);
+int conflictCount(const void *items, const size_t numberOfItems, const size_t itemSize);
 int conflictsQsort(const void * a, const void * b);
 induvidual randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
 induvidual crossover(induvidual *p1, induvidual *p2, int classCount);
@@ -38,7 +38,7 @@ void conflicts(induvidual *ind, int classCount){
 				if(ind->t[c].day[d].lectures[l].init != 1){
 					break;
 				}
-				
+
 				if(ind->t[c].day[d].lectures[l].free == 0){
 					dubRoom[c] = ind->t[c].day[d].lectures[l].l_room;
 					dubTeacher[c] = ind->t[c].day[d].lectures[l].l_teacher;
@@ -46,8 +46,8 @@ void conflicts(induvidual *ind, int classCount){
 			}
 			if(classCount > 0){
 				/* Check for dublicates in teachers and rooms */
-				conflicts += dubCount(dubRoom,classCount,sizeof(room));
-				conflicts += dubCount(dubTeacher,classCount,sizeof(teacher));
+				conflicts += conflictCount(dubRoom,classCount,sizeof(room));
+				conflicts += conflictCount(dubTeacher,classCount,sizeof(teacher));
 			}
 		}
 	}
@@ -64,16 +64,16 @@ void conflicts(induvidual *ind, int classCount){
  * @param	size	size of each entry
  * @return			 returns amount of dublicates/conflicts
  */
-int dubCount(void *a, size_t items, size_t size){
+int conflictCount(const void *items, const size_t numberOfItems, const size_t itemSize){
 	/* TODO: https://codereview.stackexchange.com/questions/149602/duplicate-counter-in-c */
 	int i,j;
 	int conflicts = 0;
-		char *x = (char *)a;
+		char *x = (char *)items;
 
-		for (i = 0; i < items - 1; i++){
-			for (j = i + 1; j < items; j++){
+		for (i = 0; i < numberOfItems - 1; i++){
+			for (j = i + 1; j < numberOfItems; j++){
 				/* Check if chunks are equal, if so count */
-				if(memcmp(&(x[i*size]), &(x[j*size]), size) == 0){
+				if(memcmp(&(x[i*itemSize]), &(x[j*itemSize]), itemSize) == 0){
 					conflicts++;
 				}
 			}
