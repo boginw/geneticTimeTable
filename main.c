@@ -15,7 +15,7 @@
 #define MAX_CLASSES        10
 #define MAX_TEACHERS       10
 #define MAX_TIMETABLES     10
-#define MAX_INDUVIDUALS    25
+#define MAX_individuals    25
 
 #define SCHOOL_DAYS_YEAR  190
 #define WEEK_LENGTH         5
@@ -125,7 +125,7 @@ int main(int argc, char const *argv[]){
     subject subjects[MAX_SUBJECTS]; /* Array af fag, bliver deklaret men IKKE initieret */
     class classes[MAX_CLASSES]; /* Array af klasser, bliver deklaret men IKKE initieret */
     teacher teachers[MAX_TEACHERS]; /* Array af lærer, bliver deklaret men IKKE initieret */
-    induvidual induviduals[MAX_INDUVIDUALS]; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
+    induvidual individuals[MAX_individuals]; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
 	int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
     int i,j; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
@@ -152,25 +152,25 @@ int main(int argc, char const *argv[]){
 
     /* Create initial population */
     /* TODO: OMSKRIV DETTE TIL RECURSIVE FUNKTIONS KALD !!!!!! */
-    for (i = 0; i < MAX_INDUVIDUALS; i++){
+    for (i = 0; i < MAX_individuals; i++){
         /* For hvert individ op til maks antal individer */
-        induviduals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+        individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     }
 
-    qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
-    printf("First conflicts: %3d\n", induviduals[0].conflicts);
+    qsort(individuals, MAX_individuals, sizeof(induvidual), conflictsQsort);
+    printf("First conflicts: %3d\n", individuals[0].conflicts);
 
     /* Conflicts preview */
     for (j = 0; j < 10000; j++){
 
-        for (i = 0; i < MAX_INDUVIDUALS-2; i+=2){
-            crossover(&induviduals[i], &induviduals[i+1], classCount);
+        for (i = 0; i < MAX_individuals-2; i+=2){
+            crossover(&individuals[i], &individuals[i+1], classCount);
         }
 
-        qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
+        qsort(individuals, MAX_individuals, sizeof(induvidual), conflictsQsort);
 
         if(j%100==0){
-            printf("Best conflicts: %3d", induviduals[0].conflicts);
+            printf("Best conflicts: %3d", individuals[0].conflicts);
             for (i = 0; i < 19; i++){
                 printf("\b");
             }
@@ -179,18 +179,18 @@ int main(int argc, char const *argv[]){
 
     /* Uncomment for demo of schedules */
     for (i = 0; i < classCount; i++){
-        printf("\nClass %s, conflicts: %d\n", induviduals[0].t[i].forClass->name, induviduals[0].conflicts);
-        printTimeTable(induviduals[0].t[i], intervalLabels);
+        printf("\nClass %s, conflicts: %d\n", individuals[0].t[i].forClass->name, individuals[0].conflicts);
+        printTimeTable(individuals[0].t[i], intervalLabels);
     }
 
 
     /* Conflicts preview */
-    /*qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
-    for (i = 0; i < MAX_INDUVIDUALS; i++){
-        printf("Ind: %2d, conflicts: %d\n", i, induviduals[i].conflicts);
+    /*qsort(individuals, MAX_individuals, sizeof(induvidual), conflictsQsort);
+    for (i = 0; i < MAX_individuals; i++){
+        printf("Ind: %2d, conflicts: %d\n", i, individuals[i].conflicts);
     }*/
     /* Dump csv files in folder schedules */
-    /*dumpCSV(&induviduals[0],classCount,intervalLabels);*/
+    /*dumpCSV(&individuals[0],classCount,intervalLabels);*/
 
     return 0;
 }
