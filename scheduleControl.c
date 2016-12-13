@@ -102,7 +102,10 @@ individual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 	lecture r_lecture; /* variable til at midlertidig gemme random genereret lektion, indtil de bliver placerer i et klasseskema */
 	int *hoursPerWeek;
 	hoursPerWeek = calloc(subjectCount, sizeof(int)); /* intierer arrayet således at der er plads til alle fag */
-
+	if(hoursPerWeek == NULL){
+		printf("Not enough ram, sorry...\n");
+		exit(EXIT_FAILURE);
+	}
 	memset(&r_individual,'\0',sizeof(individual));
 
 	/* For hvert individ op til maks antal individer */
