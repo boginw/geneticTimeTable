@@ -189,7 +189,7 @@ int main(int argc, char const *argv[]){
         for (i = 0; i < MAX_INDIVIDUALS-1; i+=1){
             crossover(&individuals[i], &individuals[i+1], classCount);
         }
-        
+
         for(i = 0; i < MAX_INDIVIDUALS; i++){
             if(shouldMutate()){
                 mutate(&individuals[i]);
@@ -207,14 +207,14 @@ int main(int argc, char const *argv[]){
 
         	/*printTimeTable(individuals[0].t[0], intervalLabels);*/
 
-            printf("%3d%% [%-50s] conflicts: %3d | generation: %6d/%-6d", 
-            	(int) ((((float) j) / runForGen)*100), 
-            	progressLine, 
-            	individuals[0].conflicts, 
-            	j, 
+            printf("%3d%% [%-50s] conflicts: %3d | generation: %6d/%-6d",
+            	(int) ((((float) j) / runForGen)*100),
+            	progressLine,
+            	individuals[0].conflicts,
+            	j,
             	runForGen
             );
-            
+
             for (i = 0; i < 6000; i++){
                 printf("\b");
             }

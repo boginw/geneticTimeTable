@@ -60,13 +60,14 @@ void printLecture(lecture l){
 }
 
 void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
-	char rows[MAX_LECTURES*4+3][1024];
+	char rows[(MAX_LECTURES)*4+3][1024];
 	lecture tempLecture;
 	int i,j,index;
 
 	char temp[22];
 	char timeTemp0[6];
 	char timeTemp1[6];
+
 	for (j = 0; j < MAX_LECTURES/WEEK_LENGTH; j++){
 		strcpy(rows[j*4+0],"");
 		strcpy(rows[j*4+1],"");
@@ -77,7 +78,7 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 			if((index = lectureOnDateTime(t,i,j)) != -1){
 				tempLecture = t.lectures[index];
 			}
-			
+
 			if(i == 0){
 				sscanf(labels[j]," %[^,],%s",timeTemp0,timeTemp1);
 
