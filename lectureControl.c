@@ -1,8 +1,4 @@
-int isRoomCorrect(lecture *l);
-int isTeacherCorrect(lecture *l);
-lecture randomLecture(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
-lecture randomLectureForClass(room *rooms, int roomCount, subject *subjects, int subjectCount, teacher *teachers, int teacherCount, class *curClass);
-lecture randomLectureForClassAndSubject(room *rooms, int roomCount, teacher *teachers, int teacherCount, class *curClass, subject *curSubject);
+
 
 int checkLecture(lecture l){
 	if(!isRoomCorrect(&l)){
@@ -79,7 +75,7 @@ lecture randomLectureForClassAndSubject(room *rooms, int roomCount, teacher *tea
 		r_lecture.l_room = &rooms[randomNumber(0,roomCount-1)];
 	}
 
-	while((r_lecture.l_teacher = &teachers[randomNumber(0, teacherCount-1)])){
+	while((r_lecture.l_teacher = &teachers[randomNumber(0,teacherCount-1)])){
 		for(i = 0; i < r_lecture.l_teacher->canTeachLength; i++){
 			if(strcmp(r_lecture.l_teacher->canTeach[i]->name, r_lecture.l_subject->name) == 0){
 				shouldBreak = 1;

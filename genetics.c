@@ -1,11 +1,12 @@
-void weapon_x(individual *i, int amountOfMutations);
-void injectSerumX(individual *i);
-void addSugar(individual *i);
-void addSpice(individual *i);
-void addEverythingNice(individual *i);
+
+
+int crossover_points      =  MAX_LECTURES/2;
+int mutation_size         =  100;
+int crossover_probability =  90;
+int mutation_probability  =  10;
 
 individual crossover(individual *p1, individual *p2, int classCount){
-	int i,p,c,d,l;
+	int i,p,c,l;
 	individual n;
 	int first;
 	int *cp = calloc(MAX_LECTURES, sizeof(int));
@@ -21,11 +22,11 @@ individual crossover(individual *p1, individual *p2, int classCount){
 	/* TODO: is it safe to assume everything running? */
 	/* make new code by combining parent codes */
 
+	first = randomNumber(0,1);
 	for (c = 0; c < classCount; c++){
 		/* determine crossover point (randomly) */
 
-		for (d = 0; d < WEEK_LENGTH; d++){
-			first = randomNumber(0,1);
+		for (l = 0; l < MAX_LECTURES; l++){	
 			memset(cp,0,MAX_LECTURES*sizeof(int));
 
 			for(i = crossover_points; i > 0; i--){
@@ -38,24 +39,34 @@ individual crossover(individual *p1, individual *p2, int classCount){
 				}
 			}
 
-			for (l = 0; l < MAX_LECTURES; l++){
-				swapn(&p1->t[c].day[d].lectures[l], &p2->t[c].day[d].lectures[l], sizeof(lecture));
 
-				if(first){
-					n.t[c].day[d].lectures[l] = p1->t[c].day[d].lectures[l];
-				}else{
-					n.t[c].day[d].lectures[l] = p2->t[c].day[d].lectures[l];
+			if(first){
+				if(p1->t[c].lectures[l].init != 1 && p2->t[c].lectures[l].init != 1){
+					continue;
 				}
-
-				if( cp[ l ] ){
-					/* change source chromosome */
-					first = !first;
-				}
+				swapn(
+					&p1->t[c].lectures[l], 
+					&p2->t[c].lectures[l], 
+					sizeof(lecture)
+				);
+			
+				n.t[c].lectures[l] = p1->t[c].lectures[l];
+			}else{
+				n.t[c].lectures[l] = p2->t[c].lectures[l];
 			}
+
+			if( cp[ l ] ){
+				/* change source chromosome */
+				first = !first;
+			}
+			
 		}
 	}
 
 	conflicts(&n,classCount);
+
+	conflicts(p1,classCount);
+	conflicts(p2,classCount);
 	free(cp);
 	return n;
 }

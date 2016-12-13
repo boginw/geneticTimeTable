@@ -1,15 +1,4 @@
-int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, class *classes, int *classCount, teacher *teachers, int *teacherCount, char (*labels)[MAX_LABEL_LENGTH]);
-int countLines(FILE *fp);
 
-/* PARSE FUNCTIONS */
-room parseRoom(char *line);
-subject parseSubject(char *line, room* rooms, int roomCount);
-
-/* FIND FUNCTIONS */
-int findRoomsFromString(char *roomString, room* roomsFound[MAX_ROOMS], room* rooms, int roomCount);
-int findSubjectsFromString(char *subjectString, subject* subjectsFound[MAX_SUBJECTS], subject* subjects, int subjectCount);
-room *findRoom(char *roomName, room rooms[MAX_ROOMS], int roomCount);
-class *findClass(char *className, class classes[MAX_CLASSES], int classCount);
 
 
 int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, class *classes, int *classCount, teacher *teachers, int *teacherCount, char (*labels)[MAX_LABEL_LENGTH]){

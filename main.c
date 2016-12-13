@@ -19,7 +19,7 @@
 
 #define SCHOOL_DAYS_YEAR  190
 #define WEEK_LENGTH         5
-#define MAX_LECTURES       10
+#define MAX_LECTURES       50
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
@@ -94,6 +94,8 @@ typedef struct schoolDay{
 /* Selve skemaet for en enkelt klasse */
 typedef struct timetable{
     schoolDay day[WEEK_LENGTH]; /* et array af schoolDay structs */
+    lecture lectures[MAX_LECTURES]; /* array af lektioner til dagen */
+    int lectureLength; /* antal lektioner på den pågældende dag */
     class *forClass; /* pointer til den pågældene klasse. */
 } timetable;
 
@@ -114,10 +116,11 @@ int isEmpty(int *array, size_t size);
 int shouldMutate();
 void prepend(char* s, const char* t);
 
+#include "headers.c"
 #include "fileParse.c"
 #include "lectureControl.c"
-#include "print.c"
 #include "scheduleControl.c"
+#include "print.c"
 #include "genetics.c"
 
 int main(int argc, char const *argv[]){
@@ -165,7 +168,6 @@ int main(int argc, char const *argv[]){
      * Initierer variablerner, ved at parse dat.sched igennem filParse.c funktionerne
      */
     init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount,intervalLabels);
-
     /* Create initial population */
     for (i = 0; i < MAX_INDIVIDUALS; i++){
         /* For hvert individ op til maks antal individer */
@@ -182,9 +184,9 @@ int main(int argc, char const *argv[]){
     printf("First conflicts: %3d\n", individuals[0].conflicts);
     /* Conflicts preview */
 
-    runForGen = 10000;
+    runForGen = 1000;
     for (j = 0; j < runForGen; j++){
-        for (i = 0; i < MAX_INDIVIDUALS-2; i+=2){
+        for (i = 0; i < MAX_INDIVIDUALS-1; i+=1){
             crossover(&individuals[i], &individuals[i+1], classCount);
         }
         
@@ -197,11 +199,13 @@ int main(int argc, char const *argv[]){
         qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
         if(j % 100 == 0){
-        	if(curProg*2 < (int) ((((float) j) / runForGen)*100)){
+        	if(curProg < (int) ((((float) j) / runForGen)*100)){
         		/*printf("%d, %d\n", curProg, (int) ((((float) j) / runForGen)*100) );*/
         		prepend(progressLine, "=");
         		curProg++;
         	}
+
+        	/*printTimeTable(individuals[0].t[0], intervalLabels);*/
 
             printf("%3d%% [%-50s] conflicts: %3d | generation: %6d/%-6d", 
             	(int) ((((float) j) / runForGen)*100), 
@@ -211,14 +215,14 @@ int main(int argc, char const *argv[]){
             	runForGen
             );
             
-            for (i = 0; i < 109; i++){
+            for (i = 0; i < 6000; i++){
                 printf("\b");
             }
         }
     }
 
     /* Uncomment for demo of schedules */
-    for (i = 0; i < 1; i++){
+    for (i = 0; i < classCount; i++){
         printf("\nClass %s, conflicts: %d\n", individuals[0].t[i].forClass->name, individuals[0].conflicts);
         printTimeTable(individuals[0].t[i], intervalLabels);
     }
