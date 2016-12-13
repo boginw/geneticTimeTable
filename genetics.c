@@ -4,9 +4,9 @@ void addSugar(individuals *i);
 void addSpice(individuals *i);
 void addEverythingNice(individuals *i);
 
-individuals crossover(individuals *p1, individuals *p2, int classCount){
+individual crossover(individual *p1, individual *p2, int classCount){
 	int i,p,c,d,l;
-	individuals n;
+	individual n;
 	int first;
 	int *cp = calloc(MAX_LECTURES, sizeof(int));
 	/* check probability of crossover operation */
