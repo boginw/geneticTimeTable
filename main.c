@@ -123,17 +123,28 @@ void prepend(char* s, const char* t);
 int main(int argc, char const *argv[]){
     /* VARIABLES BEGIN */
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH]; /* Array af TIMEINTERVALS [se. dat.sched] */
-    room rooms[MAX_ROOMS]; /* Array af rum, bliver deklaret men IKKE initieret */
-    subject subjects[MAX_SUBJECTS]; /* Array af fag, bliver deklaret men IKKE initieret */
-    class classes[MAX_CLASSES]; /* Array af klasser, bliver deklaret men IKKE initieret */
-    teacher teachers[MAX_TEACHERS]; /* Array af lærer, bliver deklaret men IKKE initieret */
-    individual individuals[MAX_INDIVIDUALS]; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
+    room *rooms; /* Array af rum, bliver deklaret men IKKE initieret */
+    subject *subjects; /* Array af fag, bliver deklaret men IKKE initieret */
+    class *classes; /* Array af klasser, bliver deklaret men IKKE initieret */
+    teacher *teachers; /* Array af lærer, bliver deklaret men IKKE initieret */
+    individual *individuals; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
 	int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
     int i,j; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
+
     char progressLine[50] = ">";
     int runForGen;
     int curProg = 1;
+
+    rooms = calloc(MAX_ROOMS, sizeof(room));
+    subjects = calloc(MAX_SUBJECTS, sizeof(subject));
+    classes = calloc(MAX_CLASSES, sizeof(class));
+    teachers = calloc(MAX_TEACHERS, sizeof(teacher));
+    individuals = calloc(MAX_INDIVIDUALS, sizeof(individual));
+    if(rooms == NULL || subjects == NULL || classes == NULL || teachers == NULL || individuals == NULL){
+        printf("Not enough ram, sorry...\n");
+        exit(EXIT_FAILURE);
+    }
  	/* VARIABLES END */
     srand(seed); /* Generationen af selve token til genbrug */
 
@@ -161,7 +172,9 @@ int main(int argc, char const *argv[]){
         individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     }
 
+
     qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
+
     for (i = 0; i < 1; i++){
         printf("\nClass %s, conflicts: %d\n", individuals[0].t[i].forClass->name, individuals[0].conflicts);
         printTimeTable(individuals[0].t[i], intervalLabels);
@@ -171,7 +184,6 @@ int main(int argc, char const *argv[]){
 
     runForGen = 10000;
     for (j = 0; j < runForGen; j++){
-
         for (i = 0; i < MAX_INDIVIDUALS-2; i+=2){
             crossover(&individuals[i], &individuals[i+1], classCount);
         }
@@ -184,7 +196,6 @@ int main(int argc, char const *argv[]){
 
         qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
-        
         if(j % 100 == 0){
         	if(curProg*2 < (int) ((((float) j) / runForGen)*100)){
         		/*printf("%d, %d\n", curProg, (int) ((((float) j) / runForGen)*100) );*/
@@ -220,6 +231,12 @@ int main(int argc, char const *argv[]){
     }*/
     /* Dump csv files in folder schedules */
     /*dumpCSV(&individuals[0],classCount,intervalLabels);*/
+
+    free(rooms);
+    free(subjects);
+    free(classes);
+    free(teachers);
+    free(individuals);
     return 0;
 }
 

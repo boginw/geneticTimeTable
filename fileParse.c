@@ -16,18 +16,26 @@ int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, clas
     FILE *dataFile;
     int i,j,lines,res;
     int labelCounter = 0;
-    char buffer[200];
-    char inlineBuffer[200];
-    char shortBuffer[20];
-    char lastType[15];
-
+    char *buffer;
+    char *inlineBuffer;
+    char *shortBuffer;
+    char *lastType;
     char *requirements;
 
     requirements = calloc(5 * 20, sizeof(char));
+    buffer = calloc(200, sizeof(char));
+    inlineBuffer = calloc(200, sizeof(char));
+    shortBuffer = calloc(20, sizeof(char));
+    lastType = calloc(15, sizeof(char));
 
     if(!(dataFile = fopen("dat.sched", "r"))){
         printf("DATAFILE DOES NOT EXIST...\n");
         exit(0);
+    }
+
+    if(requirements == NULL || buffer == NULL || inlineBuffer == NULL || shortBuffer == NULL || lastType == NULL){
+        printf("Not enough ram, sorry...\n");
+        exit(EXIT_FAILURE);
     }
 
     lines = countLines(dataFile);
@@ -135,6 +143,11 @@ int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, clas
     res = res + 1;
 
     free(requirements);
+    free(buffer);
+    free(inlineBuffer);
+    free(shortBuffer);
+    free(lastType);
+
     fclose(dataFile);
 
     return 1;
@@ -173,31 +186,35 @@ room parseRoom(char *line){
 }
 
 subject parseSubject(char *line, room* rooms, int roomCount){
-    char subjectBuffer[256];
-    
-    char curSub[MAX_NAME_LENGTH];
+    char *subjectBuffer;
+    char *hoursBuffer;
+    char *curSub;
     int curSubI = 0;
     int year = 0;
-    char hoursBuffer[100];
-    
     subject returnSubject;
     int i;
     int len;
-
-    sscanf(line," %[^,],%[^,],%s ",
+    subjectBuffer = calloc(256, sizeof(char));
+    hoursBuffer = calloc(100, sizeof(char));
+    curSub = calloc(MAX_NAME_LENGTH, sizeof(char));
+    if(subjectBuffer == NULL || hoursBuffer == NULL || curSub == NULL){
+        printf("Not enough ram, sorry...\n");
+        exit(EXIT_FAILURE);
+    }
+    sscanf(line," %[^,],%[^,],%s",
         returnSubject.name,
         subjectBuffer,
         hoursBuffer
     );
 
     len = strlen(hoursBuffer);
-
     for (i = 0; i < len; i++){
         if(hoursBuffer[i] != ','){
-            curSub[curSubI++] = hoursBuffer[i];
-        
+            curSub[curSubI] = hoursBuffer[i];
+            curSubI++;
             if(i+2 == len){
-                curSub[curSubI++] = hoursBuffer[i+1];
+                curSub[curSubI] = hoursBuffer[i+1];
+                curSubI++;
                 hoursBuffer[i+1] = ',';
             }
         }else{
@@ -208,11 +225,13 @@ subject parseSubject(char *line, room* rooms, int roomCount){
     }
 
     returnSubject.roomRequireLength = findRoomsFromString(subjectBuffer,returnSubject.roomRequire, rooms, roomCount);
-
+    free(subjectBuffer);
+    free(hoursBuffer);
+    free(curSub);
     return returnSubject;
 }
 
-room *findRoom(char *roomName, room rooms[MAX_ROOMS], int roomCount){
+room *findRoom(char *roomName, room *rooms, int roomCount){
     int i;
     for (i = 0; i < roomCount; i++){
         if(strcmp(roomName, rooms[i].name) == 0){
@@ -234,7 +253,7 @@ subject *findSubject(char *subjectName, subject subjects[MAX_SUBJECTS], int subj
     return NULL;
 }
 
-class *findClass(char *className, class classes[MAX_CLASSES], int classCount){
+class *findClass(char *className, class *classes, int classCount){
     int i;
     for (i = 0; i < classCount; i++){
 
@@ -246,7 +265,7 @@ class *findClass(char *className, class classes[MAX_CLASSES], int classCount){
     return NULL;
 }
 
-teacher *findTeacher(char *teacherName, teacher teachers[MAX_TEACHERS], int teacherCount){
+teacher *findTeacher(char *teacherName, teacher *teachers, int teacherCount){
     int i;
     for (i = 0; i < teacherCount; i++){
 
@@ -285,8 +304,12 @@ int findSubjectsFromString(char *subjectString, subject* subjectsFound[MAX_SUBJE
     int i;
     int curChar = 0;
     int curSubj = 0;
-    char tmpName[20];
-
+    char *tmpName;
+    tmpName = calloc(20, sizeof(char));
+    if(tmpName == NULL){
+        printf("Not enough ram, sorry...\n");
+        exit(EXIT_FAILURE);
+    }
     for (i = 1; i < len; i++){
         if(subjectString[i] != ';' && subjectString[i] != ']'){
             tmpName[curChar++] = subjectString[i];
