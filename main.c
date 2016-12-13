@@ -160,13 +160,16 @@ int main(int argc, char const *argv[]){
 
     qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
     printf("First conflicts: %3d\n", individuals[0].conflicts);
-        for (i = 0; i < classCount; i++){
-        printf("\nClass %s, conflicts: %d\n", individuals[0].t[i].forClass->name, individuals[0].conflicts);
-        printTimeTable(individuals[0].t[i], intervalLabels);
-    }
+    printf("%s", "test");
     /* Conflicts preview */
-    for (j = 0; j < 10000; j++){
-
+    j=0;
+    while(j < 100){
+        if(j%100==0){
+            printf("Best conflicts: %3d", individuals[0].conflicts);
+            for (i = 0; i < 19; i++){
+                printf("\b");
+            }
+        }
         for (i = 0; i < MAX_INDIVIDUALS-2; i+=2){
             crossover(&individuals[i], &individuals[i+1], classCount);
         }
@@ -177,13 +180,7 @@ int main(int argc, char const *argv[]){
         }
 
         qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
-
-        if(j%100==0){
-            printf("Best conflicts: %3d", individuals[0].conflicts);
-            for (i = 0; i < 19; i++){
-                printf("\b");
-            }
-        }
+        j++;
     }
 
     /* Uncomment for demo of schedules */
