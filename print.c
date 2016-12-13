@@ -1,7 +1,4 @@
-void printLecture(lecture l);
-char *autoPadding(char *header, int width);
-char *initials(char *name);
-void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]);
+
 
 /**
  * Returns a padded header instead of left alligned
@@ -49,7 +46,7 @@ void printLecture(lecture l){
 		strcat(requirements,l.l_subject->roomRequire[i]->name);
 	}
 
-	printf("| %d - %d | %3s | %-7s | %-17s | %-25s | %-14s |\n",
+	printf("| %2d - %2d | %3s | %-7s | %-17s | %-25s | %-14s |\n",
 		l.l_datetime.dayOfWeek,
 		l.l_datetime.hour,
 		l.l_class->name,
@@ -64,19 +61,23 @@ void printLecture(lecture l){
 
 void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 	char rows[MAX_LECTURES*4+3][1024];
-
-	int i,j;
+	lecture tempLecture;
+	int i,j,index;
 
 	char temp[22];
 	char timeTemp0[6];
 	char timeTemp1[6];
-	for (j = 0; j < MAX_LECTURES; j++){
+	for (j = 0; j < MAX_LECTURES/WEEK_LENGTH; j++){
 		strcpy(rows[j*4+0],"");
 		strcpy(rows[j*4+1],"");
 		strcpy(rows[j*4+2],"");
 		strcpy(rows[j*4+3],"");
 
 		for (i = 0; i < WEEK_LENGTH; i++){
+			if((index = lectureOnDateTime(t,i,j)) != -1){
+				tempLecture = t.lectures[index];
+			}
+			
 			if(i == 0){
 				sscanf(labels[j]," %[^,],%s",timeTemp0,timeTemp1);
 
@@ -91,19 +92,19 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 
 				strcat(rows[j*4+3],"|--------|");
 			}
-			if(!t.day[i].lectures[j].free && t.day[i].lectures[j].init == 1){
+			if(index != -1 && !tempLecture.free && tempLecture.init == 1){
 				sprintf(temp,"| %-17s |",
-					t.day[i].lectures[j].l_subject->name);
+					tempLecture.l_subject->name);
 
 				strcat(rows[j*4+0],temp);
 
 				sprintf(temp,"| %-17s |",
-					t.day[i].lectures[j].l_teacher->name);
+					tempLecture.l_teacher->name);
 
 				strcat(rows[j*4+1],temp);
 
 				sprintf(temp,"| %17s |",
-					t.day[i].lectures[j].l_room->name);
+					tempLecture.l_room->name);
 
 				strcat(rows[j*4+2],temp);
 
@@ -113,7 +114,7 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 				strcat(rows[j*4+0],"|                   |");
 				strcat(rows[j*4+1],"|                   |");
 				strcat(rows[j*4+2],"|                   |");
-				if(!t.day[i].lectures[j+1].free && t.day[i].lectures[j+1].init){
+				if(0 /*!t.lectures[j+1].free && t.lectures[j+1].init*/){
 					strcat(rows[j*4+3],"|-------------------|");
 				}else{
 					strcat(rows[j*4+3],"|                   |");
