@@ -163,8 +163,14 @@ int main(int argc, char const *argv[]){
     /* Conflicts preview */
     for (j = 0; j < 10000; j++){
 
+        /* Selection part, should be a function */
         for (i = 0; i < MAX_INDUVIDUALS-2; i+=2){
             crossover(&induviduals[i], &induviduals[i+1], classCount);
+        }
+        for(i = 0; i < MAX_INDUVIDUALS; i++){
+            if(shouldMutate()){
+                mutate(&induviduals[i]);
+            }
         }
 
         qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
