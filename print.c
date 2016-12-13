@@ -60,7 +60,7 @@ void printLecture(lecture l){
 }
 
 void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
-	char rows[MAX_LECTURES / WEEK_LENGTH * 4 + 3][1024];
+	char rows[MAX_LECTURES * 4 + 3][1024];
 	lecture tempLecture;
 	int i,j,index;
 
@@ -68,8 +68,8 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 	char timeTemp0[6];
 	char timeTemp1[6];
 
-	memset(rows,'\0',(MAX_LECTURES / WEEK_LENGTH * 4 + 3)*1024);
-	
+	memset(rows,'\0',(MAX_LECTURES * 4 + 3)*1024);
+
 	for (j = 0; j < MAX_LECTURES/WEEK_LENGTH; j++){
 		strcpy(rows[j*4+0],"");
 		strcpy(rows[j*4+1],"");

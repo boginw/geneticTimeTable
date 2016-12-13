@@ -10,39 +10,25 @@ int fitness(individual ind){
  * @param classCount amount of classes
  */
 void conflicts(individual *ind, int classCount){
-	int c,l;
+	int c1,l1,c2,l2,day,hour;
 	int conflicts = 0;
 
-	/* Temporary holder of rooms and teachers */
-	room    **dubRoom	 = calloc(classCount * 10, sizeof(room));
-	teacher **dubTeacher = calloc(classCount * 10, sizeof(teacher));
-
-	for (l = 0; l < MAX_LECTURES; l++){
-		/* Clean array before usage */
-		memset(dubRoom,'\0', classCount*sizeof(room));
-
-		/* Copy room and teacher to their respective array */
-		for (c = 0; c < classCount; c++){
-			if(ind->t[c].lectures[l].init != 1){
-				break;
-			}
-
-			if(ind->t[c].lectures[l].free == 0){
-				dubRoom[c] = ind->t[c].lectures[l].l_room;
-				dubTeacher[c] = ind->t[c].lectures[l].l_teacher;
-			}
-		}
-		if(classCount > 0){
-			/* Check for dublicates in teachers and rooms */
-			conflicts += dublicateCount(dubRoom,classCount,sizeof(room));
-			conflicts += dublicateCount(dubTeacher,classCount,sizeof(teacher));
-		}
-	}
-
-
+	for(c1=0; c1 < classCount; c1++){
+    for(l1=0; l1 < ind->t[c1].lectureLength; l1++){
+        day = ind->t[c1].lectures[l1].l_datetime.dayOfWeek;
+        hour = ind->t[c1].lectures[l1].l_datetime.hour;
+        for(c2=c1; c2 < classCount; c2++){
+            for(l2=l1; l2 < ind->t[c2].lectureLength; l2++){
+              if(ind->t[c2].lectures[l2].l_datetime.dayOfWeek == day && ind->t[c2].lectures[l2].l_datetime.hour==hour){
+                conflicts += (ind->t[c2].lectures[l2].l_teacher == ind->t[c1].lectures[l1].l_teacher);
+                conflicts += (ind->t[c2].lectures[l2].l_class == ind->t[c1].lectures[l1].l_class);
+                break;
+              }
+            }
+        }
+    }
+  }
 	ind->conflicts = conflicts;
-	free(dubRoom);
-	free(dubTeacher);
 }
 
 /**
