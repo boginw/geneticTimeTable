@@ -126,13 +126,10 @@ int main(int argc, char const *argv[]){
     class classes[MAX_CLASSES]; /* Array af klasser, bliver deklaret men IKKE initieret */
     teacher teachers[MAX_TEACHERS]; /* Array af lærer, bliver deklaret men IKKE initieret */
     induvidual induviduals[MAX_INDUVIDUALS]; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
-	lecture r_lecture; /* variable til at midlertidig gemme random genereret lektion, indtil de bliver placerer i et klasseskema */
 	int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
     int i,j; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
- 	int *tempPerYear; /* specifikke placeholders for data som skal bruges midlertidigt i genereringen */
-    /* VARIABLES END */
-
+ 	/* VARIABLES END */
     srand(seed); /* Generationen af selve token til genbrug */
 
   	/*
@@ -157,7 +154,7 @@ int main(int argc, char const *argv[]){
     /* TODO: OMSKRIV DETTE TIL RECURSIVE FUNKTIONS KALD !!!!!! */
     for (i = 0; i < MAX_INDUVIDUALS; i++){
         /* For hvert individ op til maks antal individer */
-        r_individual = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+        induviduals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     }
 
     qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);
@@ -195,8 +192,6 @@ int main(int argc, char const *argv[]){
     /* Dump csv files in folder schedules */
     /*dumpCSV(&induviduals[0],classCount,intervalLabels);*/
 
-
-    free(tempPerYear);
     return 0;
 }
 
