@@ -80,7 +80,7 @@ int conflictsQsort(const void * a, const void * b){
 	const individual *oa = a;
 	const individual *ob = b;
 
-	return (ob->conflicts - oa->conflicts);
+	return (oa->conflicts - ob->conflicts);
 }
 
 

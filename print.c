@@ -60,13 +60,16 @@ void printLecture(lecture l){
 }
 
 void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
-	char rows[MAX_LECTURES*4+3][1024];
+	char rows[MAX_LECTURES / WEEK_LENGTH * 4 + 3][1024];
 	lecture tempLecture;
 	int i,j,index;
 
 	char temp[22];
 	char timeTemp0[6];
 	char timeTemp1[6];
+
+	memset(rows,'\0',(MAX_LECTURES / WEEK_LENGTH * 4 + 3)*1024);
+	
 	for (j = 0; j < MAX_LECTURES/WEEK_LENGTH; j++){
 		strcpy(rows[j*4+0],"");
 		strcpy(rows[j*4+1],"");
@@ -114,7 +117,7 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 				strcat(rows[j*4+0],"|                   |");
 				strcat(rows[j*4+1],"|                   |");
 				strcat(rows[j*4+2],"|                   |");
-				if(0 /*!t.lectures[j+1].free && t.lectures[j+1].init*/){
+				if(((index = lectureOnDateTime(t,i,j+1)) != -1) && !t.lectures[index].free && t.lectures[index].init){
 					strcat(rows[j*4+3],"|-------------------|");
 				}else{
 					strcat(rows[j*4+3],"|                   |");
@@ -159,7 +162,7 @@ char *initials(char *name){
 }
 
 void dumpCSV(individual *ind, int classCount, char (*labels)[MAX_LABEL_LENGTH]){
-	int c,l,d;
+	/*int c,l,d;
 	FILE *fp;
 	char temp[20];
 	char rows[MAX_LECTURES*3][1024];
@@ -207,5 +210,5 @@ void dumpCSV(individual *ind, int classCount, char (*labels)[MAX_LABEL_LENGTH]){
 		}
 
 		fclose(fp);
-	}
+	}*/
 }

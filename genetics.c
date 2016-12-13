@@ -1,6 +1,6 @@
 
 
-int crossover_points      =  MAX_LECTURES/2;
+int crossover_points      =  MAX_LECTURES/1.5;
 int mutation_size         =  100;
 int crossover_probability =  90;
 int mutation_probability  =  10;
