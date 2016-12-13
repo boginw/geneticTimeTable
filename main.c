@@ -132,11 +132,12 @@ int main(int argc, char const *argv[]){
     int runForGen;
     int curProg = 1;
 
-    rooms = calloc(MAX_ROOMS, sizeof(room));
-    subjects = calloc(MAX_SUBJECTS, sizeof(subject));
-    classes = calloc(MAX_CLASSES, sizeof(class));
-    teachers = calloc(MAX_TEACHERS, sizeof(teacher));
+    rooms       = calloc(MAX_ROOMS,       sizeof(room));
+    subjects    = calloc(MAX_SUBJECTS,    sizeof(subject));
+    classes     = calloc(MAX_CLASSES,     sizeof(class));
+    teachers    = calloc(MAX_TEACHERS,    sizeof(teacher));
     individuals = calloc(MAX_INDIVIDUALS, sizeof(individual));
+
     if(rooms == NULL || subjects == NULL || classes == NULL || teachers == NULL || individuals == NULL){
         printf("Not enough ram, sorry...\n");
         exit(EXIT_FAILURE);
@@ -191,9 +192,8 @@ int main(int argc, char const *argv[]){
 
         qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
-        if(j % 100 == 0){
-        	if(curProg < (int) ((((float) j) / runForGen)*100)){
-        		/*printf("%d, %d\n", curProg, (int) ((((float) j) / runForGen)*100) );*/
+        if(j % 20 == 0){
+        	if(curProg*2 < (int) ((((float) j) / runForGen)*100)){
         		prepend(progressLine, "=");
         		curProg++;
         	}
@@ -201,7 +201,7 @@ int main(int argc, char const *argv[]){
         	printTimeTable(individuals[0].t[0], intervalLabels);
 
             printf("%3d%% [%-50s] conflicts: %3d | generation: %6d/%-6d", 
-            	(int) ((((float) j) / runForGen)*100), 
+            	(int) ((((float) j) / runForGen) * 100), 
             	progressLine, 
             	individuals[0].conflicts, 
             	j, 

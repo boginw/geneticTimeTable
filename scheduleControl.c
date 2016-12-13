@@ -10,39 +10,30 @@ int fitness(individual ind){
  * @param classCount amount of classes
  */
 void conflicts(individual *ind, int classCount){
-	int c,l;
+	int c,c1,l,i;
 	int conflicts = 0;
 
-	/* Temporary holder of rooms and teachers */
-	room    **dubRoom	 = calloc(classCount * 10, sizeof(room));
-	teacher **dubTeacher = calloc(classCount * 10, sizeof(teacher));
-
-	for (l = 0; l < MAX_LECTURES; l++){
-		/* Clean array before usage */
-		memset(dubRoom,'\0', classCount*sizeof(room));
-
-		/* Copy room and teacher to their respective array */
-		for (c = 0; c < classCount; c++){
-			if(ind->t[c].lectures[l].init != 1){
-				break;
+	for (c = 0; c < classCount; c++){
+		for (l = 0; l < MAX_LECTURES; l++){
+			if(ind->t[c].lectures[l].free && !ind->t[c].lectures[l].init){
+				continue;
 			}
 
-			if(ind->t[c].lectures[l].free == 0){
-				dubRoom[c] = ind->t[c].lectures[l].l_room;
-				dubTeacher[c] = ind->t[c].lectures[l].l_teacher;
+			for (c1 = c; c1 < classCount; c1++){
+				for (i = 0; i < MAX_LECTURES; i++){
+					if(ind->t[c1].lectures[i].free != 1 && 
+							memcmp(&ind->t[c].lectures[l].l_datetime, &ind->t[c1].lectures[i].l_datetime, sizeof(datetime)) == 0){
+						
+						conflicts += (ind->t[c].lectures[l].l_teacher  == ind->t[c1].lectures[i].l_teacher);
+						conflicts += (ind->t[c].lectures[l].l_room     == ind->t[c1].lectures[i].l_room);
+						break;
+					}
+				}
 			}
-		}
-		if(classCount > 0){
-			/* Check for dublicates in teachers and rooms */
-			conflicts += dublicateCount(dubRoom,classCount,sizeof(room));
-			conflicts += dublicateCount(dubTeacher,classCount,sizeof(teacher));
 		}
 	}
-	
 
 	ind->conflicts = conflicts;
-	free(dubRoom);
-	free(dubTeacher);
 }
 
 /**
@@ -120,6 +111,7 @@ individual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 	            r_individual.t[c].lectures[r_individual.t[c].lectureLength++] = r_lecture;
 	        }
 		}
+		qsort(&r_individual.t[c], MAX_LECTURES, sizeof(lecture), dayHourQsort);
 	}
 
 	conflicts(&r_individual,classCount);
@@ -127,6 +119,17 @@ individual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 	free(hoursPerWeek);
 
 	return r_individual;
+}
+
+int dayHourQsort(const void * a, const void * b){
+	const lecture *oa = a;
+	const lecture *ob = b;
+
+	if(oa->l_datetime.dayOfWeek != ob->l_datetime.dayOfWeek){
+		return oa->l_datetime.dayOfWeek - ob->l_datetime.dayOfWeek;
+	}else{
+		return oa->l_datetime.hour - ob->l_datetime.hour; 
+	}
 }
 
 int lectureOnDateTime(timetable t, int day, int hour){
