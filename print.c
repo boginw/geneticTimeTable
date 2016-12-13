@@ -143,7 +143,7 @@ char *initials(char *name){
    return inital;
 }
 
-void dumpCSV(individuals *ind, int classCount, char (*labels)[MAX_LABEL_LENGTH]){
+void dumpCSV(individual *ind, int classCount, char (*labels)[MAX_LABEL_LENGTH]){
 	int c,l,d;
 	FILE *fp;
 	char temp[20];
