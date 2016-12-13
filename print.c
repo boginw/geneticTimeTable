@@ -54,13 +54,13 @@ void printLecture(lecture l){
 }
 
 void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
-	char rows[MAX_LECTURES*4][1024];
+	char rows[MAX_LECTURES*4+3][1024];
 
 	int i,j;
-	char temp[20];
-	char timeTemp0[5];
-	char timeTemp1[5];
 
+	char temp[22];
+	char timeTemp0[6];
+	char timeTemp1[6];
 	for (j = 0; j < MAX_LECTURES; j++){
 		strcpy(rows[j*4+0],"");
 		strcpy(rows[j*4+1],"");
@@ -69,21 +69,20 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 
 		for (i = 0; i < WEEK_LENGTH; i++){
 			if(i == 0){
-				sscanf(labels[j],"%[^,],%[^,]",timeTemp0,timeTemp1);
+				sscanf(labels[j]," %[^,],%s",timeTemp0,timeTemp1);
 
 				strcat(rows[j*4+0],"|        |");
 				sprintf(temp,"| %5s  |",
 					timeTemp0);
 				strcat(rows[j*4+1],temp);
-				
+
 				sprintf(temp,"| %5s  |",
 					timeTemp1);
 				strcat(rows[j*4+2],temp);
-				
+
 				strcat(rows[j*4+3],"|--------|");
 			}
-
-			if(j < t.day[i].lectureLength){
+			if(j < t.day[i].lectureLength && !t.day[i].lectures[j].free && t.day[i].lectures[j].init == 1){
 				sprintf(temp,"| %-17s |",
 					t.day[i].lectures[j].l_subject->name);
 
@@ -105,7 +104,11 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 				strcat(rows[j*4+0],"|                   |");
 				strcat(rows[j*4+1],"|                   |");
 				strcat(rows[j*4+2],"|                   |");
-				strcat(rows[j*4+3],"|                   |");
+				if(j+1 < t.day[i].lectureLength && !t.day[i].lectures[j+1].free && t.day[i].lectures[j+1].init){
+					strcat(rows[j*4+3],"|-------------------|");
+				}else{
+					strcat(rows[j*4+3],"|                   |");
+				}
 			}
 
 			if(i+1 == WEEK_LENGTH){
