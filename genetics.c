@@ -22,7 +22,7 @@ induvidual crossover(induvidual *p1, induvidual *p2, int classCount){
 		for (d = 0; d < WEEK_LENGTH; d++){
 			first = randomNumber(0,1);
 			memset(cp,0,MAX_LECTURES*sizeof(int));
-			
+
 			for(i = crossover_points; i > 0; i--){
 				while( 1 ){
 					p = randomNumber(0,MAX_LECTURES-1);
@@ -53,4 +53,24 @@ induvidual crossover(induvidual *p1, induvidual *p2, int classCount){
 	conflicts(&n,classCount);
 	free(cp);
 	return n;
+}
+
+
+void mutate(individual *i){
+	/* TODO
+	 * vælg valg der skal muteres
+	 * vælge hvordan det skal muterer
+	 * muterer det
+	 * returner og afslut
+	 */
+	int amountOfMutations = randomNumber(1, MAX_MUTATIONS);
+	weapon_x(i, amountOfMutations);
+
+}
+
+void weapon_x(individual *i, int amountOfMutations){
+	if(amountOfMutations > 1){
+		return 1;
+	}
+	weapon_x(i, (amountOfMutations-1));
 }

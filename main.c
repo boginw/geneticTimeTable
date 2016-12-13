@@ -21,6 +21,7 @@
 #define WEEK_LENGTH         5
 #define MAX_LECTURES       10
 #define MUTATION_CHANCE     1
+#define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
 
 /**
