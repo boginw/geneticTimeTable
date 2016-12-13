@@ -26,7 +26,6 @@ void conflicts(individual *ind, int classCount){
 	/* Temporary holder of rooms and teachers */
 	room    **dubRoom	 = calloc(classCount * 10, sizeof(room));
 	teacher **dubTeacher = calloc(classCount * 10, sizeof(teacher));
-
 	for (d = 0; d < WEEK_LENGTH; d++){
 		for (l = 0; l < MAX_LECTURES; l++){
 			/* Clean array before usage */
@@ -35,7 +34,7 @@ void conflicts(individual *ind, int classCount){
 			/* Copy room and teacher to their respective array */
 			for (c = 0; c < classCount; c++){
 				if(ind->t[c].day[d].lectures[l].init != 1){
-					break;
+					continue;
 				}
 
 				if(ind->t[c].day[d].lectures[l].free == 0){
@@ -91,7 +90,7 @@ int conflictsQsort(const void * a, const void * b){
 	const individual *oa = a;
 	const individual *ob = b;
 
-	return (ob->conflicts - oa->conflicts);
+	return (oa->conflicts - ob->conflicts);
 }
 
 
