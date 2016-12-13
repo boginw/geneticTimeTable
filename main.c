@@ -157,7 +157,7 @@ int main(int argc, char const *argv[]){
         individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     }
 
-    qsort(individuals, MAX_INDIVIDUALS, sizeof(individuals), conflictsQsort);
+    qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
     printf("First conflicts: %3d\n", individuals[0].conflicts);
 
     /* Conflicts preview */
@@ -167,7 +167,7 @@ int main(int argc, char const *argv[]){
             crossover(&individuals[i], &individuals[i+1], classCount);
         }
 
-        qsort(individuals, MAX_INDIVIDUALS, sizeof(individuals), conflictsQsort);
+        qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
         if(j%100==0){
             printf("Best conflicts: %3d", individuals[0].conflicts);
