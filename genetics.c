@@ -1,3 +1,8 @@
+void weapon_x(individuals *i, int amountOfMutations);
+void injectSerumX(individuals *i);
+void addSugar(individuals *i);
+void addSpice(individuals *i);
+void addEverythingNice(individuals *i);
 
 individuals crossover(individuals *p1, individuals *p2, int classCount){
 	int i,p,c,d,l;
@@ -56,7 +61,7 @@ individuals crossover(individuals *p1, individuals *p2, int classCount){
 }
 
 
-void mutate(induvidual *i){
+void mutate(individuals *i){
 	/* TODO
 	 * vælg valg der skal muteres
 	 * vælge hvordan det skal muterer
@@ -67,15 +72,15 @@ void mutate(induvidual *i){
 	weapon_x(i, amountOfMutations);
 }
 
-void weapon_x(individual *i, int amountOfMutations){
-	if(amountOfMutations > 1){
-		return 1;
+void weapon_x(individuals *i, int amountOfMutations){
+	if(amountOfMutations < 1){
+		return;
 	}
 	injectSerumX(i);
 	weapon_x(i, (amountOfMutations-1));
 }
 
-void injectSerumX(individual *i){
+void injectSerumX(individuals *i){
 	int ingredient = randomNumber(1,3);
 	switch(ingredient){
 		case 1:
@@ -90,19 +95,19 @@ void injectSerumX(individual *i){
 	}
 }
 
-void addSugar(individual *i){
+void addSugar(individuals *i){
 	/* This layer mutates on the top level ie. the total school timetable */
 	printf("Adding sugar");
 }
 
 
-void addSpice(individual *i){
+void addSpice(individuals *i){
 	/* This layer mutates on the top level ie. the total school timetable */
 	printf("Adding spice");
 }
 
 
-void addEverythingNice(individual *i){
+void addEverythingNice(individuals *i){
 	/* This layer mutates on the top level ie. the total school timetable */
 	printf("Adding Everything Nice");
 }

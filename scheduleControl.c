@@ -6,7 +6,7 @@ individuals randomIndividual(room *rooms, int roomCount, subject *subjects, int 
 individuals crossover(individuals *p1, individuals *p2, int classCount);
 
 int crossover_points      =  MAX_LECTURES/2;
-int mutation_size         = 100;
+int mutation_size         =  100;
 int crossover_probability =  90;
 int mutation_probability  =  10;
 
@@ -118,7 +118,7 @@ individuals randomIndividual(room *rooms, int roomCount, subject *subjects, int 
 		        for (l = 0; l < MAX_LECTURES; l++){
 		            subjectIndex = randomNumber(0,subjectCount-1);
 
-		            if(tempPerYear[subjectIndex] != 0 && 
+		            if(tempPerYear[subjectIndex] != 0 &&
 							r_individual.t[c].day[d].lectures[r_individual.t[c].day[d].lectureLength].init != 1){
 
 		                r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[subjectIndex]);

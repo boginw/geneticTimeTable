@@ -167,7 +167,7 @@ int main(int argc, char const *argv[]){
         for (i = 0; i < MAX_individuals-2; i+=2){
             crossover(&individuals[i], &individuals[i+1], classCount);
         }
-        for(i = 0; i < MAX_INDUVIDUALS; i++){
+        for(i = 0; i < MAX_individuals; i++){
             if(shouldMutate()){
                 mutate(&individuals[i]);
             }
