@@ -125,7 +125,7 @@ int main(int argc, char const *argv[]){
     subject subjects[MAX_SUBJECTS]; /* Array af fag, bliver deklaret men IKKE initieret */
     class classes[MAX_CLASSES]; /* Array af klasser, bliver deklaret men IKKE initieret */
     teacher teachers[MAX_TEACHERS]; /* Array af lærer, bliver deklaret men IKKE initieret */
-    individual individuals[MAX_INDIVIDUALSS]; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
+    individual individuals[MAX_INDIVIDUALS]; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
 	int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
     int i,j; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
