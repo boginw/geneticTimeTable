@@ -85,15 +85,8 @@ typedef struct lecture{
     datetime l_datetime; /* hvilken dag og lektions nummer det skal foregå i */
 } lecture;
 
-/* En enekelt dag i skolen */
-typedef struct schoolDay{
-    int lectureLength; /* antal lektioner på den pågældende dag */
-    lecture lectures[MAX_LECTURES]; /* array af lektioner til dagen */
-} schoolDay;
-
 /* Selve skemaet for en enkelt klasse */
 typedef struct timetable{
-    schoolDay day[WEEK_LENGTH]; /* et array af schoolDay structs */
     lecture lectures[MAX_LECTURES]; /* array af lektioner til dagen */
     int lectureLength; /* antal lektioner på den pågældende dag */
     class *forClass; /* pointer til den pågældene klasse. */
@@ -205,7 +198,7 @@ int main(int argc, char const *argv[]){
         		curProg++;
         	}
 
-        	/*printTimeTable(individuals[0].t[0], intervalLabels);*/
+        	printTimeTable(individuals[0].t[0], intervalLabels);
 
             printf("%3d%% [%-50s] conflicts: %3d | generation: %6d/%-6d",
             	(int) ((((float) j) / runForGen)*100),
