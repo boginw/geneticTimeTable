@@ -191,7 +191,7 @@ int main(int argc, char const *argv[]){
     /* Conflicts preview */
     for (j = 0; j < 10000; j++){
 
-        for (i = 0; i < MAX_INDUVIDUALS-1; i+=2){
+        for (i = 0; i < MAX_INDUVIDUALS-2; i+=2){
             crossover(&induviduals[i], &induviduals[i+1], classCount);
         }
 

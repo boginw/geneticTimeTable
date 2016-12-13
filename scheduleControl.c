@@ -119,6 +119,7 @@ induvidual crossover(induvidual *p1, induvidual *p2, int classCount){
 		for (d = 0; d < WEEK_LENGTH; d++){
 			first = randomNumber(0,1);
 			memset(cp,0,MAX_LECTURES*sizeof(int));
+			
 			for(i = crossover_points; i > 0; i--){
 				while( 1 ){
 					p = randomNumber(0,MAX_LECTURES-1);
@@ -137,12 +138,12 @@ induvidual crossover(induvidual *p1, induvidual *p2, int classCount){
 				}else{
 					n.t[c].day[d].lectures[l] = p2->t[c].day[d].lectures[l];
 				}
+
 				if( cp[ l ] ){
 					/* change source chromosome */
 					first = !first;
 				}
 			}
-
 		}
 	}
 
