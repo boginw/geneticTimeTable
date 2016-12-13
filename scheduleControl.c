@@ -1,25 +1,25 @@
-int fitness(induvidual ind);
-void conflicts(induvidual *ind, int classCount);
+int fitness(individuals ind);
+void conflicts(individuals *ind, int classCount);
 int dublicateCount(const void *items, const size_t numberOfItems, const size_t itemSize);
 int conflictsQsort(const void * a, const void * b);
-induvidual randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
-induvidual crossover(induvidual *p1, induvidual *p2, int classCount);
+individuals randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
+individuals crossover(individuals *p1, individuals *p2, int classCount);
 
 int crossover_points      =  MAX_LECTURES/2;
 int mutation_size         = 100;
 int crossover_probability =  90;
 int mutation_probability  =  10;
 
-int fitness(induvidual ind){
+int fitness(individuals ind){
 	return 0;
 }
 
 /**
- * Counts conflicts of rooms and teachers in a single induvidual
- * @param ind				induvidual
+ * Counts conflicts of rooms and teachers in a single individuals
+ * @param ind				individuals
  * @param classCount amount of classes
  */
-void conflicts(induvidual *ind, int classCount){
+void conflicts(individuals *ind, int classCount){
 	int c,d,l;
 	int conflicts = 0;
 
@@ -83,27 +83,27 @@ int dublicateCount(const void *items, const size_t numberOfItems, const size_t i
 
 /**
  * Function for qSort to sort for lowest conflicts
- * @param	a first induvidual to compare
- * @param	b second induvidual to compare
+ * @param	a first individuals to compare
+ * @param	b second individuals to compare
  * @return	 whether a should come first or b
  */
 int conflictsQsort(const void * a, const void * b){
-	const induvidual *oa = a;
-	const induvidual *ob = b;
+	const individuals *oa = a;
+	const individuals *ob = b;
 
 	return (ob->conflicts - oa->conflicts);
 }
 
 
-induvidual randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+individuals randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
 	int c,d,l,s;
 	int subjectIndex = 0;
-	induvidual r_individual;
+	individuals r_individual;
 	lecture r_lecture; /* variable til at midlertidig gemme random genereret lektion, indtil de bliver placerer i et klasseskema */
 	int *tempPerYear;
 	tempPerYear = malloc(subjectCount * sizeof(int)); /* intierer arrayet således at der er plads til alle fag */
 
-	memset(&r_individual,'\0',sizeof(induvidual));
+	memset(&r_individual,'\0',sizeof(individuals));
 
 	/* For hvert individ op til maks antal individer */
 	for (c = 0; c < classCount; c++){
