@@ -64,7 +64,7 @@ lecture randomLectureForClassAndSubject(room *rooms, int roomCount, teacher *tea
 	int i;
 	int shouldBreak = 0;
 	lecture r_lecture;
-
+	memset(&r_lecture, '\0', sizeof(lecture));
 	r_lecture.l_class = curClass;
 	r_lecture.l_subject = curSubject;
 
@@ -79,7 +79,7 @@ lecture randomLectureForClassAndSubject(room *rooms, int roomCount, teacher *tea
 		r_lecture.l_room = &rooms[randomNumber(0,roomCount-1)];
 	}
 
-	while((r_lecture.l_teacher = &teachers[randomNumber(1,teacherCount)-1])){
+	while((r_lecture.l_teacher = &teachers[randomNumber(0, teacherCount-1)])){
 		for(i = 0; i < r_lecture.l_teacher->canTeachLength; i++){
 			if(strcmp(r_lecture.l_teacher->canTeach[i]->name, r_lecture.l_subject->name) == 0){
 				shouldBreak = 1;
