@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <math.h>
 
 #define MAX_NAME_LENGTH   255
 #define MAX_LABEL_LENGTH   12
@@ -168,7 +169,7 @@ int main(int argc, char const *argv[]){
 
 			/* Get all the required hours for class */
 			for (s = 0; s < subjectCount; s++){
-    			tempPerYear[s] = subjects[s].perYear[classes[c].year] / (SCHOOL_DAYS_YEAR / WEEK_LENGTH);
+    			tempPerYear[s] = ceil(subjects[s].perYear[classes[c].year] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
     		}
     		
     		while(!isEmpty(tempPerYear,subjectCount)){
@@ -200,9 +201,8 @@ int main(int argc, char const *argv[]){
     /* Conflicts preview */
     for (j = 0; j < 10000; j++){
 
-    	for (i = 0; i < MAX_INDUVIDUALS-2; i+=2){
-    		induviduals[i] = crossover(induviduals[i], induviduals[i+1],classCount);
-    		induviduals[i+1] = crossover(induviduals[i+1], induviduals[i+2],classCount);
+    	for (i = 0; i < MAX_INDUVIDUALS-1; i+=2){
+    		crossover(&induviduals[i], &induviduals[i+1], classCount);
     	}
 
 	    qsort(induviduals, MAX_INDUVIDUALS, sizeof(induvidual), conflictsQsort);

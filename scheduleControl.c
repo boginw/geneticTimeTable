@@ -4,7 +4,7 @@ int fitness(induvidual ind);
 int dubCount(void *a, size_t items, size_t size);
 int conflictsQsort(const void * a, const void * b);
 induvidual randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
-
+induvidual crossover(induvidual *p1, induvidual *p2, int classCount);
 
 int crossover_points      =  MAX_LECTURES/2;
 int mutation_size         = 100;
@@ -52,7 +52,7 @@ void conflicts(induvidual *ind, int classCount){
 		}
 	}
 
-	ind->conflicts = conflicts / 8;
+	ind->conflicts = conflicts;
 	free(dubRoom);
 	free(dubTeacher);
 }
@@ -96,7 +96,7 @@ int conflictsQsort(const void * a, const void * b){
 }
 
 
-induvidual crossover(induvidual p1, induvidual p2, int classCount){
+induvidual crossover(induvidual *p1, induvidual *p2, int classCount){
 	int i,p,c,d,l;
 	induvidual n;
 	int first;
@@ -104,11 +104,11 @@ induvidual crossover(induvidual p1, induvidual p2, int classCount){
 	/* check probability of crossover operation */
 	if( randomNumber(0,100) > crossover_probability ){
 		/* no crossover, just copy first parent */
-		return p1;
+		return *p1;
 	}
 
 	/* new chromosome object, copy chromosome setup */
-	n = p1;
+	n = *p1;
 
 	/* TODO - is it safe to assume everything running? */
 	/* make new code by combining parent codes */
@@ -130,10 +130,12 @@ induvidual crossover(induvidual p1, induvidual p2, int classCount){
 			}
 
 			for (l = 0; l < MAX_LECTURES; l++){
+				swapn(&p1->t[c].day[d].lectures[l], &p2->t[c].day[d].lectures[l], sizeof(lecture));
+
 				if(first){
-					n.t[c].day[d].lectures[l] = p1.t[c].day[d].lectures[l];
+					n.t[c].day[d].lectures[l] = p1->t[c].day[d].lectures[l];
 				}else{
-					n.t[c].day[d].lectures[l] = p2.t[c].day[d].lectures[l];
+					n.t[c].day[d].lectures[l] = p2->t[c].day[d].lectures[l];
 				}
 				if( cp[ l ] ){
 					/* change source chromosome */
