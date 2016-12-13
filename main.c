@@ -172,7 +172,7 @@ int main(int argc, char const *argv[]){
             }
         }
 
-        qsort(individuals, MAX_INDIVIDUALS, sizeof(individuals), conflictsQsort);
+        qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
         if(j%100==0){
             printf("Best conflicts: %3d", individuals[0].conflicts);
