@@ -19,7 +19,7 @@
 
 #define SCHOOL_DAYS_YEAR  200
 #define WEEK_LENGTH         5
-#define MAX_LECTURES       50
+#define MAX_LECTURES       40
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
