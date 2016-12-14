@@ -3,24 +3,20 @@ int mutation_size         =  100;
 int crossover_probability =   90;
 int mutation_probability  =   10;
 
-individual crossover(individual *p1, individual *p2, int classCount){
+void crossover(individual *child1, individual *child2, const individual *p1,const individual *p2, int classCount){
 	int i,p,c,l;
-	individual n;
-	individual oldp2 = *p2;
 	int first;
 	int *cp = calloc(MAX_LECTURES, sizeof(int));
+	*child1 = *p1;
+	*child2 = *p2;
+
 	/* check probability of crossover operation */
-	if( randomNumber(0,100) > crossover_probability ){
-		/* no crossover, just copy first parent */
+	/*if( randomNumber(0,100) > crossover_probability ){
+
 		return *p1;
-	}
+	}*/
 
-	/* new chromosome object, copy chromosome setup */
-	n = *p1;
-
-	/* TODO: is it safe to assume everything running? */
 	/* make new code by combining parent codes */
-
 	first = randomNumber(0,1);
 	for (c = 0; c < classCount; c++){
 		/* determine crossover point (randomly) */
@@ -38,20 +34,19 @@ individual crossover(individual *p1, individual *p2, int classCount){
 				}
 			}
 
-
 			if(first){
-				if(p1->t[c].lectures[l].init != 1 && oldp2.t[c].lectures[l].init != 1){
+				if(child1->t[c].lectures[l].init != 1 && child2->t[c].lectures[l].init != 1){
 					continue;
 				}
-				swapn(
-					&p1->t[c].lectures[l],
-					&oldp2.t[c].lectures[l],
+				/*swapn(
+					&child1->t[c].lectures[l],
+					&child2.t[c].lectures[l],
 					sizeof(lecture)
-				);
+				);*/
 
-				n.t[c].lectures[l] = p1->t[c].lectures[l];
+				child1->t[c].lectures[l] = child2->t[c].lectures[l];
 			}else{
-				n.t[c].lectures[l] = oldp2.t[c].lectures[l];
+				child2->t[c].lectures[l] = child1->t[c].lectures[l];
 			}
 
 			if( cp[ l ] ){
@@ -62,11 +57,10 @@ individual crossover(individual *p1, individual *p2, int classCount){
 		}
 	}
 
-	conflicts(&n,classCount);
-	conflicts(p1,classCount);
-	conflicts(p2,classCount);
+	conflicts(child1,classCount);
+	conflicts(child2,classCount);
 	free(cp);
-	return n;
+
 }
 
 
