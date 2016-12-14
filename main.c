@@ -146,27 +146,25 @@ int main(int argc, char const *argv[]){
     int curProg = 1;
 
     int *roulette;
-    int conflictsSum = 0;
-    int currentRoulette = 0;
-    int akk = 0;
+
 
     int lastBestGen = 0;
 
     individual lowestIndividual;
 
-    populationParams.rooms       = calloc(MAX_ROOMS,       sizeof(room));
-    populationParams.subjects    = calloc(MAX_SUBJECTS,    sizeof(subject));
-    populationParams.classes     = calloc(MAX_CLASSES,     sizeof(class));
-    populationParams.teachers    = calloc(MAX_TEACHERS,    sizeof(teacher));
-    populationParams.individuals = calloc(MAX_INDIVIDUALS, sizeof(individual));
-    populationParams.childrens = calloc(MAX_INDIVIDUALS, sizeof(individual));
-    populationParams.tempPopulation = calloc(MAX_INDIVIDUALS, sizeof(individual));
+    populationParams.rooms          = calloc(MAX_ROOMS,       sizeof(room));
+    populationParams.subjects       = calloc(MAX_SUBJECTS,    sizeof(subject));
+    populationParams.classes        = calloc(MAX_CLASSES,     sizeof(class));
+    populationParams.teachers       = calloc(MAX_TEACHERS,    sizeof(teacher));
+    populationParams.individuals    = calloc(MAX_INDIVIDUALS, sizeof(individual));
+    populationParams.childrens      = calloc(MAX_INDIVIDUALS, sizeof(individual));
+    populationParams.tempPopulation = calloc(MAX_INDIVIDUALS*2, sizeof(individual));
 
     populationParams.roomCount              = 0;
     populationParams.subjectCount           = 0;
     populationParams.classCount             = 0;
     populationParams.teacherCount           = 0;
-    populationParams.individualsCount       = 0;
+    populationParams.individualsCount       = MAX_INDIVIDUALS;
     populationParams.childrensCount         = 0;
     populationParams.tempPopulationCount    = 0;
 
@@ -200,7 +198,7 @@ int main(int argc, char const *argv[]){
      */
 
     init(&populationParams);
-    conflictsSum = generateInitialPopulation(&populationParams);
+    generateInitialPopulation(&populationParams);
     qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
     printf("First conflicts: %3d\n", populationParams.individuals[0].conflicts);
     /* Conflicts preview */
@@ -213,21 +211,18 @@ int main(int argc, char const *argv[]){
         mergePopulation(&populationParams);
         mutatePopulation(&populationParams);
         calcFitnessOnPopulation(&populationParams);
-        /*
-
-        individuals = selectionOnPopulation(tempPOP);*/
-
-        if(lastBestGen + 2000 < j){
+        selection(&populationParams);
+        /*if(lastBestGen + 2000 < j){
             printf("new \n");
             for (i = 0 ; i < MAX_INDIVIDUALS-5; i++){
                 populationParams.individuals[MAX_INDIVIDUALS-1-i] = randomIndividual(&populationParams);
             }
             lastBestGen = j;
-        }
+        }*/
         /* Replace shit populationParams.individuals */
-        for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
+        /*for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
             populationParams.individuals[i] = randomIndividual(&populationParams);
-        }
+        }*/
 
         /*qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
         for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
@@ -235,11 +230,6 @@ int main(int argc, char const *argv[]){
                 populationParams.individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
             }
         }*/
-
-
-
-        /* Sort for lowest conflicts */
-        qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
 
         if(populationParams.individuals[0].conflicts < lowestConflict || lowestConflict == -1){
@@ -276,9 +266,6 @@ int main(int argc, char const *argv[]){
             }
 
         }
-
-        akk = 0;
-        currentRoulette = 0;
     }
 
     /* Uncomment for demo of schedules */
@@ -305,11 +292,22 @@ int main(int argc, char const *argv[]){
     return 0;
 }
 
+void selection(params *populationParams){
+    int i;
+    qsort(populationParams->tempPopulation, populationParams->tempPopulationCount, sizeof(individual), conflictsQsort);
+    for(i=0; i < MAX_INDIVIDUALS; i++){
+        populationParams->individuals[i] = populationParams->tempPopulation[i];
+    }
+    memset(populationParams->tempPopulation, '\0', (populationParams->tempPopulationCount*sizeof(individual)));
+    populationParams->tempPopulationCount = 0;
+}
+
 void calcFitnessOnPopulation(params *populationParams){
     int i;
     for(i = 0; i < populationParams->tempPopulationCount-1; i++){
-        setFitness(populationParams);
+        conflicts(&populationParams->tempPopulation[i], populationParams->classCount);
     }
+    setFitness(populationParams);
 }
 
 void mutatePopulation(params *populationParams){
@@ -329,21 +327,24 @@ void mergePopulation(params *populationParams){
         populationParams->tempPopulation[j] = populationParams->childrens[i];
         j++;
     }
+    populationParams->tempPopulationCount = j;
+    memset(populationParams->childrens, '\0', (populationParams->childrensCount*sizeof(individual)));
+    populationParams->childrensCount = 0;
 }
 
 void crossoverPopulation(params *populationParams){
-   int i;
-   populationParams->childrensCount = 0;
-    for(i = 0; i < MAX_INDIVIDUALS-2; i+=2){
+   int i, countChildren=0;
+    for(i = 0; i < MAX_INDIVIDUALS-1; i++){
         crossover(
-                    &populationParams->childrens[populationParams->childrensCount+1],
-                    &populationParams->childrens[populationParams->childrensCount+2],
+                    &populationParams->childrens[i],
+                    &populationParams->childrens[i+1],
                     &populationParams->individuals[i],
                     &populationParams->individuals[i+1],
                     populationParams->classCount
                 );
-        populationParams->childrensCount += 2;
+        countChildren++;
     }
+    populationParams->childrensCount = countChildren+1;
 }
 
 int generateInitialPopulation(params *populationParams){

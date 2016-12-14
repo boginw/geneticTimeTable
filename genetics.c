@@ -3,13 +3,12 @@ int mutation_size         =  100;
 int crossover_probability =   90;
 int mutation_probability  =   10;
 
-void crossover(individual *child1, individual *child2, const individual *p1,const individual *p2, int classCount){
+void crossover(individual *child1, individual *child2, const individual *p1, const individual *p2, int classCount){
 	int i,p,c,l;
 	int first;
 	int *cp = calloc(MAX_LECTURES, sizeof(int));
 	*child1 = *p1;
 	*child2 = *p2;
-
 	/* check probability of crossover operation */
 	/*if( randomNumber(0,100) > crossover_probability ){
 
@@ -59,6 +58,7 @@ void crossover(individual *child1, individual *child2, const individual *p1,cons
 
 	conflicts(child1,classCount);
 	conflicts(child2,classCount);
+
 	free(cp);
 
 }
@@ -172,6 +172,7 @@ void setFitness(params *populationParams){
   for (i = 0; i < populationParams->tempPopulationCount; i++){
       fitnessRatio = (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
       fitnessRatio = fitnessRatio / (float) akk * 100;
+
       populationParams->tempPopulation[i].fitness = fitnessRatio;
   }
 }
