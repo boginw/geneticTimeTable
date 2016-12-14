@@ -212,8 +212,9 @@ int main(int argc, char const *argv[]){
     for (j = 0; j < NUM_OF_GEN; j++){
 
         crossoverPopulation(&populationParams);
+        mergePopulation(&populationParams);
         /*
-        tempPOP = mergePopulation(individuals, childrens);
+        tempPOP =
         mutatePopulation(tempPOP);
         calcFitnessOnPopulation(tempPOP);
         individuals = selectionOnPopulation(tempPOP);*/
@@ -275,7 +276,7 @@ int main(int argc, char const *argv[]){
             highestConflict = populationParams.individuals[MAX_INDIVIDUALS-1].conflicts;
         }
 
-printf("Her");
+
         if(j % 20 == 0){
             if(curProg*2 < (int) ((((float) j) / NUM_OF_GEN) * 100) ){
                 prepend(progressLine, "=");
@@ -294,9 +295,9 @@ printf("Her");
 
 
 
-           /* for (i = 0; i < 6000; i++){
+            for (i = 0; i < 6000; i++){
                 printf("\b");
-            }*/
+            }
 
         }
 
@@ -328,8 +329,13 @@ printf("Her");
     return 0;
 }
 
+void mergePopulation(params *populationParams){
+    populationParams.tempPopulationCount = mergeArrays(populationParams.tempPopulation, populationParams->individuals, individualsCount, populationParams->childrens, childrensCount, sizeof(individual));
+}
+
 void crossoverPopulation(params *populationParams){
    int i;
+   populationParams->childrensCount = 0;
     for(i = 0; i < MAX_INDIVIDUALS-2; i+=2){
         crossover(
                     &populationParams->childrens[populationParams->childrensCount+1],
@@ -344,6 +350,7 @@ void crossoverPopulation(params *populationParams){
 
 int generateInitialPopulation(params *populationParams){
     int i, conflictsSum=0;
+
     /* Create initial population */
     for (i = 0; i < MAX_INDIVIDUALS; i++){
         /* For hvert individ op til maks antal individer */
