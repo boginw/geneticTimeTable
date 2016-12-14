@@ -127,7 +127,7 @@ int main(int argc, char const *argv[]){
 	int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
     int i,j; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
-
+    int lowestConflict = -1, highestConflict, startlowconflict, starthighconflict;
     char progressLine[50] = ">";
     int runForGen;
     int curProg = 1;
@@ -176,8 +176,11 @@ int main(int argc, char const *argv[]){
     }
     printf("First conflicts: %3d\n", individuals[0].conflicts);
     /* Conflicts preview */
+    starthighconflict = individuals[MAX_INDIVIDUALS-1].conflicts;
+    startlowconflict = individuals[0].conflicts;
 
-    runForGen = 1000;
+
+    runForGen = 6000;
     for (j = 0; j < runForGen; j++){
         for (i = 0; i < MAX_INDIVIDUALS-1; i+=1){
             crossover(&individuals[i], &individuals[i+1], classCount);
@@ -185,21 +188,23 @@ int main(int argc, char const *argv[]){
 
         for(i = 0; i < MAX_INDIVIDUALS; i++){
             if(shouldMutate()){
-                mutate(&individuals[i]);
+                mutate(&individuals[i], rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
             }
         }
 
         qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
-
+        if(individuals[0].conflicts < lowestConflict || lowestConflict == -1){
+            lowestConflict=individuals[0].conflicts;
+        }
+        if(individuals[MAX_INDIVIDUALS-1].conflicts > highestConflict){
+            highestConflict = individuals[MAX_INDIVIDUALS-1].conflicts;
+        }
         if(j % 100 == 0){
         	if(curProg < (int) ((((float) j) / runForGen)*100)){
         		/*printf("%d, %d\n", curProg, (int) ((((float) j) / runForGen)*100) );*/
         		prepend(progressLine, "=");
         		curProg++;
         	}
-
-        	printTimeTable(individuals[0].t[0], intervalLabels);
-
             printf("%3d%% [%-50s] conflicts: %3d | generation: %6d/%-6d",
             	(int) ((((float) j) / runForGen)*100),
             	progressLine,
@@ -228,7 +233,7 @@ int main(int argc, char const *argv[]){
     }*/
     /* Dump csv files in folder schedules */
     /*dumpCSV(&individuals[0],classCount,intervalLabels);*/
-
+    printf("Start High: %d\nStart Low: %d\nLowest: %d\nHighest: %d", starthighconflict, startlowconflict, lowestConflict, highestConflict);
     free(rooms);
     free(subjects);
     free(classes);

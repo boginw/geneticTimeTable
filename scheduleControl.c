@@ -15,17 +15,17 @@ void conflicts(individual *ind, int classCount){
 
 	for(c1=0; c1 < classCount; c1++){
     for(l1=0; l1 < ind->t[c1].lectureLength; l1++){
-        day = ind->t[c1].lectures[l1].l_datetime.dayOfWeek;
-        hour = ind->t[c1].lectures[l1].l_datetime.hour;
-        for(c2=c1; c2 < classCount; c2++){
-            for(l2=l1; l2 < ind->t[c2].lectureLength; l2++){
-              if(ind->t[c2].lectures[l2].l_datetime.dayOfWeek == day && ind->t[c2].lectures[l2].l_datetime.hour==hour){
-                conflicts += (ind->t[c2].lectures[l2].l_teacher == ind->t[c1].lectures[l1].l_teacher);
-                conflicts += (ind->t[c2].lectures[l2].l_class == ind->t[c1].lectures[l1].l_class);
-                break;
-              }
-            }
+      day = ind->t[c1].lectures[l1].l_datetime.dayOfWeek;
+      hour = ind->t[c1].lectures[l1].l_datetime.hour;
+      for(c2=c1; c2 < classCount; c2++){
+        for(l2=0; l2 < ind->t[c2].lectureLength; l2++){
+          if(ind->t[c2].lectures[l2].l_datetime.dayOfWeek == day && ind->t[c2].lectures[l2].l_datetime.hour==hour){
+            conflicts += (ind->t[c2].lectures[l2].l_teacher == ind->t[c1].lectures[l1].l_teacher);
+            conflicts += (ind->t[c2].lectures[l2].l_class == ind->t[c1].lectures[l1].l_class);
+            break;
+          }
         }
+      }
     }
   }
 	ind->conflicts = conflicts;
@@ -114,7 +114,6 @@ individual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 	conflicts(&r_individual,classCount);
 
 	free(hoursPerWeek);
-
 	return r_individual;
 }
 
