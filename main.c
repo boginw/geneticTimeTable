@@ -139,7 +139,7 @@ void prepend(char* s, const char* t);
 int main(int argc, char const *argv[]){
     /* VARIABLES BEGIN */
     params populationParams;
-    int i,j,r; /* iteration counters */
+    int i,j; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
     int lowestConflict = -1, highestConflict = 0, startlowconflict, starthighconflict;
     char progressLine[50] = ">";
@@ -148,8 +148,6 @@ int main(int argc, char const *argv[]){
     int *roulette;
     int conflictsSum = 0;
     int currentRoulette = 0;
-    int rouletteRatio = 0;
-    int maxConflicts = 0;
     int akk = 0;
 
     int lastBestGen = 0;
@@ -213,10 +211,10 @@ int main(int argc, char const *argv[]){
 
         crossoverPopulation(&populationParams);
         mergePopulation(&populationParams);
+        mutatePopulation(&populationParams);
+        calcFitnessOnPopulation(&populationParams);
         /*
-        tempPOP =
-        mutatePopulation(tempPOP);
-        calcFitnessOnPopulation(tempPOP);
+
         individuals = selectionOnPopulation(tempPOP);*/
 
         if(lastBestGen + 2000 < j){
@@ -237,28 +235,6 @@ int main(int argc, char const *argv[]){
                 populationParams.individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
             }
         }*/
-
-        qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
-
-
-
-        /* Selection */
-        maxConflicts = populationParams.individuals[MAX_INDIVIDUALS - 1].conflicts;
-        for (i = 0; i < MAX_INDIVIDUALS; i++){
-            akk += (((maxConflicts - populationParams.individuals[i].conflicts) / (float) maxConflicts)) * 100;
-        }
-
-        for (i = 0; i < MAX_INDIVIDUALS; i++){
-
-            rouletteRatio = (((maxConflicts - populationParams.individuals[i].conflicts) / (float) maxConflicts)) * 100;
-
-            rouletteRatio = rouletteRatio / (float) akk * 100;
-
-            for (r = 0; r < rouletteRatio; r++){
-                roulette[currentRoulette] = i;
-                currentRoulette++;
-            }
-        }
 
 
 
@@ -329,8 +305,30 @@ int main(int argc, char const *argv[]){
     return 0;
 }
 
+void calcFitnessOnPopulation(params *populationParams){
+    int i;
+    for(i = 0; i < populationParams->tempPopulationCount-1; i++){
+        setFitness(populationParams);
+    }
+}
+
+void mutatePopulation(params *populationParams){
+    int i;
+    for(i = 0; i < populationParams->tempPopulationCount-1; i++){
+        if(shouldMutate()){
+            mutate(&populationParams->tempPopulation[i], populationParams);
+        }
+    }
+}
+
 void mergePopulation(params *populationParams){
-    populationParams.tempPopulationCount = mergeArrays(populationParams.tempPopulation, populationParams->individuals, individualsCount, populationParams->childrens, childrensCount, sizeof(individual));
+    int i,j=0;
+    for(i=0; i < populationParams->individualsCount; i++){
+        populationParams->tempPopulation[j] = populationParams->individuals[i];
+        j++;
+        populationParams->tempPopulation[j] = populationParams->childrens[i];
+        j++;
+    }
 }
 
 void crossoverPopulation(params *populationParams){
