@@ -161,3 +161,17 @@ void getRandomDatetimeWithNoLecture(timetable *t, int *day, int*hour){
 	}
 	getRandomDatetimeWithNoLecture(t, day, hour);
 }
+
+
+void setFitness(params *populationParams){
+  int i, akk = 0, fitnessRatio;
+  int maxConflicts = populationParams->tempPopulation[populationParams->tempPopulationCount - 1].conflicts;
+  for (i = 0; i < populationParams->tempPopulationCount; i++){
+      akk += (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
+  }
+  for (i = 0; i < populationParams->tempPopulationCount; i++){
+      fitnessRatio = (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
+      fitnessRatio = fitnessRatio / (float) akk * 100;
+      populationParams->tempPopulation[i].fitness = fitnessRatio;
+  }
+}
