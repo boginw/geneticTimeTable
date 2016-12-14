@@ -113,9 +113,9 @@ individual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 		/* Get all the required hours for class */
 		for (s = 0; s < subjectCount; s++){
 		    hoursPerWeek[s] = ceil(subjects[s].perYear[classes[c].year] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
-		    if(strcmp(classes[c].name, "1B") == 0 && hoursPerWeek[s] > 0){
-		     /*printf("%s skal have %d antal timer i %s om ugen hvilket er %d om året\n", classes[c].name, hoursPerWeek[s], subjects[s].name, subjects[s].perYear[classes[c].year]);*/
-				}
+		    /*if(strcmp(classes[c].name, "1B") == 0 && hoursPerWeek[s] > 0){
+		    	 printf("%s skal have %d antal timer i %s om ugen hvilket er %d om året\n", classes[c].name, hoursPerWeek[s], subjects[s].name, subjects[s].perYear[classes[c].year]);
+			}*/
 		}
 
 		while(!isEmpty(hoursPerWeek,subjectCount)){ /* Makes sure to reject timetalbes that dosent meet the requried min hours per subject*/
