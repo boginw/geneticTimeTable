@@ -1,9 +1,9 @@
 
 
-int crossover_points      =  MAX_LECTURES/1.5;
+int crossover_points      =   10;
 int mutation_size         =  100;
-int crossover_probability =  90;
-int mutation_probability  =  10;
+int crossover_probability =   90;
+int mutation_probability  =   10;
 
 individual crossover(individual *p1, individual *p2, int classCount){
 	int i,p,c,l;
@@ -26,7 +26,7 @@ individual crossover(individual *p1, individual *p2, int classCount){
 	for (c = 0; c < classCount; c++){
 		/* determine crossover point (randomly) */
 
-		for (l = 0; l < MAX_LECTURES; l++){	
+		for (l = 0; l < MAX_LECTURES; l++){
 			memset(cp,0,MAX_LECTURES*sizeof(int));
 
 			for(i = crossover_points; i > 0; i--){
@@ -45,11 +45,11 @@ individual crossover(individual *p1, individual *p2, int classCount){
 					continue;
 				}
 				swapn(
-					&p1->t[c].lectures[l], 
-					&p2->t[c].lectures[l], 
+					&p1->t[c].lectures[l],
+					&p2->t[c].lectures[l],
 					sizeof(lecture)
 				);
-			
+
 				n.t[c].lectures[l] = p1->t[c].lectures[l];
 			}else{
 				n.t[c].lectures[l] = p2->t[c].lectures[l];
@@ -59,7 +59,7 @@ individual crossover(individual *p1, individual *p2, int classCount){
 				/* change source chromosome */
 				first = !first;
 			}
-			
+
 		}
 	}
 

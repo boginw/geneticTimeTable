@@ -36,4 +36,5 @@ int conflictsQsort(const void * a, const void * b);
 individual randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
 int lectureOnDateTime(timetable t, int day, int hour);
 
+
 int dayHourQsort(const void * a, const void * b);

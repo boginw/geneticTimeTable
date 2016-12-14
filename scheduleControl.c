@@ -10,7 +10,8 @@ int fitness(individual ind){
  * @param classCount amount of classes
  */
 void conflicts(individual *ind, int classCount){
-	int c,c1,l,i;
+
+	/*int c,c1,l,i;
 	int conflicts = 0;
 
 	for (c = 0; c < classCount; c++){
@@ -31,8 +32,26 @@ void conflicts(individual *ind, int classCount){
 				}
 			}
 		}
-	}
+	}*/
 
+	int c1,l1,c2,l2,day,hour;
+	int conflicts = 0;
+
+	for(c1=0; c1 < classCount; c1++){
+	    for(l1=0; l1 < ind->t[c1].lectureLength; l1++){
+	        day = ind->t[c1].lectures[l1].l_datetime.dayOfWeek;
+	        hour = ind->t[c1].lectures[l1].l_datetime.hour;
+	        for(c2 = c1; c2 < classCount; c2++){
+	            for(l2 = 0; l2 < ind->t[c2].lectureLength; l2++){
+	            	if(ind->t[c2].lectures[l2].l_datetime.dayOfWeek == day && ind->t[c2].lectures[l2].l_datetime.hour==hour){
+	                	conflicts += (ind->t[c2].lectures[l2].l_teacher == ind->t[c1].lectures[l1].l_teacher);
+	                	conflicts += (ind->t[c2].lectures[l2].l_class == ind->t[c1].lectures[l1].l_class);
+	                	break;
+	              }
+	            }
+	        }
+	    }
+  	}
 	ind->conflicts = conflicts;
 }
 
@@ -82,7 +101,10 @@ individual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 	lecture r_lecture; /* variable til at midlertidig gemme random genereret lektion, indtil de bliver placerer i et klasseskema */
 	int *hoursPerWeek;
 	hoursPerWeek = calloc(subjectCount, sizeof(int)); /* intierer arrayet således at der er plads til alle fag */
-
+	if(hoursPerWeek == NULL){
+		printf("Not enough ram, sorry...\n");
+		exit(EXIT_FAILURE);
+	}
 	memset(&r_individual,'\0',sizeof(individual));
 
 	/* For hvert individ op til maks antal individer */

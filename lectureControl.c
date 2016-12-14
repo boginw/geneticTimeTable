@@ -60,7 +60,7 @@ lecture randomLectureForClassAndSubject(room *rooms, int roomCount, teacher *tea
 	int i;
 	int shouldBreak = 0;
 	lecture r_lecture;
-
+	memset(&r_lecture, '\0', sizeof(lecture));
 	r_lecture.l_class = curClass;
 	r_lecture.l_subject = curSubject;
 
