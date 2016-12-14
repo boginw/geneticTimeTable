@@ -206,9 +206,9 @@ int main(int argc, char const *argv[]){
     printf("First conflicts: %3d\n", populationParams.individuals[0].conflicts);
     /* Conflicts preview */
     starthighconflict = populationParams.individuals[MAX_INDIVIDUALS-1].conflicts;
-    startlowconflict = populationParams.individuals[0].conflicts;
+    startlowconflict  = populationParams.individuals[0].conflicts;
 
-    runForGen = 1000;
+    runForGen = 10000;
     for (j = 0; j < runForGen; j++){
         if(lastBestGen + 2000 < j){
             printf("new \n");
