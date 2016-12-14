@@ -94,13 +94,13 @@ int conflictsQsort(const void * a, const void * b){
 }
 
 
-individual randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+individual randomIndividual(const params *populationParams){
 	int c,day,hour,s;
 	int subjectIndex = 0;
 	individual r_individual;
 	lecture r_lecture; /* variable til at midlertidig gemme random genereret lektion, indtil de bliver placerer i et klasseskema */
 	int *hoursPerWeek;
-	hoursPerWeek = calloc(subjectCount, sizeof(int)); /* intierer arrayet således at der er plads til alle fag */
+	hoursPerWeek = calloc(populationParams->subjectCount, sizeof(int)); /* intierer arrayet således at der er plads til alle fag */
 	if(hoursPerWeek == NULL){
 		printf("Not enough ram, sorry...\n");
 		exit(EXIT_FAILURE);
@@ -108,22 +108,31 @@ individual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 	memset(&r_individual,'\0',sizeof(individual));
 
 	/* For hvert individ op til maks antal individer */
-	for (c = 0; c < classCount; c++){
-		r_individual.t[c].forClass = &classes[c];
+	for (c = 0; c < populationParams->classCount; c++){
+		r_individual.t[c].forClass = &populationParams->classes[c];
 		/* Get all the required hours for class */
-		for (s = 0; s < subjectCount; s++){
-		    hoursPerWeek[s] = ceil(subjects[s].perYear[classes[c].year] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
+		for (s = 0; s < populationParams->subjectCount; s++){
+		    hoursPerWeek[s] = ceil(
+		    	populationParams->subjects[s].perYear[populationParams->classes[c].year] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH)
+		    );
 		    /*if(strcmp(classes[c].name, "1B") == 0 && hoursPerWeek[s] > 0){
 		    	 printf("%s skal have %d antal timer i %s om ugen hvilket er %d om året\n", classes[c].name, hoursPerWeek[s], subjects[s].name, subjects[s].perYear[classes[c].year]);
 			}*/
 		}
 
-		while(!isEmpty(hoursPerWeek,subjectCount)){ /* Makes sure to reject timetalbes that dosent meet the requried min hours per subject*/
+		while(!isEmpty(hoursPerWeek,populationParams->subjectCount)){ /* Makes sure to reject timetalbes that dosent meet the requried min hours per subject*/
     		day = randomNumber(0,WEEK_LENGTH-1);
     		hour = randomNumber(0,MAX_LECTURES/WEEK_LENGTH-1);
-        	subjectIndex = randomNumber(0,subjectCount-1);
+        	subjectIndex = randomNumber(0,populationParams->subjectCount-1);
         	if(hoursPerWeek[subjectIndex] > 0 && lectureOnDateTime(r_individual.t[c], day, hour) == -1){
-	            r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[subjectIndex]);
+	            r_lecture = randomLectureForClassAndSubject(
+	            	populationParams->rooms,
+	            	populationParams->roomCount,
+	            	populationParams->teachers,
+	            	populationParams->teacherCount, 
+	            	&populationParams->classes[c], 
+	            	&populationParams->subjects[subjectIndex]
+	            );
 	            r_lecture.l_datetime.dayOfWeek = day;
 	            r_lecture.l_datetime.hour = hour;
 	            r_lecture.init = 1;
@@ -136,7 +145,7 @@ individual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 		qsort(&r_individual.t[c], MAX_LECTURES, sizeof(lecture), dayHourQsort);
 	}
 
-	conflicts(&r_individual,classCount);
+	conflicts(&r_individual,populationParams->classCount);
 
 	free(hoursPerWeek);
 	return r_individual;

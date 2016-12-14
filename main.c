@@ -20,8 +20,8 @@
 #define SCHOOL_DAYS_YEAR  190
 #define WEEK_LENGTH         5
 #define MAX_LECTURES       50
-#define MUTATION_CHANCE     5
-#define MAX_MUTATIONS      30
+#define MUTATION_CHANCE     1
+#define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
 
 /**
@@ -100,6 +100,21 @@ typedef struct individual{
     int mutations; /* antal mutationer foretaget */
 } individual;
 
+typedef struct params{
+    room       *rooms; /* Array af rum, bliver deklaret men IKKE initieret */
+    subject    *subjects; /* Array af fag, bliver deklaret men IKKE initieret */
+    class      *classes; /* Array af klasser, bliver deklaret men IKKE initieret */
+    teacher    *teachers; /* Array af lærer, bliver deklaret men IKKE initieret */
+    individual *individuals; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
+   
+    int roomCount; 
+    int subjectCount; 
+    int classCount;
+    int teacherCount;
+    int individualsCount;
+
+    char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH];
+} params;
 
 int randomNumber(int min, int max);
 void swapn(void *a, void *b, size_t n);
@@ -118,13 +133,7 @@ void prepend(char* s, const char* t);
 
 int main(int argc, char const *argv[]){
     /* VARIABLES BEGIN */
-    char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH]; /* Array af TIMEINTERVALS [se. dat.sched] */
-    room *rooms; /* Array af rum, bliver deklaret men IKKE initieret */
-    subject *subjects; /* Array af fag, bliver deklaret men IKKE initieret */
-    class *classes; /* Array af klasser, bliver deklaret men IKKE initieret */
-    teacher *teachers; /* Array af lærer, bliver deklaret men IKKE initieret */
-    individual *individuals; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
-	int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
+    params populationParams;
     int i,j,r; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
     int lowestConflict = -1, highestConflict = 0, startlowconflict, starthighconflict;
@@ -139,28 +148,37 @@ int main(int argc, char const *argv[]){
     int maxConflicts = 0;
     int akk = 0;
 
-    int lastBest = -1;
     int lastBestGen = 0;
 
     individual lowestIndividual;
 
-    rooms       = calloc(MAX_ROOMS,       sizeof(room));
-    subjects    = calloc(MAX_SUBJECTS,    sizeof(subject));
-    classes     = calloc(MAX_CLASSES,     sizeof(class));
-    teachers    = calloc(MAX_TEACHERS,    sizeof(teacher));
-    roulette    = calloc(100,             sizeof(int));
-    individuals = calloc(MAX_INDIVIDUALS, sizeof(individual));
+    populationParams.rooms       = calloc(MAX_ROOMS,       sizeof(room));
+    populationParams.subjects    = calloc(MAX_SUBJECTS,    sizeof(subject));
+    populationParams.classes     = calloc(MAX_CLASSES,     sizeof(class));
+    populationParams.teachers    = calloc(MAX_TEACHERS,    sizeof(teacher));
+    populationParams.individuals = calloc(MAX_INDIVIDUALS, sizeof(individual));
 
-    if(rooms == NULL || subjects == NULL || classes == NULL || teachers == NULL || individuals == NULL){
+    populationParams.roomCount        = 0;
+    populationParams.subjectCount     = 0;
+    populationParams.classCount       = 0;
+    populationParams.teacherCount     = 0;
+    populationParams.individualsCount = 0;
+
+    roulette = calloc(100, sizeof(int));
+
+    if(populationParams.rooms == NULL || populationParams.subjects == NULL || 
+            populationParams.classes == NULL || populationParams.teachers == NULL || 
+            populationParams.individuals == NULL){
         printf("Not enough ram, sorry...\n");
         exit(EXIT_FAILURE);
     }
- 	/* VARIABLES END */
+    /* VARIABLES END */
     srand(seed); /* Generationen af selve token til genbrug */
 
-  	/*
-   	 * Tjekker efter debug mode
-  	 */
+
+    /*
+     * Tjekker efter debug mode
+     */
     if(argc > 1){
         if(strcmp(argv[1],"--debug") == 0){
             debug = 1;
@@ -174,63 +192,57 @@ int main(int argc, char const *argv[]){
     /*
      * Initierer variablerner, ved at parse dat.sched igennem filParse.c funktionerne
      */
-    init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount,intervalLabels);
+    init(&populationParams);
+
     /* Create initial population */
     for (i = 0; i < MAX_INDIVIDUALS; i++){
         /* For hvert individ op til maks antal individer */
-        individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
-        conflictsSum += individuals[i].conflicts;
+        populationParams.individuals[i] = randomIndividual(&populationParams);
+        conflictsSum += populationParams.individuals[i].conflicts;
     }
 
 
-    qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
-
-    for (i = 0; i < 1; i++){
-        printf("\nClass %s, conflicts: %d\n", individuals[0].t[i].forClass->name, individuals[0].conflicts);
-        printTimeTable(individuals[0].t[i], intervalLabels);
-    }
-    printf("First conflicts: %3d\n", individuals[0].conflicts);
+    qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
+    printf("First conflicts: %3d\n", populationParams.individuals[0].conflicts);
     /* Conflicts preview */
-    starthighconflict = individuals[MAX_INDIVIDUALS-1].conflicts;
-    startlowconflict = individuals[0].conflicts;
+    starthighconflict = populationParams.individuals[MAX_INDIVIDUALS-1].conflicts;
+    startlowconflict = populationParams.individuals[0].conflicts;
 
-
-    runForGen = 30000;
+    runForGen = 1000;
     for (j = 0; j < runForGen; j++){
         if(lastBestGen + 2000 < j){
             printf("new \n");
             for (i = 0 ; i < MAX_INDIVIDUALS-5; i++){
-                individuals[MAX_INDIVIDUALS-1-i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+                populationParams.individuals[MAX_INDIVIDUALS-1-i] = randomIndividual(&populationParams);
             }
             lastBestGen = j;
         }
 
-
-    	/* Replace shit individuals */
+    	/* Replace shit populationParams.individuals */
     	for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
-    		individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+    		populationParams.individuals[i] = randomIndividual(&populationParams);
     	}
 
-    	/*qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
+    	/*qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
     	for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
-    		if((individuals[0].conflicts - individuals[i].conflicts) / (float) individuals[0].conflicts * 100 > 40){
-    			individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+    		if((populationParams.individuals[0].conflicts - populationParams.individuals[i].conflicts) / (float) populationParams.individuals[0].conflicts * 100 > 40){
+    			populationParams.individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     		}
     	}*/
 
-    	qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
+    	qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
 
 
     	/* Selection */
-    	maxConflicts = individuals[MAX_INDIVIDUALS - 1].conflicts;
+    	maxConflicts = populationParams.individuals[MAX_INDIVIDUALS - 1].conflicts;
         for (i = 0; i < MAX_INDIVIDUALS; i++){
-    		akk += (((maxConflicts - individuals[i].conflicts) / (float) maxConflicts)) * 100;
+    		akk += (((maxConflicts - populationParams.individuals[i].conflicts) / (float) maxConflicts)) * 100;
     	}
 
     	for (i = 0; i < MAX_INDIVIDUALS; i++){
 
-    		rouletteRatio = (((maxConflicts - individuals[i].conflicts) / (float) maxConflicts)) * 100;
+    		rouletteRatio = (((maxConflicts - populationParams.individuals[i].conflicts) / (float) maxConflicts)) * 100;
 
     		rouletteRatio = rouletteRatio / (float) akk * 100;
 
@@ -243,24 +255,24 @@ int main(int argc, char const *argv[]){
 
     	/* Mutate and cross */
         for(i = 1; i < MAX_INDIVIDUALS-1; i++){
-            crossover(&individuals[i], &individuals[roulette[randomNumber(0,currentRoulette-1)]], classCount);
+            crossover(&populationParams.individuals[i], &populationParams.individuals[roulette[randomNumber(0,currentRoulette-1)]], populationParams.classCount);
             if(shouldMutate()){
-                mutate(&individuals[i], rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+                mutate(&populationParams.individuals[i], &populationParams);
             }
         }
 
         /* Sort for lowest conflicts */
-        qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
+        qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
 
-        if(individuals[0].conflicts < lowestConflict || lowestConflict == -1){
-            lowestConflict = individuals[0].conflicts;
-            lowestIndividual = individuals[0];
+        if(populationParams.individuals[0].conflicts < lowestConflict || lowestConflict == -1){
+            lowestConflict = populationParams.individuals[0].conflicts;
+            lowestIndividual = populationParams.individuals[0];
             lastBestGen = j;
         }
 
-        if(individuals[MAX_INDIVIDUALS-1].conflicts > highestConflict){
-            highestConflict = individuals[MAX_INDIVIDUALS-1].conflicts;
+        if(populationParams.individuals[MAX_INDIVIDUALS-1].conflicts > highestConflict){
+            highestConflict = populationParams.individuals[MAX_INDIVIDUALS-1].conflicts;
         }
 
         if(j % 20 == 0){
@@ -269,12 +281,12 @@ int main(int argc, char const *argv[]){
         		curProg++;
         	}
 
-        	/*printTimeTable(individuals[0].t[0], intervalLabels);*/
+        	/*printTimeTable(populationParams.individuals[0].t[0], intervalLabels);*/
 
             printf("%3d%% [%-50s] conflicts: %3d | lowest: %3d | generation: %6d/%-6d", 
             	(int) ((((float) j) / runForGen) * 100),
             	progressLine, 
-            	individuals[0].conflicts, 
+            	populationParams.individuals[0].conflicts, 
             	lowestConflict,
             	j,
             	runForGen
@@ -290,25 +302,25 @@ int main(int argc, char const *argv[]){
     }
 
     /* Uncomment for demo of schedules */
-    for (i = 0; i < classCount; i++){
+    for (i = 0; i < populationParams.classCount; i++){
         printf("\nClass %s, conflicts: %d\n", lowestIndividual.t[i].forClass->name, lowestIndividual.conflicts);
-        printTimeTable(lowestIndividual.t[i], intervalLabels);
+        printTimeTable(lowestIndividual.t[i], populationParams.intervalLabels);
     }
 
 
     /* Conflicts preview */
-    /*qsort(individuals, MAX_INDIVIDUALSs, sizeof(individuals), conflictsQsort);
+    /*qsort(populationParams.individuals, MAX_INDIVIDUALSs, sizeof(populationParams.individuals), conflictsQsort);
     for (i = 0; i < MAX_INDIVIDUALSs; i++){
-        printf("Ind: %2d, conflicts: %d\n", i, individuals[i].conflicts);
+        printf("Ind: %2d, conflicts: %d\n", i, populationParams.individuals[i].conflicts);
     }*/
     /* Dump csv files in folder schedules */
-    /*dumpCSV(&individuals[0],classCount,intervalLabels);*/
+    /*dumpCSV(&populationParams.individuals[0],classCount,intervalLabels);*/
     printf("Start High: %d\nStart Low: %d\nLowest: %d\nHighest: %d", starthighconflict, startlowconflict, lowestConflict, highestConflict);
-    free(rooms);
-    free(subjects);
-    free(classes);
-    free(teachers);
-    free(individuals);
+    free(populationParams.rooms);
+    free(populationParams.subjects);
+    free(populationParams.classes);
+    free(populationParams.teachers);
+    free(populationParams.individuals);
     free(roulette);
     return 0;
 }
