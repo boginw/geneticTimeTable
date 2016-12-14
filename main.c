@@ -212,6 +212,7 @@ int main(int argc, char const *argv[]){
     for (j = 0; j < NUM_OF_GEN; j++){
 
         crossoverPopulation(&populationParams);
+        
         /*
         tempPOP = mergePopulation(individuals, childrens);
         mutatePopulation(tempPOP);
@@ -233,7 +234,7 @@ int main(int argc, char const *argv[]){
         /*qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
         for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
             if((populationParams.individuals[0].conflicts - populationParams.individuals[i].conflicts) / (float) populationParams.individuals[0].conflicts * 100 > 40){
-                populationParams.individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+                populationParams.individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teacFrs, teacherCount);
             }
         }*/
 
@@ -275,7 +276,6 @@ int main(int argc, char const *argv[]){
             highestConflict = populationParams.individuals[MAX_INDIVIDUALS-1].conflicts;
         }
 
-printf("Her");
         if(j % 20 == 0){
             if(curProg*2 < (int) ((((float) j) / NUM_OF_GEN) * 100) ){
                 prepend(progressLine, "=");
@@ -294,9 +294,9 @@ printf("Her");
 
 
 
-           /* for (i = 0; i < 6000; i++){
+            for (i = 0; i < 6000; i++){
                 printf("\b");
-            }*/
+            }
 
         }
 
@@ -339,6 +339,8 @@ void crossoverPopulation(params *populationParams){
                     populationParams->classCount
                 );
         populationParams->childrensCount += 2;
+        
+        printf("%d\n", populationParams->childrensCount);
     }
 }
 
