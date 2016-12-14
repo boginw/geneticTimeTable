@@ -5,6 +5,7 @@ void crossoverPopulation(params *populationParams);
 void mergePopulation(params *populationParams);
 void mutatePopulation(params *populationParams);
 void calcFitnessOnPopulation(params *populationParams);
+void selection(params *populationParams);
 /* PARSE FUNCTIONS */
 room parseRoom(char *line);
 subject parseSubject(char *line, room* rooms, int roomCount);

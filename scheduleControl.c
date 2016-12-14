@@ -10,32 +10,8 @@ int fitness(individual ind){
  * @param classCount amount of classes
  */
 void conflicts(individual *ind, int classCount){
-
-	/*int c,c1,l,i;
-	int conflicts = 0;
-
-	for (c = 0; c < classCount; c++){
-		for (l = 0; l < MAX_LECTURES; l++){
-			if(ind->t[c].lectures[l].free && !ind->t[c].lectures[l].init){
-				continue;
-			}
-
-			for (c1 = c; c1 < classCount; c1++){
-				for (i = 0; i < MAX_LECTURES; i++){
-					if(ind->t[c1].lectures[i].free != 1 && 
-							memcmp(&ind->t[c].lectures[l].l_datetime, &ind->t[c1].lectures[i].l_datetime, sizeof(datetime)) == 0){
-						
-						conflicts += (ind->t[c].lectures[l].l_teacher  == ind->t[c1].lectures[i].l_teacher);
-						conflicts += (ind->t[c].lectures[l].l_room     == ind->t[c1].lectures[i].l_room);
-						break;
-					}
-				}
-			}
-		}
-	}*/
-
-	int c1,l1,c2,l2,day,hour;
-	int conflicts = 0;
+	int c1,l1,c2,l2,day,hour,
+			conflicts = 0;
 
 	for(c1=0; c1 < classCount; c1++){
 	    for(l1=0; l1 < ind->t[c1].lectureLength; l1++){
@@ -90,7 +66,7 @@ int conflictsQsort(const void * a, const void * b){
 	const individual *oa = a;
 	const individual *ob = b;
 
-	return (oa->conflicts - ob->conflicts);
+	return (ob->fitness - oa->fitness);
 }
 
 
@@ -155,7 +131,7 @@ int dayHourQsort(const void * a, const void * b){
 	if(oa->l_datetime.dayOfWeek != ob->l_datetime.dayOfWeek){
 		return oa->l_datetime.dayOfWeek - ob->l_datetime.dayOfWeek;
 	}else{
-		return oa->l_datetime.hour - ob->l_datetime.hour; 
+		return oa->l_datetime.hour - ob->l_datetime.hour;
 	}
 }
 
