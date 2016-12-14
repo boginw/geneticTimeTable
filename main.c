@@ -15,7 +15,7 @@
 #define MAX_CLASSES        10
 #define MAX_TEACHERS       10
 #define MAX_TIMETABLES     10
-#define MAX_INDIVIDUALS    25
+#define MAX_INDIVIDUALS    35
 
 #define SCHOOL_DAYS_YEAR  190
 #define WEEK_LENGTH         5
@@ -192,13 +192,21 @@ int main(int argc, char const *argv[]){
     startlowconflict = individuals[0].conflicts;
 
 
-    runForGen = 20000;
+    runForGen = 30000;
     for (j = 0; j < runForGen; j++){
 
     	/* Replace shit individuals */
     	for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
     		individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     	}
+    	
+    	/*qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
+    	for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
+    		if((individuals[0].conflicts - individuals[i].conflicts) / (float) individuals[0].conflicts * 100 > 40){
+    			individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+    		}
+    	}*/
+
     	qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
 
@@ -223,7 +231,7 @@ int main(int argc, char const *argv[]){
 
 
     	/* Mutate and cross */
-        for(i = 0; i < MAX_INDIVIDUALS-1; i++){
+        for(i = 1; i < MAX_INDIVIDUALS-1; i++){
             crossover(&individuals[i], &individuals[roulette[randomNumber(0,currentRoulette-1)]], classCount);
             if(shouldMutate()){
                 mutate(&individuals[i], rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
@@ -235,7 +243,7 @@ int main(int argc, char const *argv[]){
 
 
         if(individuals[0].conflicts < lowestConflict || lowestConflict == -1){
-            lowestConflict=individuals[0].conflicts;
+            lowestConflict = individuals[0].conflicts;
             lowestIndividual = individuals[0];
         }
         if(individuals[MAX_INDIVIDUALS-1].conflicts > highestConflict){
