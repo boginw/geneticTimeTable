@@ -20,8 +20,8 @@
 #define SCHOOL_DAYS_YEAR  190
 #define WEEK_LENGTH         5
 #define MAX_LECTURES       50
-#define MUTATION_CHANCE     1
-#define MAX_MUTATIONS       7
+#define MUTATION_CHANCE     5
+#define MAX_MUTATIONS      30
 #define FREE_LECTURE_CH    30
 
 /**
@@ -139,6 +139,9 @@ int main(int argc, char const *argv[]){
     int maxConflicts = 0;
     int akk = 0;
 
+    int lastBest = -1;
+    int lastBestGen = 0;
+
     individual lowestIndividual;
 
     rooms       = calloc(MAX_ROOMS,       sizeof(room));
@@ -194,12 +197,20 @@ int main(int argc, char const *argv[]){
 
     runForGen = 30000;
     for (j = 0; j < runForGen; j++){
+        if(lastBestGen + 2000 < j){
+            printf("new \n");
+            for (i = 0 ; i < MAX_INDIVIDUALS-5; i++){
+                individuals[MAX_INDIVIDUALS-1-i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+            }
+            lastBestGen = j;
+        }
+
 
     	/* Replace shit individuals */
     	for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
     		individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     	}
-    	
+
     	/*qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
     	for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
     		if((individuals[0].conflicts - individuals[i].conflicts) / (float) individuals[0].conflicts * 100 > 40){
@@ -245,7 +256,9 @@ int main(int argc, char const *argv[]){
         if(individuals[0].conflicts < lowestConflict || lowestConflict == -1){
             lowestConflict = individuals[0].conflicts;
             lowestIndividual = individuals[0];
+            lastBestGen = j;
         }
+
         if(individuals[MAX_INDIVIDUALS-1].conflicts > highestConflict){
             highestConflict = individuals[MAX_INDIVIDUALS-1].conflicts;
         }
