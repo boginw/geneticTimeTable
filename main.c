@@ -212,9 +212,13 @@ int main(int argc, char const *argv[]){
     for (j = 0; j < NUM_OF_GEN; j++){
 
         crossoverPopulation(&populationParams);
+<<<<<<< HEAD
         
+=======
+        mergePopulation(&populationParams);
+>>>>>>> 8b67c201c8aefcfb77e07455af2d199ac2222aca
         /*
-        tempPOP = mergePopulation(individuals, childrens);
+        tempPOP =
         mutatePopulation(tempPOP);
         calcFitnessOnPopulation(tempPOP);
         individuals = selectionOnPopulation(tempPOP);*/
@@ -328,8 +332,13 @@ int main(int argc, char const *argv[]){
     return 0;
 }
 
+void mergePopulation(params *populationParams){
+    populationParams.tempPopulationCount = mergeArrays(populationParams.tempPopulation, populationParams->individuals, individualsCount, populationParams->childrens, childrensCount, sizeof(individual));
+}
+
 void crossoverPopulation(params *populationParams){
    int i;
+   populationParams->childrensCount = 0;
     for(i = 0; i < MAX_INDIVIDUALS-2; i+=2){
         crossover(
                     &populationParams->childrens[populationParams->childrensCount+1],
@@ -346,6 +355,7 @@ void crossoverPopulation(params *populationParams){
 
 int generateInitialPopulation(params *populationParams){
     int i, conflictsSum=0;
+
     /* Create initial population */
     for (i = 0; i < MAX_INDIVIDUALS; i++){
         /* For hvert individ op til maks antal individer */
