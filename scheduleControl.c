@@ -1,14 +1,4 @@
-int fitness(individual ind);
-void conflicts(individual *ind, int classCount);
-int dublicateCount(const void *items, const size_t numberOfItems, const size_t itemSize);
-int conflictsQsort(const void * a, const void * b);
-individual randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
-individual crossover(individual *p1, individual *p2, int classCount);
 
-int crossover_points      =  MAX_LECTURES/2;
-int mutation_size         =  100;
-int crossover_probability =  90;
-int mutation_probability  =  10;
 
 int fitness(individual ind){
 	return 0;
@@ -20,40 +10,49 @@ int fitness(individual ind){
  * @param classCount amount of classes
  */
 void conflicts(individual *ind, int classCount){
-	int c,d,l;
+
+	/*int c,c1,l,i;
 	int conflicts = 0;
 
-	/* Temporary holder of rooms and teachers */
-	room    **dubRoom	 = calloc(classCount * 10, sizeof(room));
-	teacher **dubTeacher = calloc(classCount * 10, sizeof(teacher));
-
-	for (d = 0; d < WEEK_LENGTH; d++){
+	for (c = 0; c < classCount; c++){
 		for (l = 0; l < MAX_LECTURES; l++){
-			/* Clean array before usage */
-			memset(dubRoom,'\0', classCount*sizeof(room));
-
-			/* Copy room and teacher to their respective array */
-			for (c = 0; c < classCount; c++){
-				if(ind->t[c].day[d].lectures[l].init != 1){
-					break;
-				}
-
-				if(ind->t[c].day[d].lectures[l].free == 0){
-					dubRoom[c] = ind->t[c].day[d].lectures[l].l_room;
-					dubTeacher[c] = ind->t[c].day[d].lectures[l].l_teacher;
-				}
+			if(ind->t[c].lectures[l].free && !ind->t[c].lectures[l].init){
+				continue;
 			}
-			if(classCount > 0){
-				/* Check for dublicates in teachers and rooms */
-				conflicts += dublicateCount(dubRoom,classCount,sizeof(room));
-				conflicts += dublicateCount(dubTeacher,classCount,sizeof(teacher));
+
+			for (c1 = c; c1 < classCount; c1++){
+				for (i = 0; i < MAX_LECTURES; i++){
+					if(ind->t[c1].lectures[i].free != 1 && 
+							memcmp(&ind->t[c].lectures[l].l_datetime, &ind->t[c1].lectures[i].l_datetime, sizeof(datetime)) == 0){
+						
+						conflicts += (ind->t[c].lectures[l].l_teacher  == ind->t[c1].lectures[i].l_teacher);
+						conflicts += (ind->t[c].lectures[l].l_room     == ind->t[c1].lectures[i].l_room);
+						break;
+					}
+				}
 			}
 		}
-	}
+	}*/
 
+	int c1,l1,c2,l2,day,hour;
+	int conflicts = 0;
+
+	for(c1=0; c1 < classCount; c1++){
+	    for(l1=0; l1 < ind->t[c1].lectureLength; l1++){
+	        day = ind->t[c1].lectures[l1].l_datetime.dayOfWeek;
+	        hour = ind->t[c1].lectures[l1].l_datetime.hour;
+	        for(c2 = c1; c2 < classCount; c2++){
+	            for(l2 = 0; l2 < ind->t[c2].lectureLength; l2++){
+	            	if(ind->t[c2].lectures[l2].l_datetime.dayOfWeek == day && ind->t[c2].lectures[l2].l_datetime.hour==hour){
+	                	conflicts += (ind->t[c2].lectures[l2].l_teacher == ind->t[c1].lectures[l1].l_teacher);
+	                	conflicts += (ind->t[c2].lectures[l2].l_class == ind->t[c1].lectures[l1].l_class);
+	                	break;
+	              }
+	            }
+	        }
+	    }
+  	}
 	ind->conflicts = conflicts;
-	free(dubRoom);
-	free(dubTeacher);
 }
 
 /**
@@ -91,18 +90,21 @@ int conflictsQsort(const void * a, const void * b){
 	const individual *oa = a;
 	const individual *ob = b;
 
-	return (ob->conflicts - oa->conflicts);
+	return (oa->conflicts - ob->conflicts);
 }
 
 
 individual randomIndividual(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
-	int c,d,l,s;
+	int c,day,hour,s;
 	int subjectIndex = 0;
 	individual r_individual;
 	lecture r_lecture; /* variable til at midlertidig gemme random genereret lektion, indtil de bliver placerer i et klasseskema */
 	int *hoursPerWeek;
 	hoursPerWeek = calloc(subjectCount, sizeof(int)); /* intierer arrayet således at der er plads til alle fag */
-
+	if(hoursPerWeek == NULL){
+		printf("Not enough ram, sorry...\n");
+		exit(EXIT_FAILURE);
+	}
 	memset(&r_individual,'\0',sizeof(individual));
 
 	/* For hvert individ op til maks antal individer */
@@ -117,31 +119,47 @@ individual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 		}
 
 		while(!isEmpty(hoursPerWeek,subjectCount)){ /* Makes sure to reject timetalbes that dosent meet the requried min hours per subject*/
-        	d = randomNumber(0,WEEK_LENGTH-1);
-        	l = randomNumber(0,MAX_LECTURES-1);
-            subjectIndex = randomNumber(0,subjectCount-1);
+    		day = randomNumber(0,WEEK_LENGTH-1);
+    		hour = randomNumber(0,MAX_LECTURES/WEEK_LENGTH-1);
+        	subjectIndex = randomNumber(0,subjectCount-1);
+        	if(hoursPerWeek[subjectIndex] > 0 && lectureOnDateTime(r_individual.t[c], day, hour) == -1){
+	            r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[subjectIndex]);
+	            r_lecture.l_datetime.dayOfWeek = day;
+	            r_lecture.l_datetime.hour = hour;
+	            r_lecture.init = 1;
+	            /*r_individual.t[c].lectureLength += 1;*/
+	            hoursPerWeek[subjectIndex] -= 1;
 
-            if(hoursPerWeek[subjectIndex] > 0 &&
-				r_individual.t[c].day[d].lectures[l].init == 0){
-
-            	/*printf("%s = %d\n",  subjects[subjectIndex].name, hoursPerWeek[subjectIndex]);*/
-                r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[subjectIndex]);
-                r_lecture.l_datetime.dayOfWeek = d;
-                r_lecture.l_datetime.hour = l;
-                r_lecture.init = 1;
-                r_individual.t[c].day[d].lectureLength += 1;
-                hoursPerWeek[subjectIndex] -= 1;
-
-                r_individual.t[c].day[d].lectures[l] = r_lecture;
-                /*printLecture(r_individual.t[c].day[d].lectures[l]);*/
-            }
+	            r_individual.t[c].lectures[r_individual.t[c].lectureLength++] = r_lecture;
+	        }
 		}
+		qsort(&r_individual.t[c], MAX_LECTURES, sizeof(lecture), dayHourQsort);
 	}
 
 	conflicts(&r_individual,classCount);
 
 	free(hoursPerWeek);
-
 	return r_individual;
 }
 
+int dayHourQsort(const void * a, const void * b){
+	const lecture *oa = a;
+	const lecture *ob = b;
+
+	if(oa->l_datetime.dayOfWeek != ob->l_datetime.dayOfWeek){
+		return oa->l_datetime.dayOfWeek - ob->l_datetime.dayOfWeek;
+	}else{
+		return oa->l_datetime.hour - ob->l_datetime.hour; 
+	}
+}
+
+int lectureOnDateTime(timetable t, int day, int hour){
+	int l;
+	for (l = 0; l < MAX_LECTURES; l++){
+		if(t.lectures[l].init == 1 && t.lectures[l].l_datetime.dayOfWeek == day && t.lectures[l].l_datetime.hour == hour){
+			return l;
+		}
+	}
+
+	return -1;
+}

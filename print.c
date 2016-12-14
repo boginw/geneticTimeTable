@@ -1,7 +1,4 @@
-void printLecture(lecture l);
-char *autoPadding(char *header, int width);
-char *initials(char *name);
-void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]);
+
 
 /**
  * Returns a padded header instead of left alligned
@@ -15,8 +12,11 @@ char *autoPadding(char *header, int width){
     char *newHeader;
 
     int len = strlen(header);
-    newHeader = malloc(width * sizeof(char));
-
+    newHeader = calloc(width, sizeof(char));
+    if(newHeader == NULL){
+    	printf("Not enough ram, sorry...\n");
+      exit(EXIT_FAILURE);
+    }
     padding = width/2 -len / 2;
 
     for (i = 0; i < padding; i++){
@@ -33,15 +33,20 @@ char *autoPadding(char *header, int width){
  * @param l lecture to print
  */
 void printLecture(lecture l){
-	char *requirements = calloc((l.l_subject->roomRequireLength) * 7, sizeof(char));
+	char *requirements;
 	int i;
+	requirements = calloc((l.l_subject->roomRequireLength) * 7, sizeof(char));
+	if(requirements == NULL){
+    	printf("Not enough ram, sorry...\n");
+      exit(EXIT_FAILURE);
+    }
 	for (i = 0; i < l.l_subject->roomRequireLength; i++){
 		if(i!=0)
 			strcat(requirements,", ");
 		strcat(requirements,l.l_subject->roomRequire[i]->name);
 	}
 
-	printf("| %d - %d | %3s | %-7s | %-17s | %-25s | %-14s |\n",
+	printf("| %2d - %2d | %3s | %-7s | %-17s | %-25s | %-14s |\n",
 		l.l_datetime.dayOfWeek,
 		l.l_datetime.hour,
 		l.l_class->name,
@@ -55,20 +60,27 @@ void printLecture(lecture l){
 }
 
 void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
-	char rows[MAX_LECTURES*4+3][1024];
-
-	int i,j;
+	char rows[MAX_LECTURES * 4 + 3][1024];
+	lecture tempLecture;
+	int i,j,index;
 
 	char temp[22];
 	char timeTemp0[6];
 	char timeTemp1[6];
-	for (j = 0; j < MAX_LECTURES; j++){
+
+	memset(rows,'\0',(MAX_LECTURES * 4 + 3)*1024);
+
+	for (j = 0; j < MAX_LECTURES/WEEK_LENGTH; j++){
 		strcpy(rows[j*4+0],"");
 		strcpy(rows[j*4+1],"");
 		strcpy(rows[j*4+2],"");
 		strcpy(rows[j*4+3],"");
 
 		for (i = 0; i < WEEK_LENGTH; i++){
+			if((index = lectureOnDateTime(t,i,j)) != -1){
+				tempLecture = t.lectures[index];
+			}
+
 			if(i == 0){
 				sscanf(labels[j]," %[^,],%s",timeTemp0,timeTemp1);
 
@@ -83,19 +95,19 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 
 				strcat(rows[j*4+3],"|--------|");
 			}
-			if(!t.day[i].lectures[j].free && t.day[i].lectures[j].init == 1){
+			if(index != -1 && !tempLecture.free && tempLecture.init == 1){
 				sprintf(temp,"| %-17s |",
-					t.day[i].lectures[j].l_subject->name);
+					tempLecture.l_subject->name);
 
 				strcat(rows[j*4+0],temp);
 
 				sprintf(temp,"| %-17s |",
-					t.day[i].lectures[j].l_teacher->name);
+					tempLecture.l_teacher->name);
 
 				strcat(rows[j*4+1],temp);
 
 				sprintf(temp,"| %17s |",
-					t.day[i].lectures[j].l_room->name);
+					tempLecture.l_room->name);
 
 				strcat(rows[j*4+2],temp);
 
@@ -105,7 +117,7 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 				strcat(rows[j*4+0],"|                   |");
 				strcat(rows[j*4+1],"|                   |");
 				strcat(rows[j*4+2],"|                   |");
-				if(!t.day[i].lectures[j+1].free && t.day[i].lectures[j+1].init){
+				if(((index = lectureOnDateTime(t,i,j+1)) != -1) && !t.lectures[index].free && t.lectures[index].init){
 					strcat(rows[j*4+3],"|-------------------|");
 				}else{
 					strcat(rows[j*4+3],"|                   |");
@@ -130,9 +142,14 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 }
 
 char *initials(char *name){
-	char *inital = malloc(3*sizeof(char));
+	char *inital;
 	int i=0;
 	int n=0;
+	inital = calloc(3,sizeof(char));
+	if(inital == NULL){
+		printf("Not enough ram, sorry...\n");
+    exit(EXIT_FAILURE);
+	}
     while(name[i]!='\0'){
        if(name[i]==' '){
             i++;
@@ -145,7 +162,7 @@ char *initials(char *name){
 }
 
 void dumpCSV(individual *ind, int classCount, char (*labels)[MAX_LABEL_LENGTH]){
-	int c,l,d;
+	/*int c,l,d;
 	FILE *fp;
 	char temp[20];
 	char rows[MAX_LECTURES*3][1024];
@@ -193,5 +210,5 @@ void dumpCSV(individual *ind, int classCount, char (*labels)[MAX_LABEL_LENGTH]){
 		}
 
 		fclose(fp);
-	}
+	}*/
 }

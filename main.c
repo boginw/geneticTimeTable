@@ -15,11 +15,11 @@
 #define MAX_CLASSES        10
 #define MAX_TEACHERS       10
 #define MAX_TIMETABLES     10
-#define MAX_INDIVIDUALS    25
+#define MAX_INDIVIDUALS    35
 
 #define SCHOOL_DAYS_YEAR  190
 #define WEEK_LENGTH         5
-#define MAX_LECTURES       10
+#define MAX_LECTURES       50
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
@@ -85,15 +85,10 @@ typedef struct lecture{
     datetime l_datetime; /* hvilken dag og lektions nummer det skal foregå i */
 } lecture;
 
-/* En enekelt dag i skolen */
-typedef struct schoolDay{
-    int lectureLength; /* antal lektioner på den pågældende dag */
-    lecture lectures[MAX_LECTURES]; /* array af lektioner til dagen */
-} schoolDay;
-
 /* Selve skemaet for en enkelt klasse */
 typedef struct timetable{
-    schoolDay day[WEEK_LENGTH]; /* et array af schoolDay structs */
+    lecture lectures[MAX_LECTURES]; /* array af lektioner til dagen */
+    int lectureLength; /* antal lektioner på den pågældende dag */
     class *forClass; /* pointer til den pågældene klasse. */
 } timetable;
 
@@ -112,24 +107,51 @@ int factorial(int n);
 int generateAllCombinations(void *items, size_t size, int sizeOfVariable, void **finalItems);
 int isEmpty(int *array, size_t size);
 int shouldMutate();
+void prepend(char* s, const char* t);
 
+#include "headers.c"
 #include "fileParse.c"
 #include "lectureControl.c"
-#include "print.c"
 #include "scheduleControl.c"
+#include "print.c"
 #include "genetics.c"
 
 int main(int argc, char const *argv[]){
     /* VARIABLES BEGIN */
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH]; /* Array af TIMEINTERVALS [se. dat.sched] */
-    room rooms[MAX_ROOMS]; /* Array af rum, bliver deklaret men IKKE initieret */
-    subject subjects[MAX_SUBJECTS]; /* Array af fag, bliver deklaret men IKKE initieret */
-    class classes[MAX_CLASSES]; /* Array af klasser, bliver deklaret men IKKE initieret */
-    teacher teachers[MAX_TEACHERS]; /* Array af lærer, bliver deklaret men IKKE initieret */
-    individual individuals[MAX_INDIVIDUALS]; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
+    room *rooms; /* Array af rum, bliver deklaret men IKKE initieret */
+    subject *subjects; /* Array af fag, bliver deklaret men IKKE initieret */
+    class *classes; /* Array af klasser, bliver deklaret men IKKE initieret */
+    teacher *teachers; /* Array af lærer, bliver deklaret men IKKE initieret */
+    individual *individuals; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
 	int roomCount = 0, subjectCount = 0, classCount = 0, teacherCount = 0; /* variabler til at tælle antal værdier i de enkelte arrays */
-    int i,j; /* iteration counters */
+    int i,j,r; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
+    int lowestConflict = -1, highestConflict = 0, startlowconflict, starthighconflict;
+    char progressLine[50] = ">";
+    int runForGen;
+    int curProg = 1;
+
+    int *roulette;
+    int conflictsSum = 0;
+    int currentRoulette = 0;
+    int rouletteRatio = 0;
+    int maxConflicts = 0;
+    int akk = 0;
+
+    individual lowestIndividual;
+
+    rooms       = calloc(MAX_ROOMS,       sizeof(room));
+    subjects    = calloc(MAX_SUBJECTS,    sizeof(subject));
+    classes     = calloc(MAX_CLASSES,     sizeof(class));
+    teachers    = calloc(MAX_TEACHERS,    sizeof(teacher));
+    roulette    = calloc(100,             sizeof(int));
+    individuals = calloc(MAX_INDIVIDUALS, sizeof(individual));
+
+    if(rooms == NULL || subjects == NULL || classes == NULL || teachers == NULL || individuals == NULL){
+        printf("Not enough ram, sorry...\n");
+        exit(EXIT_FAILURE);
+    }
  	/* VARIABLES END */
     srand(seed); /* Generationen af selve token til genbrug */
 
@@ -150,46 +172,114 @@ int main(int argc, char const *argv[]){
      * Initierer variablerner, ved at parse dat.sched igennem filParse.c funktionerne
      */
     init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount,intervalLabels);
-
     /* Create initial population */
-    /* TODO: OMSKRIV DETTE TIL RECURSIVE FUNKTIONS KALD !!!!!! */
     for (i = 0; i < MAX_INDIVIDUALS; i++){
         /* For hvert individ op til maks antal individer */
         individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+        conflictsSum += individuals[i].conflicts;
     }
 
+
     qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
-    printf("First conflicts: %3d\n", individuals[0].conflicts);
-        for (i = 0; i < classCount; i++){
+
+    for (i = 0; i < 1; i++){
         printf("\nClass %s, conflicts: %d\n", individuals[0].t[i].forClass->name, individuals[0].conflicts);
         printTimeTable(individuals[0].t[i], intervalLabels);
     }
+    printf("First conflicts: %3d\n", individuals[0].conflicts);
     /* Conflicts preview */
-    for (j = 0; j < 10000; j++){
+    starthighconflict = individuals[MAX_INDIVIDUALS-1].conflicts;
+    startlowconflict = individuals[0].conflicts;
 
-        for (i = 0; i < MAX_INDIVIDUALS-2; i+=2){
-            crossover(&individuals[i], &individuals[i+1], classCount);
-        }
-        for(i = 0; i < MAX_INDIVIDUALS; i++){
+
+    runForGen = 30000;
+    for (j = 0; j < runForGen; j++){
+
+    	/* Replace shit individuals */
+    	for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
+    		individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+    	}
+    	
+    	/*qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
+    	for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
+    		if((individuals[0].conflicts - individuals[i].conflicts) / (float) individuals[0].conflicts * 100 > 40){
+    			individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+    		}
+    	}*/
+
+    	qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
+
+
+
+    	/* Selection */
+    	maxConflicts = individuals[MAX_INDIVIDUALS - 1].conflicts;
+        for (i = 0; i < MAX_INDIVIDUALS; i++){
+    		akk += (((maxConflicts - individuals[i].conflicts) / (float) maxConflicts)) * 100;
+    	}
+
+    	for (i = 0; i < MAX_INDIVIDUALS; i++){
+
+    		rouletteRatio = (((maxConflicts - individuals[i].conflicts) / (float) maxConflicts)) * 100;
+
+    		rouletteRatio = rouletteRatio / (float) akk * 100;
+
+    		for (r = 0; r < rouletteRatio; r++){
+    			roulette[currentRoulette] = i;
+    			currentRoulette++;
+    		}
+    	}
+
+
+    	/* Mutate and cross */
+        for(i = 1; i < MAX_INDIVIDUALS-1; i++){
+            crossover(&individuals[i], &individuals[roulette[randomNumber(0,currentRoulette-1)]], classCount);
             if(shouldMutate()){
-                mutate(&individuals[i]);
+                mutate(&individuals[i], rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
             }
         }
 
+        /* Sort for lowest conflicts */
         qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
-        if(j%100==0){
-            printf("Best conflicts: %3d", individuals[0].conflicts);
-            for (i = 0; i < 19; i++){
+
+        if(individuals[0].conflicts < lowestConflict || lowestConflict == -1){
+            lowestConflict = individuals[0].conflicts;
+            lowestIndividual = individuals[0];
+        }
+        if(individuals[MAX_INDIVIDUALS-1].conflicts > highestConflict){
+            highestConflict = individuals[MAX_INDIVIDUALS-1].conflicts;
+        }
+
+        if(j % 20 == 0){
+        	if(curProg*2 < (int) ((((float) j) / runForGen) * 100) ){
+        		prepend(progressLine, "=");
+        		curProg++;
+        	}
+
+        	/*printTimeTable(individuals[0].t[0], intervalLabels);*/
+
+            printf("%3d%% [%-50s] conflicts: %3d | lowest: %3d | generation: %6d/%-6d", 
+            	(int) ((((float) j) / runForGen) * 100),
+            	progressLine, 
+            	individuals[0].conflicts, 
+            	lowestConflict,
+            	j,
+            	runForGen
+            );
+
+            for (i = 0; i < 6000; i++){
                 printf("\b");
             }
         }
+
+        akk = 0;
+        currentRoulette = 0;
     }
 
     /* Uncomment for demo of schedules */
     for (i = 0; i < classCount; i++){
-        printf("\nClass %s, conflicts: %d\n", individuals[0].t[i].forClass->name, individuals[0].conflicts);
-        printTimeTable(individuals[0].t[i], intervalLabels);
+        printf("\nClass %s, conflicts: %d\n", lowestIndividual.t[i].forClass->name, lowestIndividual.conflicts);
+        printTimeTable(lowestIndividual.t[i], intervalLabels);
     }
 
 
@@ -200,7 +290,13 @@ int main(int argc, char const *argv[]){
     }*/
     /* Dump csv files in folder schedules */
     /*dumpCSV(&individuals[0],classCount,intervalLabels);*/
-
+    printf("Start High: %d\nStart Low: %d\nLowest: %d\nHighest: %d", starthighconflict, startlowconflict, lowestConflict, highestConflict);
+    free(rooms);
+    free(subjects);
+    free(classes);
+    free(teachers);
+    free(individuals);
+    free(roulette);
     return 0;
 }
 
@@ -316,4 +412,16 @@ int factorial(int n){
         result *= i;
     }
     return result;
+}
+
+void prepend(char* s, const char* t){
+    size_t len = strlen(t);
+    size_t i;
+
+    memmove(s + len, s, strlen(s) + 1);
+
+    for (i = 0; i < len; ++i)
+    {
+        s[i] = t[i];
+    }
 }
