@@ -107,12 +107,16 @@ typedef struct params{
     class      *classes; /* Array af klasser, bliver deklaret men IKKE initieret */
     teacher    *teachers; /* Array af lærer, bliver deklaret men IKKE initieret */
     individual *individuals; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
+    individual *childrens; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
+    individual *tempPopulation; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
 
     int roomCount;
     int subjectCount;
     int classCount;
     int teacherCount;
     int individualsCount;
+    int childrensCount;
+    int tempPopulationCount;
 
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH];
 } params;
@@ -157,12 +161,16 @@ int main(int argc, char const *argv[]){
     populationParams.classes     = calloc(MAX_CLASSES,     sizeof(class));
     populationParams.teachers    = calloc(MAX_TEACHERS,    sizeof(teacher));
     populationParams.individuals = calloc(MAX_INDIVIDUALS, sizeof(individual));
+    populationParams.childrens = calloc(MAX_INDIVIDUALS, sizeof(individual));
+    populationParams.tempPopulation = calloc(MAX_INDIVIDUALS, sizeof(individual));
 
-    populationParams.roomCount        = 0;
-    populationParams.subjectCount     = 0;
-    populationParams.classCount       = 0;
-    populationParams.teacherCount     = 0;
-    populationParams.individualsCount = 0;
+    populationParams.roomCount              = 0;
+    populationParams.subjectCount           = 0;
+    populationParams.classCount             = 0;
+    populationParams.teacherCount           = 0;
+    populationParams.individualsCount       = 0;
+    populationParams.childrensCount         = 0;
+    populationParams.tempPopulationCount    = 0;
 
     roulette = calloc(100, sizeof(int));
 
@@ -203,8 +211,8 @@ int main(int argc, char const *argv[]){
 
     for (j = 0; j < NUM_OF_GEN; j++){
 
-
-        /*childrens = crossoverPopulation();
+        crossoverPopulation(&populationParams);
+        /*
         tempPOP = mergePopulation(individuals, childrens);
         mutatePopulation(tempPOP);
         calcFitnessOnPopulation(tempPOP);
@@ -217,49 +225,41 @@ int main(int argc, char const *argv[]){
             }
             lastBestGen = j;
         }
+        /* Replace shit populationParams.individuals */
+        for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
+            populationParams.individuals[i] = randomIndividual(&populationParams);
+        }
 
-    	/* Replace shit populationParams.individuals */
-    	for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
-    		populationParams.individuals[i] = randomIndividual(&populationParams);
-    	}
+        /*qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
+        for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
+            if((populationParams.individuals[0].conflicts - populationParams.individuals[i].conflicts) / (float) populationParams.individuals[0].conflicts * 100 > 40){
+                populationParams.individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+            }
+        }*/
 
-    	/*qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
-    	for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
-    		if((populationParams.individuals[0].conflicts - populationParams.individuals[i].conflicts) / (float) populationParams.individuals[0].conflicts * 100 > 40){
-    			populationParams.individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
-    		}
-    	}*/
-
-    	qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
-
+        qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
 
-    	/* Selection */
-    	maxConflicts = populationParams.individuals[MAX_INDIVIDUALS - 1].conflicts;
+
+        /* Selection */
+        maxConflicts = populationParams.individuals[MAX_INDIVIDUALS - 1].conflicts;
         for (i = 0; i < MAX_INDIVIDUALS; i++){
-    		akk += (((maxConflicts - populationParams.individuals[i].conflicts) / (float) maxConflicts)) * 100;
-    	}
+            akk += (((maxConflicts - populationParams.individuals[i].conflicts) / (float) maxConflicts)) * 100;
+        }
 
-    	for (i = 0; i < MAX_INDIVIDUALS; i++){
+        for (i = 0; i < MAX_INDIVIDUALS; i++){
 
-    		rouletteRatio = (((maxConflicts - populationParams.individuals[i].conflicts) / (float) maxConflicts)) * 100;
+            rouletteRatio = (((maxConflicts - populationParams.individuals[i].conflicts) / (float) maxConflicts)) * 100;
 
-    		rouletteRatio = rouletteRatio / (float) akk * 100;
+            rouletteRatio = rouletteRatio / (float) akk * 100;
 
-    		for (r = 0; r < rouletteRatio; r++){
-    			roulette[currentRoulette] = i;
-    			currentRoulette++;
-    		}
-    	}
-
-
-    	/* Mutate and cross */
-        for(i = 1; i < MAX_INDIVIDUALS-1; i++){
-            crossover(&populationParams.individuals[i], &populationParams.individuals[roulette[randomNumber(0,currentRoulette-1)]], populationParams.classCount);
-            if(shouldMutate()){
-                mutate(&populationParams.individuals[i], &populationParams);
+            for (r = 0; r < rouletteRatio; r++){
+                roulette[currentRoulette] = i;
+                currentRoulette++;
             }
         }
+
+
 
         /* Sort for lowest conflicts */
         qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
@@ -275,25 +275,29 @@ int main(int argc, char const *argv[]){
             highestConflict = populationParams.individuals[MAX_INDIVIDUALS-1].conflicts;
         }
 
+printf("Her");
         if(j % 20 == 0){
-        	if(curProg*2 < (int) ((((float) j) / NUM_OF_GEN) * 100) ){
-        		prepend(progressLine, "=");
-        		curProg++;
-        	}
+            if(curProg*2 < (int) ((((float) j) / NUM_OF_GEN) * 100) ){
+                prepend(progressLine, "=");
+                curProg++;
+            }
 
-        	/*printTimeTable(populationParams.individuals[0].t[0], intervalLabels);*/
+            /*printTimeTable(populationParams.individuals[0].t[0], intervalLabels);*/
             printf("%3d%% [%-50s] conflicts: %3d | lowest: %3d | generation: %6d/%-6d",
-            	(int) ((((float) j) / NUM_OF_GEN) * 100),
-            	progressLine,
-            	populationParams.individuals[0].conflicts,
-            	lowestConflict,
-            	j,
-            	NUM_OF_GEN
+                (int) ((((float) j) / NUM_OF_GEN) * 100),
+                progressLine,
+                populationParams.individuals[0].conflicts,
+                lowestConflict,
+                j,
+                NUM_OF_GEN
             );
 
-            for (i = 0; i < 6000; i++){
+
+
+           /* for (i = 0; i < 6000; i++){
                 printf("\b");
-            }
+            }*/
+
         }
 
         akk = 0;
@@ -322,6 +326,20 @@ int main(int argc, char const *argv[]){
     free(populationParams.individuals);
     free(roulette);
     return 0;
+}
+
+void crossoverPopulation(params *populationParams){
+   int i;
+    for(i = 0; i < MAX_INDIVIDUALS-2; i+=2){
+        crossover(
+                    &populationParams->childrens[populationParams->childrensCount+1],
+                    &populationParams->childrens[populationParams->childrensCount+2],
+                    &populationParams->individuals[i],
+                    &populationParams->individuals[i+1],
+                    populationParams->classCount
+                );
+        populationParams->childrensCount += 2;
+    }
 }
 
 int generateInitialPopulation(params *populationParams){
