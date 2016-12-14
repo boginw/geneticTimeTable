@@ -111,29 +111,30 @@ individual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 		/* Get all the required hours for class */
 		for (s = 0; s < subjectCount; s++){
 		    hoursPerWeek[s] = ceil(subjects[s].perYear[classes[c].year] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
-		    if(strcmp(classes[c].name, "1B") == 0 && hoursPerWeek[s] > 0){
-		     /*printf("%s skal have %d antal timer i %s om ugen hvilket er %d om året\n", classes[c].name, hoursPerWeek[s], subjects[s].name, subjects[s].perYear[classes[c].year]);*/
-				}
+		    /*if(strcmp(classes[c].name, "1B") == 0 && hoursPerWeek[s] > 0){
+		    	 printf("%s skal have %d antal timer i %s om ugen hvilket er %d om året\n", classes[c].name, hoursPerWeek[s], subjects[s].name, subjects[s].perYear[classes[c].year]);
+			}*/
 		}
 
 		while(!isEmpty(hoursPerWeek,subjectCount)){ /* Makes sure to reject timetalbes that dosent meet the requried min hours per subject*/
-		        		d = randomNumber(0,WEEK_LENGTH-1);
-		        		l = randomNumber(0,MAX_LECTURES-1);
-		            subjectIndex = randomNumber(0,subjectCount-1);
-		            if(hoursPerWeek[subjectIndex] > 0 &&
-							r_individual.t[c].day[d].lectures[l].init == 0){
+        	d = randomNumber(0,WEEK_LENGTH-1);
+        	l = randomNumber(0,MAX_LECTURES-1);
+            subjectIndex = randomNumber(0,subjectCount-1);
 
-		            		/*printf("%s = %d\n",  subjects[subjectIndex].name, hoursPerWeek[subjectIndex]);*/
-		                r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[subjectIndex]);
-		                r_lecture.l_datetime.dayOfWeek = d;
-		                r_lecture.l_datetime.hour = l;
-		                r_lecture.init = 1;
-		                r_individual.t[c].day[d].lectureLength += 1;
-		                hoursPerWeek[subjectIndex] -= 1;
+            if(hoursPerWeek[subjectIndex] > 0 &&
+				r_individual.t[c].day[d].lectures[l].init == 0){
 
-		                r_individual.t[c].day[d].lectures[l] = r_lecture;
-		                /*printLecture(r_individual.t[c].day[d].lectures[l]);*/
-		            }
+            	/*printf("%s = %d\n",  subjects[subjectIndex].name, hoursPerWeek[subjectIndex]);*/
+                r_lecture = randomLectureForClassAndSubject(rooms,roomCount,teachers,teacherCount, &classes[c], &subjects[subjectIndex]);
+                r_lecture.l_datetime.dayOfWeek = d;
+                r_lecture.l_datetime.hour = l;
+                r_lecture.init = 1;
+                r_individual.t[c].day[d].lectureLength += 1;
+                hoursPerWeek[subjectIndex] -= 1;
+
+                r_individual.t[c].day[d].lectures[l] = r_lecture;
+                /*printLecture(r_individual.t[c].day[d].lectures[l]);*/
+            }
 		}
 	}
 
