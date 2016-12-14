@@ -1,6 +1,6 @@
 int init(params *populationParams);
 int countLines(FILE *fp);
-
+int generateInitialPopulation(params *populationParams);
 /* PARSE FUNCTIONS */
 room parseRoom(char *line);
 subject parseSubject(char *line, room* rooms, int roomCount);

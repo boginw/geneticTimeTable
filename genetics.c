@@ -1,5 +1,3 @@
-
-
 int crossover_points      =   10;
 int mutation_size         =  100;
 int crossover_probability =   90;
@@ -133,7 +131,7 @@ void addSpice(individual *i, params *populationParams){
 
 void addEverythingNice(individual *i, params *populationParams){
 	/* This layer mutates on the top level ie. the total school timetable */
-	/*printf("Adding Everything Nice");*/
+
 }
 
 teacher *findRandomTeacherForSubject(lecture *l, teacher *t, int teacherCount){
