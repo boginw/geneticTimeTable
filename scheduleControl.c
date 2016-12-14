@@ -139,7 +139,6 @@ individual randomIndividual(room *rooms, int roomCount, subject *subjects, int s
 	conflicts(&r_individual,classCount);
 
 	free(hoursPerWeek);
-
 	return r_individual;
 }
 

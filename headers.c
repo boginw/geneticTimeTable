@@ -18,11 +18,15 @@ lecture randomLecture(room *rooms, int roomCount, subject *subjects, int subject
 lecture randomLectureForClass(room *rooms, int roomCount, subject *subjects, int subjectCount, teacher *teachers, int teacherCount, class *curClass);
 lecture randomLectureForClassAndSubject(room *rooms, int roomCount, teacher *teachers, int teacherCount, class *curClass, subject *curSubject);
 
-void weapon_x(individual *i, int amountOfMutations);
-void injectSerumX(individual *i);
-void addSugar(individual *i);
-void addSpice(individual *i);
-void addEverythingNice(individual *i);
+void mutate(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
+void weapon_x(individual *i, int amountOfMutations, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
+void injectSerumX(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
+void addSugar(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
+void addSpice(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
+void addEverythingNice(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
+void getRandomDatetimeWithNoLecture(timetable *t, int *day, int*hour);
+teacher *findRandomTeacherForSubject(lecture *l, teacher *t, int teacherCount);
+int teacherCanTeach(subject **canTeach, int canTeachLength, char *subjectName);
 
 void printLecture(lecture l);
 char *autoPadding(char *header, int width);
