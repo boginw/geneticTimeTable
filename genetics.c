@@ -133,7 +133,7 @@ void addSpice(individual *i, room *rooms, int roomCount, subject *subjects, int 
 
 void addEverythingNice(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
 	/* This layer mutates on the top level ie. the total school timetable */
-	/*printf("Adding Everything Nice");*/
+
 }
 
 teacher *findRandomTeacherForSubject(lecture *l, teacher *t, int teacherCount){

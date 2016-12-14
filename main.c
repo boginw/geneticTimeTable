@@ -21,7 +21,7 @@
 #define WEEK_LENGTH         5
 #define MAX_LECTURES       50
 #define MUTATION_CHANCE     1
-#define MAX_MUTATIONS       7
+#define MAX_MUTATIONS      20
 #define FREE_LECTURE_CH    30
 
 /**
@@ -199,7 +199,7 @@ int main(int argc, char const *argv[]){
     	for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
     		individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     	}
-    	
+
     	/*qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
     	for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
     		if((individuals[0].conflicts - individuals[i].conflicts) / (float) individuals[0].conflicts * 100 > 40){
@@ -258,10 +258,10 @@ int main(int argc, char const *argv[]){
 
         	/*printTimeTable(individuals[0].t[0], intervalLabels);*/
 
-            printf("%3d%% [%-50s] conflicts: %3d | lowest: %3d | generation: %6d/%-6d", 
+            printf("%3d%% [%-50s] conflicts: %3d | lowest: %3d | generation: %6d/%-6d",
             	(int) ((((float) j) / runForGen) * 100),
-            	progressLine, 
-            	individuals[0].conflicts, 
+            	progressLine,
+            	individuals[0].conflicts,
             	lowestConflict,
             	j,
             	runForGen
@@ -318,7 +318,7 @@ int shouldMutate(){
     int randomnumber;
     randomnumber = rand() % 100;
 
-    return randomnumber <= MUTATION_CHANCE;
+    return randomnumber < MUTATION_CHANCE;
 }
 
 /**
