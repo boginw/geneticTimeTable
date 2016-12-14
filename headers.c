@@ -1,6 +1,6 @@
 int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, class *classes, int *classCount, teacher *teachers, int *teacherCount, char (*labels)[MAX_LABEL_LENGTH]);
 int countLines(FILE *fp);
-
+int generateInitialPopulation(individual *individuals, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
 /* PARSE FUNCTIONS */
 room parseRoom(char *line);
 subject parseSubject(char *line, room* rooms, int roomCount);

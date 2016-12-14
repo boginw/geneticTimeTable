@@ -1,5 +1,3 @@
-
-
 int crossover_points      =   10;
 int mutation_size         =  100;
 int crossover_probability =   90;

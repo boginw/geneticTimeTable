@@ -17,12 +17,13 @@
 #define MAX_TIMETABLES     10
 #define MAX_INDIVIDUALS    35
 
-#define SCHOOL_DAYS_YEAR  190
+#define SCHOOL_DAYS_YEAR  200
 #define WEEK_LENGTH         5
 #define MAX_LECTURES       50
 #define MUTATION_CHANCE     5
 #define MAX_MUTATIONS      30
 #define FREE_LECTURE_CH    30
+#define NUM_OF_GEN      30000
 
 /**
  * ASSUMPTIONS:
@@ -129,7 +130,6 @@ int main(int argc, char const *argv[]){
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
     int lowestConflict = -1, highestConflict = 0, startlowconflict, starthighconflict;
     char progressLine[50] = ">";
-    int runForGen;
     int curProg = 1;
 
     int *roulette;
@@ -139,7 +139,6 @@ int main(int argc, char const *argv[]){
     int maxConflicts = 0;
     int akk = 0;
 
-    int lastBest = -1;
     int lastBestGen = 0;
 
     individual lowestIndividual;
@@ -175,28 +174,32 @@ int main(int argc, char const *argv[]){
      * Initierer variablerner, ved at parse dat.sched igennem filParse.c funktionerne
      */
     init(rooms,&roomCount,subjects,&subjectCount,classes,&classCount,teachers,&teacherCount,intervalLabels);
-    /* Create initial population */
-    for (i = 0; i < MAX_INDIVIDUALS; i++){
-        /* For hvert individ op til maks antal individer */
-        individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
-        conflictsSum += individuals[i].conflicts;
-    }
-
-
+    conflictsSum = generateInitialPopulation(individuals, rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
     qsort(individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
 
-    for (i = 0; i < 1; i++){
-        printf("\nClass %s, conflicts: %d\n", individuals[0].t[i].forClass->name, individuals[0].conflicts);
-        printTimeTable(individuals[0].t[i], intervalLabels);
-    }
+    printf("\nClass %s, conflicts: %d\n", individuals[0].t[0].forClass->name, individuals[0].conflicts);
+    printTimeTable(individuals[0].t[0], intervalLabels);
+
     printf("First conflicts: %3d\n", individuals[0].conflicts);
+
     /* Conflicts preview */
     starthighconflict = individuals[MAX_INDIVIDUALS-1].conflicts;
     startlowconflict = individuals[0].conflicts;
 
 
-    runForGen = 30000;
-    for (j = 0; j < runForGen; j++){
+    for (j = 0; j < NUM_OF_GEN; j++){
+
+
+        childrens = crossoverPopulation();
+        tempPOP = mergePopulation(individuals, childrens);
+        mutatePopulation(tempPOP);
+        calcFitnessOnPopulation(tempPOP);
+        individuals = selectionOnPopulation(tempPOP);
+
+
+
+
+
         if(lastBestGen + 2000 < j){
             printf("new \n");
             for (i = 0 ; i < MAX_INDIVIDUALS-5; i++){
@@ -264,7 +267,7 @@ int main(int argc, char const *argv[]){
         }
 
         if(j % 20 == 0){
-        	if(curProg*2 < (int) ((((float) j) / runForGen) * 100) ){
+        	if(curProg*2 < (int) ((((float) j) / NUM_OF_GEN) * 100) ){
         		prepend(progressLine, "=");
         		curProg++;
         	}
@@ -272,12 +275,12 @@ int main(int argc, char const *argv[]){
         	/*printTimeTable(individuals[0].t[0], intervalLabels);*/
 
             printf("%3d%% [%-50s] conflicts: %3d | lowest: %3d | generation: %6d/%-6d",
-            	(int) ((((float) j) / runForGen) * 100),
+            	(int) ((((float) j) / NUM_OF_GEN) * 100),
             	progressLine,
             	individuals[0].conflicts,
             	lowestConflict,
             	j,
-            	runForGen
+            	NUM_OF_GEN
             );
 
             for (i = 0; i < 6000; i++){
@@ -311,6 +314,17 @@ int main(int argc, char const *argv[]){
     free(individuals);
     free(roulette);
     return 0;
+}
+
+int generateInitialPopulation(individual *individuals, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+    int i, conflictsSum=0;
+    /* Create initial population */
+    for (i = 0; i < MAX_INDIVIDUALS; i++){
+        /* For hvert individ op til maks antal individer */
+        individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+        conflictsSum += individuals[i].conflicts;
+    }
+    return conflictsSum;
 }
 
 void killTimetable(timetable *t){
