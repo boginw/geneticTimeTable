@@ -94,7 +94,7 @@ int conflictsQsort(const void * a, const void * b){
 }
 
 
-individual randomIndividual(const params *populationParams){
+individual randomIndividual(params *populationParams){
 	int c,day,hour,s;
 	int subjectIndex = 0;
 	individual r_individual;
@@ -126,10 +126,7 @@ individual randomIndividual(const params *populationParams){
         	subjectIndex = randomNumber(0,populationParams->subjectCount-1);
         	if(hoursPerWeek[subjectIndex] > 0 && lectureOnDateTime(r_individual.t[c], day, hour) == -1){
 	            r_lecture = randomLectureForClassAndSubject(
-	            	populationParams->rooms,
-	            	populationParams->roomCount,
-	            	populationParams->teachers,
-	            	populationParams->teacherCount, 
+	            	populationParams,
 	            	&populationParams->classes[c], 
 	            	&populationParams->subjects[subjectIndex]
 	            );

@@ -207,12 +207,10 @@ int main(int argc, char const *argv[]){
     starthighconflict = populationParams.individuals[MAX_INDIVIDUALS-1].conflicts;
     startlowconflict  = populationParams.individuals[0].conflicts;
 
+
     for (j = 0; j < NUM_OF_GEN; j++){
 
         crossoverPopulation(&populationParams);
-<<<<<<< HEAD
-        
-=======
         mergePopulation(&populationParams);
         mutatePopulation(&populationParams);
         calcFitnessOnPopulation(&populationParams);
@@ -345,8 +343,6 @@ void crossoverPopulation(params *populationParams){
                     populationParams->classCount
                 );
         populationParams->childrensCount += 2;
-        
-        printf("%d\n", populationParams->childrensCount);
     }
 }
 
