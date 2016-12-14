@@ -1,7 +1,7 @@
 
 
 
-int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, class *classes, int *classCount, teacher *teachers, int *teacherCount, char (*labels)[MAX_LABEL_LENGTH]){
+int init(params *populationParams){
     FILE *dataFile;
     int i,j,lines,res;
     int labelCounter = 0;
@@ -12,10 +12,10 @@ int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, clas
     char *requirements;
 
     requirements = calloc(5 * 20, sizeof(char));
-    buffer = calloc(200, sizeof(char));
-    inlineBuffer = calloc(200, sizeof(char));
-    shortBuffer = calloc(20, sizeof(char));
-    lastType = calloc(15, sizeof(char));
+    buffer       = calloc(200,    sizeof(char));
+    inlineBuffer = calloc(200,    sizeof(char));
+    shortBuffer  = calloc(20,     sizeof(char));
+    lastType     = calloc(15,     sizeof(char));
 
     if(!(dataFile = fopen("dat.sched", "r"))){
         printf("DATAFILE DOES NOT EXIST...\n");
@@ -43,41 +43,53 @@ int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, clas
             continue;
         }else{
             if(strcmp(lastType,"ROOM") == 0){
-                rooms[*roomCount] = parseRoom(buffer);
+                populationParams->rooms[populationParams->roomCount] = parseRoom(buffer);
 
-                *roomCount +=1;
+                populationParams->roomCount +=1;
             }else if(strcmp(lastType,"SUBJECT") == 0){
-                subjects[*subjectCount] = parseSubject(buffer, rooms, *roomCount);
-
-                *subjectCount +=1;
+                populationParams->subjects[populationParams->subjectCount] = parseSubject(buffer, populationParams->rooms, populationParams->roomCount);
+                populationParams->subjectCount +=1;
             }else if(strcmp(lastType,"CLASS") == 0){
                 res = sscanf(buffer," %[^,],%[^,],%d ",
-                    classes[*classCount].name,
+                    populationParams->classes[populationParams->classCount].name,
                     inlineBuffer,
-                    &classes[*classCount].maxWorkHoursPerDay
+                    &populationParams->classes[populationParams->classCount].maxWorkHoursPerDay
                 );
 
-                sscanf(classes[*classCount].name,"%d%*c",&classes[*classCount].year);
+                sscanf(
+                    populationParams->classes[populationParams->classCount].name,
+                    "%d%*c",
+                    &populationParams->classes[populationParams->classCount].year
+                );
 
-                classes[*classCount].classRoom = findRoom(inlineBuffer, rooms, *roomCount);
+                populationParams->classes[populationParams->classCount].classRoom = 
+                    findRoom(inlineBuffer, populationParams->rooms, populationParams->roomCount);
 
-                *classCount+=1;
+                populationParams->classCount+=1;
             }else if(strcmp(lastType,"TEACHER") == 0){
                 res = sscanf(buffer," %[^,],%d,%[^,],%[^,],%d ",
-                    teachers[*teacherCount].name,
-                    &teachers[*teacherCount].isClassleader,
+                    populationParams->teachers[populationParams->teacherCount].name,
+                    &populationParams->teachers[populationParams->teacherCount].isClassleader,
                     shortBuffer,
                     inlineBuffer,
-                    &teachers[*teacherCount].maxWorkHoursPerDay
+                    &populationParams->teachers[populationParams->teacherCount].maxWorkHoursPerDay
                 );
 
-                teachers[*teacherCount].leaderOfClass = findClass(shortBuffer, classes, *classCount);
-                teachers[*teacherCount].canTeachLength = findSubjectsFromString(inlineBuffer, teachers[*teacherCount].canTeach, subjects, *subjectCount);
+                populationParams->teachers[populationParams->teacherCount].leaderOfClass = 
+                    findClass(shortBuffer, populationParams->classes, populationParams->classCount);
+                
+                populationParams->teachers[populationParams->teacherCount].canTeachLength = 
+                    findSubjectsFromString(
+                        inlineBuffer, 
+                        populationParams->teachers[populationParams->teacherCount].canTeach, 
+                        populationParams->subjects, 
+                        populationParams->subjectCount
+                    );
 
-                *teacherCount+=1;
+                populationParams->teacherCount+=1;
             }else if(strcmp(lastType,"TIMEINTERVALS") == 0){
                 res = sscanf(buffer," %s ",
-                    labels[labelCounter++]
+                    populationParams->intervalLabels[labelCounter++]
                 );
             }else{
                 printf("Warning: Uknown type on line %i\n", i+1);
@@ -91,41 +103,53 @@ int init(room *rooms, int *roomCount, subject *subjects, int *subjectCount, clas
                "%3d Subjects\n"
                "%3d Classes\n"
                "%3d Teachers\n",
-               *roomCount,
-               *subjectCount,
-               *classCount,
-               *teacherCount
+               populationParams->roomCount,
+               populationParams->subjectCount,
+               populationParams->classCount,
+               populationParams->teacherCount
         );
 
         /* dumping info for demo purposes */
         printf("\nDUMPING DATA....\n\n");
 
         printf("Rooms:\n");
-        for (i = 0; i < *roomCount; i++){
-            printf("%d => %s\n", i+1, rooms[i].name);
+        for (i = 0; i < populationParams->roomCount; i++){
+            printf("%d => %s\n", i+1, populationParams->rooms[i].name);
         }
 
         printf("\nClasses:\n");
-        for (i = 0; i < *classCount; i++){
-            printf("%d => %s, Classroom: %s\n", i+1, classes[i].name, classes[i].classRoom->name);
+        for (i = 0; i < populationParams->classCount; i++){
+            printf("%d => %s, Classroom: %s\n", 
+                i+1, 
+                populationParams->classes[i].name, 
+                populationParams->classes[i].classRoom->name
+            );
         }
 
         printf("\nSubjects:\n");
-        for (i = 0; i < *subjectCount; i++){
-            printf("%2d => %17s, roomRequire: %s\n", i+1, subjects[i].name, (subjects[i].roomRequireLength != 0 ? subjects[i].roomRequire[0]->name : "*"));
+        for (i = 0; i < populationParams->subjectCount; i++){
+            printf("%2d => %17s, roomRequire: %s\n", 
+                i+1, 
+                populationParams->subjects[i].name, 
+                (populationParams->subjects[i].roomRequireLength != 0 ? populationParams->subjects[i].roomRequire[0]->name : "*"));
         }
 
         printf("\nTeachers:\n");
-        for (i = 0; i < *teacherCount; i++){
+        for (i = 0; i < populationParams->teacherCount; i++){
             strcpy(requirements, "");
-            for (j = 0; j < teachers[i].canTeachLength; j++){
+            for (j = 0; j < populationParams->teachers[i].canTeachLength; j++){
                 if(j!=0)
                     strcat(requirements,", ");
 
-                strcat(requirements,teachers[i].canTeach[j]->name);
+                strcat(requirements,populationParams->teachers[i].canTeach[j]->name);
             }
 
-            printf("%2d => %15s, isClassleader: %s, %s\n", i+1, teachers[i].name, (teachers[i].isClassleader ? teachers[i].leaderOfClass->name : "no"), requirements);
+            printf("%2d => %15s, isClassleader: %s, %s\n", 
+                i+1, 
+                populationParams->teachers[i].name, 
+                (populationParams->teachers[i].isClassleader ? populationParams->teachers[i].leaderOfClass->name : "no"), 
+                requirements
+            );
         }
     }
 

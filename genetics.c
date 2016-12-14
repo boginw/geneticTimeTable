@@ -70,7 +70,7 @@ individual crossover(individual *p1, individual *p2, int classCount){
 }
 
 
-void mutate(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void mutate(individual *i, params *populationParams){
 	/* TODO
 	 * vælg valg der skal muteres
 	 * vælge hvordan det skal muterer
@@ -78,35 +78,35 @@ void mutate(individual *i, room *rooms, int roomCount, subject *subjects, int su
 	 * returner og afslut
 	 */
 	int amountOfMutations = randomNumber(1, MAX_MUTATIONS);
-	weapon_x(i, amountOfMutations, rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+	weapon_x(i, amountOfMutations, populationParams);
 }
 
-void weapon_x(individual *i, int amountOfMutations, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void weapon_x(individual *i, int amountOfMutations, params *populationParams){
 	if(amountOfMutations < 1){
 		return;
 	}
-	injectSerumX(i, rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
-	weapon_x(i, (amountOfMutations-1), rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+	injectSerumX(i, populationParams);
+	weapon_x(i, (amountOfMutations-1), populationParams);
 }
 
-void injectSerumX(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void injectSerumX(individual *i, params *populationParams){
 	int ingredient = randomNumber(1,3);
 	switch(ingredient){
 		case 1:
-			addSugar(i, rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+			addSugar(i, populationParams);
 		break;
 		case 2:
-			addSpice(i, rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+			addSpice(i, populationParams);
 		break;
 		case 3:
-			addEverythingNice(i, rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+			addEverythingNice(i, populationParams);
 		break;
 	}
 }
 
-void addSugar(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void addSugar(individual *i, params *populationParams){
 	/* This layer mutates on the top level ie. the total school timetable */
-	int rndClass = randomNumber(0, classCount-1);
+	int rndClass = randomNumber(0, populationParams->classCount-1);
 	int rndLec = randomNumber(0, i->t[rndClass].lectureLength-1);
 	int rndDay, rndHour;
 	getRandomDatetimeWithNoLecture(&i->t[rndClass], &rndDay, &rndHour);
@@ -115,9 +115,9 @@ void addSugar(individual *i, room *rooms, int roomCount, subject *subjects, int 
 }
 
 
-void addSpice(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void addSpice(individual *i, params *populationParams){
 	/* This layer mutates on the top level ie. the total school timetable */
-	int rndClass = randomNumber(0, classCount-1);
+	int rndClass = randomNumber(0, populationParams->classCount-1);
 	int rndLec = randomNumber(0, i->t[rndClass].lectureLength-1);
 	lecture *thelecture = &i->t[rndClass].lectures[rndLec];
 
@@ -125,11 +125,11 @@ void addSpice(individual *i, room *rooms, int roomCount, subject *subjects, int 
 		return;
 	}
 
-	thelecture->l_teacher = findRandomTeacherForSubject(thelecture, teachers, teacherCount);
+	thelecture->l_teacher = findRandomTeacherForSubject(thelecture, populationParams->teachers, populationParams->teacherCount);
 }
 
 
-void addEverythingNice(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void addEverythingNice(individual *i, params *populationParams){
 	/* This layer mutates on the top level ie. the total school timetable */
 
 }
