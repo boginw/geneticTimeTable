@@ -57,7 +57,7 @@ Class time,[],ONCE_A_WEEK
 
 ### TEACHER ###
 # Format: Navn, er klasseleder, hvis ja så for hvilken klasse, liste over de fag læreren må undervise i, hvor mange timer læreren max må undervise i om ugen
-Verner Frank,1,1A,[Class time,Physical Activity;Math;Geography;Biology;Social Studies;Basic Science],-1
+Verner Frank,1,1A,[Class time;Physical Activity;Math;Geography;Biology;Social Studies;Basic Science],-1
 Finn Storm,0,0,[Physical Activity;Physics/Chemistry;Danish;English;Christianity],5
 Thorbjorn Toft,1,2B,[Class time;Physical Activity;History;German;French;Visual Arts;Basic Science],5
 Johan Rohde,1,2A,[Class time;Physical Activity;French;Math;Sports;Music;Visual Arts;Design],5

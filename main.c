@@ -19,11 +19,11 @@
 
 #define SCHOOL_DAYS_YEAR  200
 #define WEEK_LENGTH         5
-#define MAX_LECTURES       40
+#define MAX_LECTURES       45
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
-#define NUM_OF_GEN     10000 
+#define NUM_OF_GEN     200
 
 #define ROOM_CONFLICT       1
 #define TEACHER_CONFLICT    2
@@ -159,16 +159,17 @@ int main(int argc, char const *argv[]){
     int lastBestGen = 0;
 
     individual conflictTest;
+    individual conflictTest2;
 
     individual lowestIndividual;
 
-    populationParams.rooms          = calloc(MAX_ROOMS,       sizeof(room));
-    populationParams.subjects       = calloc(MAX_SUBJECTS,    sizeof(subject));
-    populationParams.classes        = calloc(MAX_CLASSES,     sizeof(class));
-    populationParams.teachers       = calloc(MAX_TEACHERS,    sizeof(teacher));
-    populationParams.individuals    = calloc(MAX_INDIVIDUALS, sizeof(individual));
-    populationParams.childrens      = calloc(MAX_INDIVIDUALS, sizeof(individual));
-    populationParams.tempPopulation = calloc(MAX_INDIVIDUALS*2, sizeof(individual));
+    populationParams.rooms          = calloc(MAX_ROOMS,           sizeof(room));
+    populationParams.subjects       = calloc(MAX_SUBJECTS,        sizeof(subject));
+    populationParams.classes        = calloc(MAX_CLASSES,         sizeof(class));
+    populationParams.teachers       = calloc(MAX_TEACHERS,        sizeof(teacher));
+    populationParams.individuals    = calloc(MAX_INDIVIDUALS,     sizeof(individual));
+    populationParams.childrens      = calloc(MAX_INDIVIDUALS,     sizeof(individual));
+    populationParams.tempPopulation = calloc(MAX_INDIVIDUALS * 2, sizeof(individual));
 
     populationParams.roomCount              = 0;
     populationParams.subjectCount           = 0;
@@ -212,7 +213,9 @@ int main(int argc, char const *argv[]){
     init(&populationParams);
 
 
-    if(0){
+    if(argc > 2 && strcmp(argv[2],"--tests") == 0){
+
+    	/* 6 */
         conflictTest.t[0].lectures[0].init = 1;
         conflictTest.t[0].lectures[0].free = 0;
         /* Expected Conflict */
@@ -225,6 +228,7 @@ int main(int argc, char const *argv[]){
         conflictTest.t[0].lectures[0].l_datetime.hour = 0;
         conflictTest.t[0].lectureLength = 1;
 
+        /* 4 */
         conflictTest.t[1].lectures[0].init = 1;
         conflictTest.t[1].lectures[0].free = 0;
         conflictTest.t[1].lectures[0].l_room = &populationParams.rooms[0];
@@ -235,6 +239,7 @@ int main(int argc, char const *argv[]){
         conflictTest.t[1].lectures[0].l_datetime.hour = 0;
         conflictTest.t[1].lectureLength = 1;
 
+        /* 2 */
         conflictTest.t[2].lectures[0].init = 1;
         conflictTest.t[2].lectures[0].free = 0;
         conflictTest.t[2].lectures[0].l_room = &populationParams.rooms[0];
@@ -245,12 +250,86 @@ int main(int argc, char const *argv[]){
         conflictTest.t[2].lectures[0].l_datetime.hour = 0;
         conflictTest.t[2].lectureLength = 1;
 
-        conflicts(&conflictTest, 3);
+        /* 0 */
+        conflictTest.t[3].lectures[0].init = 1;
+        conflictTest.t[3].lectures[0].free = 0;
+        conflictTest.t[3].lectures[0].l_room = &populationParams.rooms[0];
+        conflictTest.t[3].lectures[0].l_class = &populationParams.classes[0];
+        conflictTest.t[3].lectures[0].l_subject = &populationParams.subjects[0];
+        conflictTest.t[3].lectures[0].l_teacher = &populationParams.teachers[1];
+        conflictTest.t[3].lectures[0].l_datetime.dayOfWeek = 0;
+        conflictTest.t[3].lectures[0].l_datetime.hour = 0;
+        conflictTest.t[3].lectureLength = 1;
 
-        printf("Conflicts: %d\n", conflictTest.conflicts);
+        conflicts(&conflictTest, 4);
+        printTimeTable(conflictTest.t[0], populationParams.intervalLabels);
+        printTimeTable(conflictTest.t[1], populationParams.intervalLabels);
+        printTimeTable(conflictTest.t[2], populationParams.intervalLabels);
+        printTimeTable(conflictTest.t[3], populationParams.intervalLabels);
+        printf("Expected:  8, Conflicts: %2d\n", conflictTest.conflicts);
+
+
+
+        /* 6 */
+        conflictTest2.t[0].lectures[0].init = 1;
+        conflictTest2.t[0].lectures[0].free = 0;
+        /* Expected Conflict */
+        conflictTest2.t[0].lectures[0].l_room = &populationParams.rooms[0];
+        conflictTest2.t[0].lectures[0].l_class = &populationParams.classes[0];
+        conflictTest2.t[0].lectures[0].l_subject = &populationParams.subjects[0];
+        /* Expected Conflict */
+        conflictTest2.t[0].lectures[0].l_teacher = &populationParams.teachers[0];
+        conflictTest2.t[0].lectures[0].l_datetime.dayOfWeek = 0;
+        conflictTest2.t[0].lectures[0].l_datetime.hour = 0;
+        conflictTest2.t[0].lectureLength = 1;
+
+        /* 4 */
+        conflictTest2.t[1].lectures[0].init = 1;
+        conflictTest2.t[1].lectures[0].free = 0;
+        conflictTest2.t[1].lectures[0].l_room = &populationParams.rooms[1];
+        conflictTest2.t[1].lectures[0].l_class = &populationParams.classes[1];
+        conflictTest2.t[1].lectures[0].l_subject = &populationParams.subjects[1];
+        conflictTest2.t[1].lectures[0].l_teacher = &populationParams.teachers[1];
+        conflictTest2.t[1].lectures[0].l_datetime.dayOfWeek = 0;
+        conflictTest2.t[1].lectures[0].l_datetime.hour = 0;
+        conflictTest2.t[1].lectureLength = 1;
+
+        /* 2 */
+        conflictTest2.t[2].lectures[0].init = 1;
+        conflictTest2.t[2].lectures[0].free = 0;
+        conflictTest2.t[2].lectures[0].l_room = &populationParams.rooms[2];
+        conflictTest2.t[2].lectures[0].l_class = &populationParams.classes[2];
+        conflictTest2.t[2].lectures[0].l_subject = &populationParams.subjects[2];
+        conflictTest2.t[2].lectures[0].l_teacher = &populationParams.teachers[2];
+        conflictTest2.t[2].lectures[0].l_datetime.dayOfWeek = 0;
+        conflictTest2.t[2].lectures[0].l_datetime.hour = 0;
+        conflictTest2.t[2].lectureLength = 1;
+
+        /* 0 */
+        conflictTest2.t[3].lectures[0].init = 1;
+        conflictTest2.t[3].lectures[0].free = 0;
+        conflictTest2.t[3].lectures[0].l_room = &populationParams.rooms[3];
+        conflictTest2.t[3].lectures[0].l_class = &populationParams.classes[3];
+        conflictTest2.t[3].lectures[0].l_subject = &populationParams.subjects[3];
+        conflictTest2.t[3].lectures[0].l_teacher = &populationParams.teachers[3];
+        conflictTest2.t[3].lectures[0].l_datetime.dayOfWeek = 0;
+        conflictTest2.t[3].lectures[0].l_datetime.hour = 0;
+        conflictTest2.t[3].lectureLength = 1;
+
+
+
+
+        conflicts(&conflictTest2, 4);
+        /*printTimeTable(conflictTest2.t[0], populationParams.intervalLabels);
+        printTimeTable(conflictTest2.t[1], populationParams.intervalLabels);
+        printTimeTable(conflictTest2.t[2], populationParams.intervalLabels);
+        printTimeTable(conflictTest2.t[3], populationParams.intervalLabels);*/
+        printf("Expected:  0, Conflicts: %2d\n", conflictTest2.conflicts);
 
         exit(0);
     }
+
+
     generateInitialPopulation(&populationParams);
     qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
     printf("First conflicts: %3d\n", populationParams.individuals[0].conflicts);
