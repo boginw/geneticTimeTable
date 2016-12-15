@@ -46,12 +46,14 @@ void printLecture(lecture l){
 		strcat(requirements,l.l_subject->roomRequire[i]->name);
 	}
 
-	printf("| %2d - %2d | %3s | %-7s | %-17s | %-25s | %-14s |\n",
+	printf("| %2d - %2d | %3s | %s %-7s | %-17s | %s %-25s | %-14s |\n",
 		l.l_datetime.dayOfWeek,
 		l.l_datetime.hour,
 		l.l_class->name,
+		(l.conflictFlag == 1 || l.conflictFlag == 3) ? "!" : "",
 		l.l_room->name,
 		l.l_subject->name,
+		(l.conflictFlag == 2 || l.conflictFlag == 3) ? "!" : "",
 		l.l_teacher->name,
 		(l.l_subject->roomRequireLength != 0 ? requirements : "*")
 	);

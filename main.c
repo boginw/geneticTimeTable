@@ -25,6 +25,9 @@
 #define FREE_LECTURE_CH    30
 #define NUM_OF_GEN      30000
 
+#define ROOM_CONFLICT       1
+#define TEACHER_CONFLICT    2
+
 /**
  * ASSUMPTIONS:
  *  every room has enough space for an entire class
@@ -79,6 +82,7 @@ typedef struct datetime{
 typedef struct lecture{
     int     init; /* boolean værdi afgører om den er i et skema eller ej */
     int     free; /* hvorvidt om det er en fri time */
+    int     conflictFlag; /* */
     room    *l_room; /* pointer til det rum selve lektionen foregår i */
     class   *l_class; /* pointer til den pågældende klasse som skal have lektionen */
     subject *l_subject; /* pointer til faget lektionen omhandler */
