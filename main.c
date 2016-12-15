@@ -311,6 +311,9 @@ void selection(params *populationParams){
     deadpool = calloc(100, sizeof(int));
 
     for(i=0; i < populationParams->tempPopulationCount; i++){
+        if(populationParams->akkFitnessPoints == 0){
+            populationParams->akkFitnessPoints = 1;
+        }
         prop = (((float)populationParams->tempPopulation[i].fitness) / ((float)populationParams->akkFitnessPoints))*100;
             if(prop > 0){
                 for(p=rouletteCount; p<rouletteCount+prop; p++){
