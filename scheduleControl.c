@@ -10,38 +10,69 @@ int fitness(individual ind){
  * @param classCount amount of classes
  */
 void conflicts(individual *ind, int classCount){
-	int c1,l1,c2,l2,day,hour,
-			conflicts = 0;
+	int class1,   class2,
+	    lecture1, lecture2,
+	    day,      hour,
+	    conflicts = 0;
 
-	for(c1=0; c1 < classCount; c1++){
-			ind->t[c1].numOfConflicts = 0;
-	    for(l1=0; l1 < ind->t[c1].lectureLength; l1++){
-	    		if(!ind->t[c1].lectures[l1].init){
-	    			continue;
-	    		}
-	        day = ind->t[c1].lectures[l1].l_datetime.dayOfWeek;
-	        hour = ind->t[c1].lectures[l1].l_datetime.hour;
-	        for(c2 = c1; c2 < classCount; c2++){
-	            for(l2 = 0; l2 < ind->t[c2].lectureLength; l2++){
-	            	if(ind->t[c2].lectures[l2].l_datetime.dayOfWeek == day && ind->t[c2].lectures[l2].l_datetime.hour==hour){
-	            			ind->t[c2].lectures[l2].conflictFlag = 0;
-	            			ind->t[c1].lectures[l1].conflictFlag = 0;
-	            			if(ind->t[c2].lectures[l2].l_teacher == ind->t[c1].lectures[l1].l_teacher){
-	            				ind->t[c2].lectures[l2].conflictFlag += TEACHER_CONFLICT;
-	            				conflicts++;
-	            				ind->t[c1].numOfConflicts++;
-	            			}
-	            			if(ind->t[c2].lectures[l2].l_class == ind->t[c1].lectures[l1].l_class){
-	            				ind->t[c2].lectures[l2].conflictFlag += ROOM_CONFLICT;
-	            				conflicts++;
-	            				ind->t[c1].numOfConflicts++;
-	            			}
-	                	break;
-	              }
-	            }
+	classCount -= 1;
+	
+	for (class1 = 0; class1 < classCount; class1++){
+		qsort(&ind->t[class1], MAX_LECTURES, sizeof(lecture), dayHourQsort);
+	}
+
+
+	for (class1 = 0; class1 < classCount; class1++){
+		/* Reset conflicts */
+		ind->t[class1].numOfConflicts = 0;
+
+		for(lecture1 = 0; lecture1 < ind->t[class1].lectureLength; lecture1++){
+			/* Don't check empty lectures */
+			if(!ind->t[class1].lectures[lecture1].init){
+				continue;
+			}
+
+			day  = ind->t[class1].lectures[lecture1].l_datetime.dayOfWeek;
+	        hour = ind->t[class1].lectures[lecture1].l_datetime.hour;
+
+           	/* Reset this lecture's conflict flags */
+           	ind->t[class1].lectures[lecture1].conflictFlag = 0;
+
+			for(class2 = class1; class2 < classCount; class2++){
+
+				/* Foreach lecture in other classes where day is less or equal to the day */
+				for(
+					lecture2 = 0; 
+					lecture2 < ind->t[class2].lectureLength &&
+						ind->t[class2].lectures[lecture2].l_datetime.dayOfWeek <= day;
+					lecture2++
+				){
+
+					/* If same day and hour */
+					if(ind->t[class2].lectures[lecture2].l_datetime.dayOfWeek == day && 
+							ind->t[class2].lectures[lecture2].l_datetime.hour == hour){
+
+						/* If same teacher */
+						if(ind->t[class2].lectures[lecture2].l_teacher == ind->t[class1].lectures[lecture1].l_teacher){
+            				ind->t[class1].lectures[lecture1].conflictFlag += TEACHER_CONFLICT;
+
+            				conflicts++;
+            				ind->t[class1].numOfConflicts++;
+            			}
+
+            			/* If same room */
+            			if(ind->t[class2].lectures[lecture2].l_room == ind->t[class1].lectures[lecture1].l_room){
+            				ind->t[class1].lectures[lecture1].conflictFlag += ROOM_CONFLICT;
+
+            				conflicts++;
+            				ind->t[class1].numOfConflicts++;
+            			}
+					}
+				}
 	        }
-	    }
-  	}
+		}
+	}
+
 	ind->conflicts = conflicts;
 }
 

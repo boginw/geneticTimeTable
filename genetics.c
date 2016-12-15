@@ -29,15 +29,15 @@ void crossover(individual *child1, individual *child2, const individual *p1, con
 				}
 			}
 		}
-		
+
 		for (l = 0; l < MAX_LECTURES; l++){
 			memset(cp,0,MAX_LECTURES*sizeof(int));
 
+			if(child1->t[c].lectures[l].init != 1 || child2->t[c].lectures[l].init != 1){
+				continue;
+			}
 
 			if(first){
-				if(child1->t[c].lectures[l].init != 1 && child2->t[c].lectures[l].init != 1){
-					continue;
-				}
 				/*swapn(
 					&child1->t[c].lectures[l],
 					&child2.t[c].lectures[l],
@@ -54,6 +54,13 @@ void crossover(individual *child1, individual *child2, const individual *p1, con
 				first = !first;
 			}
 
+			if(child1->t[c].lectures[l].l_subject->roomRequireLength == 0){
+				child1->t[c].lectures[l].l_room = child1->t[c].forClass->classRoom;
+			}
+
+			if(child2->t[c].lectures[l].l_subject->roomRequireLength == 0){
+				child2->t[c].lectures[l].l_room = child2->t[c].forClass->classRoom;
+			}
 		}
 	}
 

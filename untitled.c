@@ -1,42 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
-int mergeArray(void *output, const void *a, size_t sizeOfA, const void *b, size_t sizeOfB, size_t sizeOfType){
-    memcpy((char *)output, a, sizeOfA * sizeOfType);
-    memcpy(((char **)output)[sizeOfA * sizeOfType], b, sizeOfB * sizeOfType);
-
-    /*
-    char *oa = (char *)a,
-         *ob = (char *)b;
-
-    sizeOfA = (sizeOfA - 1) * sizeOfType;
-    sizeOfB = (sizeOfB - 1) * sizeOfType;
-
-    while(sizeOfA != -1 && sizeOfB != -1){
-        
-        if(sizeOfA >= 0){
-            ((char*)output)[i++] = oa[sizeOfA--];
-        }
-
-        if(sizeOfB >= 0){
-            ((char*)output)[i++] = ob[sizeOfB--];
-        }
-    }
-    
-    return i;*/
+#include <pthreadGC2.h>
+#include <stdint.h>
+ 
+// Let us create a global variable to change it in threads
+int g = 0;
+ 
+// The function to be executed by all threads
+void *myThreadFun(void *vargp)
+{
+    // Store the value argument passed to this thread
+    int myid = (intptr_t) vargp;
+ 
+    // Let us create a static variable to observe its changes
+    static int s = 0;
+ 
+    // Change static and global variables
+    ++s; ++g;
+ 
+    // Print the argument, static and global variables
+    printf("Thread ID: %d, Static: %d, Global: %d\n", myid, ++s, ++g);
 }
-
-int main(){
+ 
+int main()
+{
     int i;
-    int a[5] = {1,2,3,4,5};
-    int b[5] = {1,2,3,4,5};
-    int c[20];
+    pthread_t tid;
+ 
+    // Let us create three threads
+    for (i = 0; i < 4; i++)
+        pthread_create(&tid, NULL, myThreadFun, (void *)(intptr_t) i);
+    
+    pthread_exit(NULL);
 
-    mergeArray(&c,&a,5,&b,5,sizeof(int));
-
-    for (i = 0; i < 10; i++){
-        printf("%d\n", c[i]);   
-    }
-    return 0;
+    printf("Result Global: %d\n", ++g);
+    return 0; 
 }

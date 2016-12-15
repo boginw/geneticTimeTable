@@ -23,7 +23,7 @@
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
-#define NUM_OF_GEN      10000
+#define NUM_OF_GEN     10000 
 
 #define ROOM_CONFLICT       1
 #define TEACHER_CONFLICT    2
@@ -158,6 +158,8 @@ int main(int argc, char const *argv[]){
 
     int lastBestGen = 0;
 
+    individual conflictTest;
+
     individual lowestIndividual;
 
     populationParams.rooms          = calloc(MAX_ROOMS,       sizeof(room));
@@ -208,6 +210,47 @@ int main(int argc, char const *argv[]){
      */
 
     init(&populationParams);
+
+
+    if(0){
+        conflictTest.t[0].lectures[0].init = 1;
+        conflictTest.t[0].lectures[0].free = 0;
+        /* Expected Conflict */
+        conflictTest.t[0].lectures[0].l_room = &populationParams.rooms[0];
+        conflictTest.t[0].lectures[0].l_class = &populationParams.classes[0];
+        conflictTest.t[0].lectures[0].l_subject = &populationParams.subjects[0];
+        /* Expected Conflict */
+        conflictTest.t[0].lectures[0].l_teacher = &populationParams.teachers[1];
+        conflictTest.t[0].lectures[0].l_datetime.dayOfWeek = 0;
+        conflictTest.t[0].lectures[0].l_datetime.hour = 0;
+        conflictTest.t[0].lectureLength = 1;
+
+        conflictTest.t[1].lectures[0].init = 1;
+        conflictTest.t[1].lectures[0].free = 0;
+        conflictTest.t[1].lectures[0].l_room = &populationParams.rooms[0];
+        conflictTest.t[1].lectures[0].l_class = &populationParams.classes[0];
+        conflictTest.t[1].lectures[0].l_subject = &populationParams.subjects[0];
+        conflictTest.t[1].lectures[0].l_teacher = &populationParams.teachers[1];
+        conflictTest.t[1].lectures[0].l_datetime.dayOfWeek = 0;
+        conflictTest.t[1].lectures[0].l_datetime.hour = 0;
+        conflictTest.t[1].lectureLength = 1;
+
+        conflictTest.t[2].lectures[0].init = 1;
+        conflictTest.t[2].lectures[0].free = 0;
+        conflictTest.t[2].lectures[0].l_room = &populationParams.rooms[0];
+        conflictTest.t[2].lectures[0].l_class = &populationParams.classes[0];
+        conflictTest.t[2].lectures[0].l_subject = &populationParams.subjects[0];
+        conflictTest.t[2].lectures[0].l_teacher = &populationParams.teachers[1];
+        conflictTest.t[2].lectures[0].l_datetime.dayOfWeek = 0;
+        conflictTest.t[2].lectures[0].l_datetime.hour = 0;
+        conflictTest.t[2].lectureLength = 1;
+
+        conflicts(&conflictTest, 3);
+
+        printf("Conflicts: %d\n", conflictTest.conflicts);
+
+        exit(0);
+    }
     generateInitialPopulation(&populationParams);
     qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
     printf("First conflicts: %3d\n", populationParams.individuals[0].conflicts);

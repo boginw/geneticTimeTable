@@ -79,7 +79,8 @@ lecture randomLectureForClassAndSubject(params *populationParams, class *curClas
 	if(r_lecture.l_subject->roomRequireLength > 0){
 		r_lecture.l_room = r_lecture.l_subject->roomRequire[randomNumber(0,r_lecture.l_subject->roomRequireLength-1)];
 	}else{
-		r_lecture.l_room = &populationParams->rooms[randomNumber(0,populationParams->roomCount-1)];
+		r_lecture.l_room = curClass->classRoom;
+		/*r_lecture.l_room = &populationParams->rooms[randomNumber(0,populationParams->roomCount-1)];*/
 	}
 
 	while((r_lecture.l_teacher = &populationParams->teachers[randomNumber(0,populationParams->teacherCount-1)])){
