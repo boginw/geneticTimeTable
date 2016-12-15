@@ -14,7 +14,11 @@ void conflicts(individual *ind, int classCount){
 			conflicts = 0;
 
 	for(c1=0; c1 < classCount; c1++){
+			ind->t[c1].numOfConflicts = 0;
 	    for(l1=0; l1 < ind->t[c1].lectureLength; l1++){
+	    		if(!ind->t[c1].lectures[l1].init){
+	    			continue;
+	    		}
 	        day = ind->t[c1].lectures[l1].l_datetime.dayOfWeek;
 	        hour = ind->t[c1].lectures[l1].l_datetime.hour;
 	        for(c2 = c1; c2 < classCount; c2++){
@@ -25,10 +29,12 @@ void conflicts(individual *ind, int classCount){
 	            			if(ind->t[c2].lectures[l2].l_teacher == ind->t[c1].lectures[l1].l_teacher){
 	            				ind->t[c2].lectures[l2].conflictFlag += TEACHER_CONFLICT;
 	            				conflicts++;
+	            				ind->t[c1].numOfConflicts++;
 	            			}
 	            			if(ind->t[c2].lectures[l2].l_class == ind->t[c1].lectures[l1].l_class){
 	            				ind->t[c2].lectures[l2].conflictFlag += ROOM_CONFLICT;
 	            				conflicts++;
+	            				ind->t[c1].numOfConflicts++;
 	            			}
 	                	break;
 	              }

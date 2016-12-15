@@ -23,7 +23,7 @@
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
-#define NUM_OF_GEN      1
+#define NUM_OF_GEN      10000
 
 #define ROOM_CONFLICT       1
 #define TEACHER_CONFLICT    2
@@ -93,6 +93,7 @@ typedef struct lecture{
 /* Selve skemaet for en enkelt klasse */
 typedef struct timetable{
     lecture lectures[MAX_LECTURES]; /* array af lektioner til dagen */
+    int numOfConflicts; /**/
     int lectureLength; /* antal lektioner på den pågældende dag */
     class *forClass; /* pointer til den pågældene klasse. */
 } timetable;
@@ -279,7 +280,7 @@ int main(int argc, char const *argv[]){
 
     /* Uncomment for demo of schedules */
     for (i = 0; i < populationParams.classCount; i++){
-        printf("\nClass %s, conflicts: %d\n", lowestIndividual.t[i].forClass->name, lowestIndividual.conflicts);
+        printf("\nClass %s, conflicts: %d\n", lowestIndividual.t[i].forClass->name, lowestIndividual.t[i].numOfConflicts);
         printTimeTable(lowestIndividual.t[i], populationParams.intervalLabels);
     }
 

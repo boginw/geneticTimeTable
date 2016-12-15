@@ -66,7 +66,7 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 	lecture tempLecture;
 	int i,j,index;
 
-	char temp[22];
+	char temp[23];
 	char timeTemp0[6];
 	char timeTemp1[6];
 
@@ -98,31 +98,31 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 				strcat(rows[j*4+3],"|--------|");
 			}
 			if(index != -1 && !tempLecture.free && tempLecture.init == 1){
-				sprintf(temp,"| %-17s |",
+				sprintf(temp,"| %-18s |",
 					tempLecture.l_subject->name);
 
 				strcat(rows[j*4+0],temp);
 
-				sprintf(temp,"| %-17s |",
-					tempLecture.l_teacher->name);
+				sprintf(temp,"| %-17s%c |",
+					tempLecture.l_teacher->name, (tempLecture.conflictFlag == 2 || tempLecture.conflictFlag == 3) ? '!' : ' ');
 
 				strcat(rows[j*4+1],temp);
 
-				sprintf(temp,"| %17s |",
-					tempLecture.l_room->name);
+				sprintf(temp,"| %17s%c |",
+					tempLecture.l_room->name, (tempLecture.conflictFlag == 1 || tempLecture.conflictFlag == 3) ? '!' : ' ');
 
 				strcat(rows[j*4+2],temp);
 
-				strcat(rows[j*4+3],"|-------------------|");
+				strcat(rows[j*4+3],"|--------------------|");
 
 			}else{
-				strcat(rows[j*4+0],"|                   |");
-				strcat(rows[j*4+1],"|                   |");
-				strcat(rows[j*4+2],"|                   |");
+				strcat(rows[j*4+0],"|                    |");
+				strcat(rows[j*4+1],"|                    |");
+				strcat(rows[j*4+2],"|                    |");
 				if(((index = lectureOnDateTime(t,i,j+1)) != -1) && !t.lectures[index].free && t.lectures[index].init){
-					strcat(rows[j*4+3],"|-------------------|");
+					strcat(rows[j*4+3],"|--------------------|");
 				}else{
-					strcat(rows[j*4+3],"|                   |");
+					strcat(rows[j*4+3],"|                    |");
 				}
 			}
 
@@ -135,9 +135,9 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 		}
 	}
 
-	printf("\n-------------------------------------------------------------------------------------------------------------------\n"
-		     "| Tid    ||       Mandag      ||      Tirsdag      ||      Onsdag       ||      Torsdag      ||      Fredag       |\n"
-		     "-------------------------------------------------------------------------------------------------------------------\n");
+	printf("\n------------------------------------------------------------------------------------------------------------------------\n"
+		     "| Tid    ||       Mandag       ||      Tirsdag       ||      Onsdag        ||      Torsdag       ||      Fredag        |\n"
+		     "------------------------------------------------------------------------------------------------------------------------\n");
 	for (i = 0; i < MAX_LECTURES*4; i++){
 		printf("%s", rows[i]);
 	}
