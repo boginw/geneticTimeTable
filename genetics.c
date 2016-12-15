@@ -1,59 +1,52 @@
-
-
 int crossover_points      =   10;
 int mutation_size         =  100;
 int crossover_probability =   90;
 int mutation_probability  =   10;
 
-individual crossover(individual *p1, individual *p2, int classCount){
+void crossover(individual *child1, individual *child2, const individual *p1, const individual *p2, int classCount){
 	int i,p,c,l;
-	individual n;
-	individual oldp2 = *p2;
 	int first;
 	int *cp = calloc(MAX_LECTURES, sizeof(int));
+	*child1 = *p1;
+	*child2 = *p2;
 	/* check probability of crossover operation */
-	if( randomNumber(0,100) > crossover_probability ){
-		/* no crossover, just copy first parent */
+	/*if( randomNumber(0,100) > crossover_probability ){
+
 		return *p1;
-	}
+	}*/
 
-	/* new chromosome object, copy chromosome setup */
-	n = *p1;
-
-	/* TODO: is it safe to assume everything running? */
 	/* make new code by combining parent codes */
-
 	first = randomNumber(0,1);
 	for (c = 0; c < classCount; c++){
 		/* determine crossover point (randomly) */
 
+		for(i = crossover_points; i > 0; i--){
+			while( 1 ){
+				p = randomNumber(0,MAX_LECTURES-1);
+				if( !cp[ p ] ){
+					cp[ p ] = 1;
+					break;
+				}
+			}
+		}
+
 		for (l = 0; l < MAX_LECTURES; l++){
 			memset(cp,0,MAX_LECTURES*sizeof(int));
 
-			for(i = crossover_points; i > 0; i--){
-				while( 1 ){
-					p = randomNumber(0,MAX_LECTURES-1);
-					if( !cp[ p ] ){
-						cp[ p ] = 1;
-						break;
-					}
-				}
+			if(child1->t[c].lectures[l].init != 1 || child2->t[c].lectures[l].init != 1){
+				continue;
 			}
 
-
 			if(first){
-				if(p1->t[c].lectures[l].init != 1 && oldp2.t[c].lectures[l].init != 1){
-					continue;
-				}
-				swapn(
-					&p1->t[c].lectures[l],
-					&oldp2.t[c].lectures[l],
+				/*swapn(
+					&child1->t[c].lectures[l],
+					&child2.t[c].lectures[l],
 					sizeof(lecture)
-				);
+				);*/
 
-				n.t[c].lectures[l] = p1->t[c].lectures[l];
+				child1->t[c].lectures[l] = child2->t[c].lectures[l];
 			}else{
-				n.t[c].lectures[l] = oldp2.t[c].lectures[l];
+				child2->t[c].lectures[l] = child1->t[c].lectures[l];
 			}
 
 			if( cp[ l ] ){
@@ -61,18 +54,25 @@ individual crossover(individual *p1, individual *p2, int classCount){
 				first = !first;
 			}
 
+			if(child1->t[c].lectures[l].l_subject->roomRequireLength == 0){
+				child1->t[c].lectures[l].l_room = child1->t[c].forClass->classRoom;
+			}
+
+			if(child2->t[c].lectures[l].l_subject->roomRequireLength == 0){
+				child2->t[c].lectures[l].l_room = child2->t[c].forClass->classRoom;
+			}
 		}
 	}
 
-	conflicts(&n,classCount);
-	conflicts(p1,classCount);
-	conflicts(p2,classCount);
+	conflicts(child1,classCount);
+	conflicts(child2,classCount);
+
 	free(cp);
-	return n;
+
 }
 
 
-void mutate(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void mutate(individual *i, params *populationParams){
 	/* TODO
 	 * vælg valg der skal muteres
 	 * vælge hvordan det skal muterer
@@ -80,35 +80,36 @@ void mutate(individual *i, room *rooms, int roomCount, subject *subjects, int su
 	 * returner og afslut
 	 */
 	int amountOfMutations = randomNumber(1, MAX_MUTATIONS);
-	weapon_x(i, amountOfMutations, rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+	weapon_x(i, amountOfMutations, populationParams);
 }
 
-void weapon_x(individual *i, int amountOfMutations, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void weapon_x(individual *i, int amountOfMutations, params *populationParams){
 	if(amountOfMutations < 1){
 		return;
 	}
-	injectSerumX(i, rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
-	weapon_x(i, (amountOfMutations-1), rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+	injectSerumX(i, populationParams);
+	i->mutations++;
+	weapon_x(i, (amountOfMutations-1), populationParams);
 }
 
-void injectSerumX(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void injectSerumX(individual *i, params *populationParams){
 	int ingredient = randomNumber(1,3);
 	switch(ingredient){
 		case 1:
-			addSugar(i, rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+			addSugar(i, populationParams);
 		break;
 		case 2:
-			addSpice(i, rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+			addSpice(i, populationParams);
 		break;
 		case 3:
-			addEverythingNice(i, rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+			addEverythingNice(i, populationParams);
 		break;
 	}
 }
 
-void addSugar(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void addSugar(individual *i, params *populationParams){
 	/* This layer mutates on the top level ie. the total school timetable */
-	int rndClass = randomNumber(0, classCount-1);
+	int rndClass = randomNumber(0, populationParams->classCount-1);
 	int rndLec = randomNumber(0, i->t[rndClass].lectureLength-1);
 	int rndDay, rndHour;
 	getRandomDatetimeWithNoLecture(&i->t[rndClass], &rndDay, &rndHour);
@@ -117,9 +118,9 @@ void addSugar(individual *i, room *rooms, int roomCount, subject *subjects, int 
 }
 
 
-void addSpice(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void addSpice(individual *i, params *populationParams){
 	/* This layer mutates on the top level ie. the total school timetable */
-	int rndClass = randomNumber(0, classCount-1);
+	int rndClass = randomNumber(0, populationParams->classCount-1);
 	int rndLec = randomNumber(0, i->t[rndClass].lectureLength-1);
 	lecture *thelecture = &i->t[rndClass].lectures[rndLec];
 
@@ -127,13 +128,13 @@ void addSpice(individual *i, room *rooms, int roomCount, subject *subjects, int 
 		return;
 	}
 
-	thelecture->l_teacher = findRandomTeacherForSubject(thelecture, teachers, teacherCount);
+	thelecture->l_teacher = findRandomTeacherForSubject(thelecture, populationParams->teachers, populationParams->teacherCount);
 }
 
 
-void addEverythingNice(individual *i, room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount){
+void addEverythingNice(individual *i, params *populationParams){
 	/* This layer mutates on the top level ie. the total school timetable */
-	/*printf("Adding Everything Nice");*/
+
 }
 
 teacher *findRandomTeacherForSubject(lecture *l, teacher *t, int teacherCount){
@@ -168,4 +169,31 @@ void getRandomDatetimeWithNoLecture(timetable *t, int *day, int*hour){
 		return;
 	}
 	getRandomDatetimeWithNoLecture(t, day, hour);
+}
+
+
+void setFitness(params *populationParams){
+ /* int i, akk = 0, fitnessRatio;
+  int maxConflicts = populationParams->tempPopulation[populationParams->tempPopulationCount - 1].conflicts;
+  for (i = 0; i < populationParams->tempPopulationCount; i++){
+      akk += (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
+  }
+  for (i = 0; i < populationParams->tempPopulationCount; i++){
+      fitnessRatio = (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
+      fitnessRatio = fitnessRatio / (float) akk * 100;
+
+      populationParams->tempPopulation[i].fitness = fitnessRatio;
+  }*/
+  int i, biggest;
+  if(populationParams->biggestConflicts > 0){
+  	biggest = populationParams->biggestConflicts;
+  }else{
+  	biggest = 1;
+  }
+
+  for (i = 0; i < populationParams->tempPopulationCount; i++){
+  	populationParams->tempPopulation[i].fitness = (((biggest - populationParams->tempPopulation[i].conflicts) / (float) biggest)) * 100000;
+  	populationParams->tempPopulation[i].fitness += 100;
+  	populationParams->akkFitnessPoints += populationParams->tempPopulation[i].fitness;
+	}
 }

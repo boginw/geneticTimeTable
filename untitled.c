@@ -1,19 +1,38 @@
-pr lektion tjek hver eneste lektion på samme dag og samme tid efter:
-  - Duplication af lærer
-  - Duplication af rum
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthreadGC2.h>
+#include <stdint.h>
+ 
+// Let us create a global variable to change it in threads
+int g = 0;
+ 
+// The function to be executed by all threads
+void *myThreadFun(void *vargp)
+{
+    // Store the value argument passed to this thread
+    int myid = (intptr_t) vargp;
+ 
+    // Let us create a static variable to observe its changes
+    static int s = 0;
+ 
+    // Change static and global variables
+    ++s; ++g;
+ 
+    // Print the argument, static and global variables
+    printf("Thread ID: %d, Static: %d, Global: %d\n", myid, ++s, ++g);
+}
+ 
+int main()
+{
+    int i;
+    pthread_t tid;
+ 
+    // Let us create three threads
+    for (i = 0; i < 4; i++)
+        pthread_create(&tid, NULL, myThreadFun, (void *)(intptr_t) i);
+    
+    pthread_exit(NULL);
 
-
-  for(i=0; i > classCount; i++){
-    for(k=0; k > individual.t[i].lectureLength; k++){
-        day = individual.t[i].lecture[k].l_datetime.dayOfWeek;
-        hour = individual.t[i].lecture[k].l_datetime.hour;
-        for(l=i; l > classCount; l++){
-            for(j=0; j > individual.t[l].lectureLength; j++){
-              if(individual.t[l].lecture[j].l_datetime.dayOfWeek == day && individual.t[l].lecture[j].l_datetime.hour==hour){
-                conflicts += (individual.t[l].lecture[j].l_teacher == individual.t[i].lecture[k].l_teacher);
-                conflicts += (individual.t[l].lecture[j].l_class == individual.t[i].lecture[k].l_class);
-              }
-            }
-        }
-    }
-  }
+    printf("Result Global: %d\n", ++g);
+    return 0; 
+}
