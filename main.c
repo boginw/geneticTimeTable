@@ -117,6 +117,9 @@ typedef struct params{
     int individualsCount;
     int childrensCount;
     int tempPopulationCount;
+    int akkFitnessPoints;
+    int akkConflicts;
+    int biggestConflicts;
 
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH];
 } params;
@@ -167,6 +170,9 @@ int main(int argc, char const *argv[]){
     populationParams.individualsCount       = MAX_INDIVIDUALS;
     populationParams.childrensCount         = 0;
     populationParams.tempPopulationCount    = 0;
+    populationParams.akkFitnessPoints       = 0;
+    populationParams.akkConflicts           = 0;
+    populationParams.biggestConflicts       = 0;
 
     roulette = calloc(100, sizeof(int));
 
@@ -293,19 +299,47 @@ int main(int argc, char const *argv[]){
 }
 
 void selection(params *populationParams){
-    int i;
-    qsort(populationParams->tempPopulation, populationParams->tempPopulationCount, sizeof(individual), conflictsQsort);
+    int i, *roulette, rouletteCount=0, p;
+    int prop;
+    roulette = calloc(100, sizeof(int));
+
+    for(i=0; i < populationParams->tempPopulationCount-1; i++){
+        prop = (((float)populationParams->tempPopulation[i].fitness) / ((float)populationParams->akkFitnessPoints))*100;
+        for(p=rouletteCount; p<rouletteCount+prop; p++){
+            roulette[p] = i;
+        }
+        rouletteCount += prop;
+    }
+    if(rouletteCount < 100){
+
+        p=0;
+        for(i=rouletteCount; i < 100; i++){
+            roulette[i] = -1;
+            p++;
+        }
+        rouletteCount+=p;
+    }
     for(i=0; i < MAX_INDIVIDUALS; i++){
-        populationParams->individuals[i] = populationParams->tempPopulation[i];
+        populationParams->individuals[i] = populationParams->tempPopulation[roulette[randomNumber(0,99)]];
     }
     memset(populationParams->tempPopulation, '\0', (populationParams->tempPopulationCount*sizeof(individual)));
     populationParams->tempPopulationCount = 0;
+    populationParams->akkFitnessPoints    = 0;
+    qsort(populationParams->tempPopulation, populationParams->tempPopulationCount, sizeof(individual), conflictsQsort);
+    free(roulette);
 }
+
+
 
 void calcFitnessOnPopulation(params *populationParams){
     int i;
+    populationParams->akkConflicts = 0;
     for(i = 0; i < populationParams->tempPopulationCount-1; i++){
         conflicts(&populationParams->tempPopulation[i], populationParams->classCount);
+        populationParams->akkConflicts += populationParams->tempPopulation[i].conflicts;
+        if(populationParams->tempPopulation[i].conflicts > populationParams->biggestConflicts){
+            populationParams->biggestConflicts = populationParams->tempPopulation[i].conflicts;
+        }
     }
     setFitness(populationParams);
 }
