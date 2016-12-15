@@ -23,7 +23,7 @@
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
-#define NUM_OF_GEN      30000
+#define NUM_OF_GEN      1
 
 #define ROOM_CONFLICT       1
 #define TEACHER_CONFLICT    2
