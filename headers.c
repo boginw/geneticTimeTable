@@ -20,9 +20,11 @@ class *findClass(char *className, class classes[MAX_CLASSES], int classCount);
 
 int isRoomCorrect(lecture *l);
 int isTeacherCorrect(lecture *l);
-lecture randomLecture(room *rooms, int roomCount, subject *subjects, int subjectCount, class *classes, int classCount, teacher *teachers, int teacherCount);
-lecture randomLectureForClass(room *rooms, int roomCount, subject *subjects, int subjectCount, teacher *teachers, int teacherCount, class *curClass);
-lecture randomLectureForClassAndSubject(room *rooms, int roomCount, teacher *teachers, int teacherCount, class *curClass, subject *curSubject);
+
+
+lecture randomLecture(params *populationParams);
+lecture randomLectureForClass(params *populationParams, class *curClass);
+lecture randomLectureForClassAndSubject(params *populationParams, class *curClass, subject *curSubject);
 
 void mutate(individual *i, params *populationParams);
 void weapon_x(individual *i, int amountOfMutations, params *populationParams);
@@ -43,7 +45,7 @@ int fitness(individual ind);
 void conflicts(individual *ind, int classCount);
 int dublicateCount(const void *items, const size_t numberOfItems, const size_t itemSize);
 int conflictsQsort(const void * a, const void * b);
-individual randomIndividual(const params *populationParams);
+individual randomIndividual(params *populationParams);
 int lectureOnDateTime(timetable t, int day, int hour);
 
 

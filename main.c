@@ -19,7 +19,7 @@
 
 #define SCHOOL_DAYS_YEAR  200
 #define WEEK_LENGTH         5
-#define MAX_LECTURES       50
+#define MAX_LECTURES       40
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
@@ -209,7 +209,8 @@ int main(int argc, char const *argv[]){
     printf("First conflicts: %3d\n", populationParams.individuals[0].conflicts);
     /* Conflicts preview */
     starthighconflict = populationParams.individuals[MAX_INDIVIDUALS-1].conflicts;
-    startlowconflict = populationParams.individuals[0].conflicts;
+    startlowconflict  = populationParams.individuals[0].conflicts;
+
 
     for (j = 0; j < NUM_OF_GEN; j++){
 
@@ -233,7 +234,7 @@ int main(int argc, char const *argv[]){
         /*qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
         for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
             if((populationParams.individuals[0].conflicts - populationParams.individuals[i].conflicts) / (float) populationParams.individuals[0].conflicts * 100 > 40){
-                populationParams.individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teachers, teacherCount);
+                populationParams.individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teacFrs, teacherCount);
             }
         }*/
 
@@ -247,7 +248,6 @@ int main(int argc, char const *argv[]){
         if(populationParams.individuals[MAX_INDIVIDUALS-1].conflicts > highestConflict){
             highestConflict = populationParams.individuals[MAX_INDIVIDUALS-1].conflicts;
         }
-
 
         if(j % 20 == 0){
             if(curProg*2 < (int) ((((float) j) / NUM_OF_GEN) * 100) ){
