@@ -20,18 +20,19 @@ void crossover(individual *child1, individual *child2, const individual *p1, con
 	for (c = 0; c < classCount; c++){
 		/* determine crossover point (randomly) */
 
+		for(i = crossover_points; i > 0; i--){
+			while( 1 ){
+				p = randomNumber(0,MAX_LECTURES-1);
+				if( !cp[ p ] ){
+					cp[ p ] = 1;
+					break;
+				}
+			}
+		}
+		
 		for (l = 0; l < MAX_LECTURES; l++){
 			memset(cp,0,MAX_LECTURES*sizeof(int));
 
-			for(i = crossover_points; i > 0; i--){
-				while( 1 ){
-					p = randomNumber(0,MAX_LECTURES-1);
-					if( !cp[ p ] ){
-						cp[ p ] = 1;
-						break;
-					}
-				}
-			}
 
 			if(first){
 				if(child1->t[c].lectures[l].init != 1 && child2->t[c].lectures[l].init != 1){

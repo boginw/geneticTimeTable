@@ -305,27 +305,27 @@ int main(int argc, char const *argv[]){
 }
 
 void selection(params *populationParams){
-    int i, *roulette, rouletteCount=0, p, rouletteSelector, *deadpool, deadpoolCount=0;
+    int i, *roulette, rouletteCount=0, p, rouletteSelector;
     int prop;
     roulette = calloc(100, sizeof(int));
-    deadpool = calloc(100, sizeof(int));
 
     for(i=0; i < populationParams->tempPopulationCount; i++){
         if(populationParams->akkFitnessPoints == 0){
             populationParams->akkFitnessPoints = 1;
         }
         prop = (((float)populationParams->tempPopulation[i].fitness) / ((float)populationParams->akkFitnessPoints))*100;
-            if(prop > 0){
-                for(p=rouletteCount; p<rouletteCount+prop; p++){
-                    roulette[p] = i;
-                }
-            }else{
-                deadpool[deadpoolCount] = i;
-                deadpoolCount++;
+        if(prop > 0){
+            for(p=rouletteCount; p<rouletteCount+prop; p++){
+                roulette[p] = i;
             }
+        }/*else{
+            deadpool[deadpoolCount] = i;
+            deadpoolCount++;
+        }*/
         rouletteCount += prop;
     }
-    if(rouletteCount < 100){
+
+    /*if(rouletteCount <= 100){
 
         p=0;
         for(i=rouletteCount; i < 100; i++){
@@ -333,7 +333,8 @@ void selection(params *populationParams){
             p++;
         }
         rouletteCount+=p;
-    }
+    }*/
+
     for(i=0; i < MAX_INDIVIDUALS-1; i++){
         rouletteSelector = roulette[randomNumber(0,99)];
         populationParams->individuals[i] = populationParams->tempPopulation[rouletteSelector];
