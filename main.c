@@ -175,7 +175,6 @@ int main(int argc, char const *argv[]){
     populationParams.biggestConflicts       = 0;
 
     roulette = calloc(100, sizeof(int));
-
     if(populationParams.rooms == NULL || populationParams.subjects == NULL ||
             populationParams.classes == NULL || populationParams.teachers == NULL ||
             populationParams.individuals == NULL){
@@ -392,7 +391,6 @@ void crossoverPopulation(params *populationParams){
 
 int generateInitialPopulation(params *populationParams){
     int i, conflictsSum=0;
-
     /* Create initial population */
     for (i = 0; i < MAX_INDIVIDUALS; i++){
         /* For hvert individ op til maks antal individer */
