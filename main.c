@@ -226,9 +226,9 @@ int main(int argc, char const *argv[]){
             lastBestGen = j;
         }
         /* Replace shit populationParams.individuals */
-        /*for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
+        for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
             populationParams.individuals[i] = randomIndividual(&populationParams);
-        }*/
+        }
 
         /*qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
         for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
@@ -266,7 +266,7 @@ int main(int argc, char const *argv[]){
 
 
 
-            for (i = 0; i < 6000; i++){
+            for (i = 0; i < 114; i++){
                 printf("\b");
             }
 
