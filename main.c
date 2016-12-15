@@ -218,13 +218,13 @@ int main(int argc, char const *argv[]){
         mutatePopulation(&populationParams);
         calcFitnessOnPopulation(&populationParams);
         selection(&populationParams);
-        /*if(lastBestGen + 2000 < j){
+        if(lastBestGen + 2000 < j){
             printf("new \n");
             for (i = 0 ; i < MAX_INDIVIDUALS-5; i++){
                 populationParams.individuals[MAX_INDIVIDUALS-1-i] = randomIndividual(&populationParams);
             }
             lastBestGen = j;
-        }*/
+        }
         /* Replace shit populationParams.individuals */
         /*for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
             populationParams.individuals[i] = randomIndividual(&populationParams);
@@ -294,38 +294,47 @@ int main(int argc, char const *argv[]){
     free(populationParams.classes);
     free(populationParams.teachers);
     free(populationParams.individuals);
+    free(populationParams.childrens);
+    free(populationParams.tempPopulation);
     free(roulette);
     return 0;
 }
 
 void selection(params *populationParams){
-    int i, *roulette, rouletteCount=0, p;
+    int i, *roulette, rouletteCount=0, p, rouletteSelector, *deadpool, deadpoolCount=0;
     int prop;
     roulette = calloc(100, sizeof(int));
+    deadpool = calloc(100, sizeof(int));
 
-    for(i=0; i < populationParams->tempPopulationCount-1; i++){
+    for(i=0; i < populationParams->tempPopulationCount; i++){
         prop = (((float)populationParams->tempPopulation[i].fitness) / ((float)populationParams->akkFitnessPoints))*100;
-        for(p=rouletteCount; p<rouletteCount+prop; p++){
-            roulette[p] = i;
-        }
+            if(prop > 0){
+                for(p=rouletteCount; p<rouletteCount+prop; p++){
+                    roulette[p] = i;
+                }
+            }else{
+                deadpool[deadpoolCount] = i;
+                deadpoolCount++;
+            }
         rouletteCount += prop;
     }
     if(rouletteCount < 100){
 
         p=0;
         for(i=rouletteCount; i < 100; i++){
-            roulette[i] = -1;
+            roulette[i] = deadpool[randomNumber(0,deadpoolCount-1)];
             p++;
         }
         rouletteCount+=p;
     }
-    for(i=0; i < MAX_INDIVIDUALS; i++){
-        populationParams->individuals[i] = populationParams->tempPopulation[roulette[randomNumber(0,99)]];
+    for(i=0; i < MAX_INDIVIDUALS-1; i++){
+        rouletteSelector = roulette[randomNumber(0,99)];
+        populationParams->individuals[i] = populationParams->tempPopulation[rouletteSelector];
     }
     memset(populationParams->tempPopulation, '\0', (populationParams->tempPopulationCount*sizeof(individual)));
     populationParams->tempPopulationCount = 0;
     populationParams->akkFitnessPoints    = 0;
-    qsort(populationParams->tempPopulation, populationParams->tempPopulationCount, sizeof(individual), conflictsQsort);
+    qsort(populationParams->individuals, populationParams->individualsCount, sizeof(individual), conflictsQsort);
     free(roulette);
 }
 

@@ -185,6 +185,7 @@ void setFitness(params *populationParams){
 
   for (i = 0; i < populationParams->tempPopulationCount; i++){
   	populationParams->tempPopulation[i].fitness = (((biggest - populationParams->tempPopulation[i].conflicts) / (float) biggest)) * 100000;
+  	populationParams->tempPopulation[i].fitness += 100;
   	populationParams->akkFitnessPoints += populationParams->tempPopulation[i].fitness;
 	}
 }
