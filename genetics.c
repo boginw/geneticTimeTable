@@ -80,6 +80,7 @@ void weapon_x(individual *i, int amountOfMutations, params *populationParams){
 		return;
 	}
 	injectSerumX(i, populationParams);
+	i->mutations++;
 	weapon_x(i, (amountOfMutations-1), populationParams);
 }
 
@@ -164,7 +165,7 @@ void getRandomDatetimeWithNoLecture(timetable *t, int *day, int*hour){
 
 
 void setFitness(params *populationParams){
-  int i, akk = 0, fitnessRatio;
+ /* int i, akk = 0, fitnessRatio;
   int maxConflicts = populationParams->tempPopulation[populationParams->tempPopulationCount - 1].conflicts;
   for (i = 0; i < populationParams->tempPopulationCount; i++){
       akk += (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
@@ -174,5 +175,17 @@ void setFitness(params *populationParams){
       fitnessRatio = fitnessRatio / (float) akk * 100;
 
       populationParams->tempPopulation[i].fitness = fitnessRatio;
+  }*/
+  int i, biggest;
+  if(populationParams->biggestConflicts > 0){
+  	biggest = populationParams->biggestConflicts;
+  }else{
+  	biggest = 1;
   }
+
+  for (i = 0; i < populationParams->tempPopulationCount; i++){
+  	populationParams->tempPopulation[i].fitness = (((biggest - populationParams->tempPopulation[i].conflicts) / (float) biggest)) * 100000;
+  	populationParams->tempPopulation[i].fitness += 100;
+  	populationParams->akkFitnessPoints += populationParams->tempPopulation[i].fitness;
+	}
 }

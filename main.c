@@ -23,7 +23,10 @@
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
-#define NUM_OF_GEN       3000
+#define NUM_OF_GEN      10000
+
+#define ROOM_CONFLICT       1
+#define TEACHER_CONFLICT    2
 
 /**
  * ASSUMPTIONS:
@@ -79,6 +82,7 @@ typedef struct datetime{
 typedef struct lecture{
     int     init; /* boolean værdi afgører om den er i et skema eller ej */
     int     free; /* hvorvidt om det er en fri time */
+    int     conflictFlag; /* */
     room    *l_room; /* pointer til det rum selve lektionen foregår i */
     class   *l_class; /* pointer til den pågældende klasse som skal have lektionen */
     subject *l_subject; /* pointer til faget lektionen omhandler */
@@ -89,6 +93,7 @@ typedef struct lecture{
 /* Selve skemaet for en enkelt klasse */
 typedef struct timetable{
     lecture lectures[MAX_LECTURES]; /* array af lektioner til dagen */
+    int numOfConflicts; /**/
     int lectureLength; /* antal lektioner på den pågældende dag */
     class *forClass; /* pointer til den pågældene klasse. */
 } timetable;
@@ -117,6 +122,9 @@ typedef struct params{
     int individualsCount;
     int childrensCount;
     int tempPopulationCount;
+    int akkFitnessPoints;
+    int akkConflicts;
+    int biggestConflicts;
 
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH];
 } params;
@@ -167,9 +175,11 @@ int main(int argc, char const *argv[]){
     populationParams.individualsCount       = MAX_INDIVIDUALS;
     populationParams.childrensCount         = 0;
     populationParams.tempPopulationCount    = 0;
+    populationParams.akkFitnessPoints       = 0;
+    populationParams.akkConflicts           = 0;
+    populationParams.biggestConflicts       = 0;
 
     roulette = calloc(100, sizeof(int));
-
     if(populationParams.rooms == NULL || populationParams.subjects == NULL ||
             populationParams.classes == NULL || populationParams.teachers == NULL ||
             populationParams.individuals == NULL){
@@ -213,13 +223,13 @@ int main(int argc, char const *argv[]){
         mutatePopulation(&populationParams);
         calcFitnessOnPopulation(&populationParams);
         selection(&populationParams);
-        /*if(lastBestGen + 2000 < j){
+        if(lastBestGen + 2000 < j){
             printf("new \n");
             for (i = 0 ; i < MAX_INDIVIDUALS-5; i++){
                 populationParams.individuals[MAX_INDIVIDUALS-1-i] = randomIndividual(&populationParams);
             }
             lastBestGen = j;
-        }*/
+        }
         /* Replace shit populationParams.individuals */
         for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
             populationParams.individuals[i] = randomIndividual(&populationParams);
@@ -270,7 +280,7 @@ int main(int argc, char const *argv[]){
 
     /* Uncomment for demo of schedules */
     for (i = 0; i < populationParams.classCount; i++){
-        printf("\nClass %s, conflicts: %d\n", lowestIndividual.t[i].forClass->name, lowestIndividual.conflicts);
+        printf("\nClass %s, conflicts: %d\n", lowestIndividual.t[i].forClass->name, lowestIndividual.t[i].numOfConflicts);
         printTimeTable(lowestIndividual.t[i], populationParams.intervalLabels);
     }
 
@@ -288,24 +298,61 @@ int main(int argc, char const *argv[]){
     free(populationParams.classes);
     free(populationParams.teachers);
     free(populationParams.individuals);
+    free(populationParams.childrens);
+    free(populationParams.tempPopulation);
     free(roulette);
     return 0;
 }
 
 void selection(params *populationParams){
-    int i;
-    qsort(populationParams->tempPopulation, populationParams->tempPopulationCount, sizeof(individual), conflictsQsort);
-    for(i=0; i < MAX_INDIVIDUALS; i++){
-        populationParams->individuals[i] = populationParams->tempPopulation[i];
+    int i, *roulette, rouletteCount=0, p, rouletteSelector, *deadpool, deadpoolCount=0;
+    int prop;
+    roulette = calloc(100, sizeof(int));
+    deadpool = calloc(100, sizeof(int));
+
+    for(i=0; i < populationParams->tempPopulationCount; i++){
+        prop = (((float)populationParams->tempPopulation[i].fitness) / ((float)populationParams->akkFitnessPoints))*100;
+            if(prop > 0){
+                for(p=rouletteCount; p<rouletteCount+prop; p++){
+                    roulette[p] = i;
+                }
+            }else{
+                deadpool[deadpoolCount] = i;
+                deadpoolCount++;
+            }
+        rouletteCount += prop;
+    }
+    if(rouletteCount < 100){
+
+        p=0;
+        for(i=rouletteCount; i < 100; i++){
+            roulette[i] = deadpool[randomNumber(0,deadpoolCount-1)];
+            p++;
+        }
+        rouletteCount+=p;
+    }
+    for(i=0; i < MAX_INDIVIDUALS-1; i++){
+        rouletteSelector = roulette[randomNumber(0,99)];
+        populationParams->individuals[i] = populationParams->tempPopulation[rouletteSelector];
     }
     memset(populationParams->tempPopulation, '\0', (populationParams->tempPopulationCount*sizeof(individual)));
     populationParams->tempPopulationCount = 0;
+    populationParams->akkFitnessPoints    = 0;
+    qsort(populationParams->individuals, populationParams->individualsCount, sizeof(individual), conflictsQsort);
+    free(roulette);
 }
+
+
 
 void calcFitnessOnPopulation(params *populationParams){
     int i;
+    populationParams->akkConflicts = 0;
     for(i = 0; i < populationParams->tempPopulationCount-1; i++){
         conflicts(&populationParams->tempPopulation[i], populationParams->classCount);
+        populationParams->akkConflicts += populationParams->tempPopulation[i].conflicts;
+        if(populationParams->tempPopulation[i].conflicts > populationParams->biggestConflicts){
+            populationParams->biggestConflicts = populationParams->tempPopulation[i].conflicts;
+        }
     }
     setFitness(populationParams);
 }
@@ -349,7 +396,6 @@ void crossoverPopulation(params *populationParams){
 
 int generateInitialPopulation(params *populationParams){
     int i, conflictsSum=0;
-
     /* Create initial population */
     for (i = 0; i < MAX_INDIVIDUALS; i++){
         /* For hvert individ op til maks antal individer */
