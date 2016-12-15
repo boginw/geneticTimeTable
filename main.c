@@ -192,7 +192,7 @@ int main(int argc, char const *argv[]){
     startlowconflict = individuals[0].conflicts;
 
 
-    runForGen = 30000;
+    runForGen = 1000;
     for (j = 0; j < runForGen; j++){
 
     	/* Replace shit individuals */
