@@ -148,10 +148,6 @@ void prepend(char* s, const char* t);
 #include "genetics.c"
 #include "tests.c"
 
-void testInd(params *populationParams, individual *pop, int amountOfTimeTables, int val, ...);
-
-individual testInd(params *populationParams, int amountOfTimeTables, int val, ...);
-
 int main(int argc, char const *argv[]){
     /* VARIABLES BEGIN */
     params populationParams;
@@ -344,33 +340,6 @@ void selection(params *populationParams){
     qsort(populationParams->individuals, populationParams->individualsCount, sizeof(individual), conflictsQsort);
     free(roulette);
 }
-
-individual testInd(params *populationParams, int amountOfTimeTables, int val, ...){
-	individual c;
-	int i;
-	va_list arguments;
-
-	va_start(arguments, val);
-
-	for (i = 0; i < amountOfTimeTables; i++){
-		c.t[i].lectures[0].init = 1;
-	    c.t[i].lectures[0].free = 0;
-
-	    c.t[i].lectures[0].l_room    = &populationParams->rooms[va_arg(arguments, int)];
-	    c.t[i].lectures[0].l_teacher = &populationParams->teachers[va_arg(arguments, int)];
-	    c.t[i].lectures[0].l_class   = &populationParams->classes[0];
-	    c.t[i].lectures[0].l_subject = &populationParams->subjects[0];
-	    c.t[i].lectures[0].l_datetime.dayOfWeek = 0;
-	    c.t[i].lectures[0].l_datetime.hour = 0;
-	    c.t[i].lectureLength = 1;
-	}
-
-	va_end(arguments);
-
-    conflicts(&c, 4);
-    return c;
-}
-
 
 
 
