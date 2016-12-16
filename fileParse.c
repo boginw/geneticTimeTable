@@ -195,10 +195,11 @@ int countLines(FILE *fp){
 
 room parseRoom(char *line){
     room returnRoom;
-    sscanf(line," %[^\n]",
-        returnRoom.name
-    );
 
+    strip(line);
+
+    strcpy(returnRoom.name, line);
+    
     return returnRoom;
 }
 

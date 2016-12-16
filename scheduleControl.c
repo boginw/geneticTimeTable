@@ -12,80 +12,82 @@ int fitness(individual ind){
 void conflicts(individual *ind, int classCount){
 	int class1,   class2,
 	    lecture1, lecture2,
-	    day,      hour, 
-	    tempFlags = 0,
+	    day,      hour,
 	    conflicts = 0;
-	
+
+
+	/*printf("\n");*/
 	for (class1 = 0; class1 < classCount; class1++){
-		qsort(&ind->t[class1], MAX_LECTURES, sizeof(lecture), dayHourQsort);
+		qsort(&ind->t[class1], ind->t[class1].lectureLength, sizeof(lecture), dayHourQsort);
 	}
 
-
-	for (class1 = 0; class1 < classCount - 1; class1++){
-		/* Reset conflicts */
-
+	for (class1 = 0; class1 < classCount; class1++){
 		for(lecture1 = 0; lecture1 < ind->t[class1].lectureLength; lecture1++){
-			/* Don't check empty lectures */
-			if(!ind->t[class1].lectures[lecture1].init){
-				continue;
-			}
+			ind->t[class1].lectures[lecture1].conflictFlag    = 0;
+			ind->t[class1].lectures[lecture1].conflictTeacher = 0;
+			ind->t[class1].lectures[lecture1].conflictRoom    = 0;
+		}
+	}
+
+	for (class1 = 0; class1 < classCount; class1++){
+		for(lecture1 = 0; lecture1 < ind->t[class1].lectureLength; lecture1++){
 
 			day  = ind->t[class1].lectures[lecture1].l_datetime.dayOfWeek;
 	        hour = ind->t[class1].lectures[lecture1].l_datetime.hour;
 
-           	/* Reset this lecture's conflict flags */
-            ind->t[class1].lectures[lecture1].conflictFlag = 0;
-            
-			for(class2 = class1 + 1; class2 < classCount; class2++){
+			/*printf("Lecture #%d => day:%d hour:%d\n", lecture1, ind->t[class1].lectures[lecture1].l_datetime.dayOfWeek, hour); */
 
-				/* Foreach lecture in other classes where day is less or equal to the day */
-				for(
-					lecture2 = 0; 
-					lecture2 < ind->t[class2].lectureLength &&
-						ind->t[class2].lectures[lecture2].l_datetime.dayOfWeek <= day;
-					lecture2++
-				){
-					tempFlags = 0;
-					/* If same day and hour */
-					if(ind->t[class2].lectures[lecture2].l_datetime.dayOfWeek == day && 
-							ind->t[class2].lectures[lecture2].l_datetime.hour == hour){
+			/* Don't check empty lectures */
+			if(ind->t[class1].lectures[lecture1].init == 1){
 
-						/* If same room */
-            			if(ind->t[class2].lectures[lecture2].l_room == ind->t[class1].lectures[lecture1].l_room){
-            				tempFlags += ROOM_CONFLICT;
-							conflicts++;
-            				
-            				if(ind->t[class1].lectures[lecture1].conflictFlag < TEACHER_CONFLICT){
 
-            					ind->t[class1].lectures[lecture1].conflictFlag += ROOM_CONFLICT;
-								ind->t[class1].numOfConflicts++;
-            				}
-            				 
-            			}
+		        if(class1 + 1 != classCount){
+		            
+					for(class2 = class1 + 1; class2 < classCount; class2++){
 
-						/* If same teacher */
-						if(ind->t[class2].lectures[lecture2].l_teacher == ind->t[class1].lectures[lecture1].l_teacher){
-            				tempFlags += TEACHER_CONFLICT;
-            				conflicts++;
+						/* Foreach lecture in other classes where day is less or equal to the day */
+						for(
+							lecture2 = 0; 
+							lecture2 < ind->t[class2].lectureLength &&
+								ind->t[class2].lectures[lecture2].l_datetime.dayOfWeek <= day;
+							lecture2++
+						){
 
-            				if(ind->t[class1].lectures[lecture1].conflictFlag < TEACHER_CONFLICT){
+							/* If same day and hour */
+							if(ind->t[class2].lectures[lecture2].l_datetime.dayOfWeek == day && 
+									ind->t[class2].lectures[lecture2].l_datetime.hour == hour){
 
-            					ind->t[class1].lectures[lecture1].conflictFlag += TEACHER_CONFLICT;
-            					ind->t[class1].numOfConflicts++;
-            				}
-            			}
+		            			if(ind->t[class2].lectures[lecture2].l_room == ind->t[class1].lectures[lecture1].l_room){
 
-            			if(ind->t[class1].lectures[lecture1].conflictFlag < tempFlags){
-            				ind->t[class1].lectures[lecture1].conflictFlag = tempFlags;	
-            			}
+		            				/*printf("Same room:    %d==%d\n", class1,class2);*/
 
-            			ind->t[class2].lectures[lecture2].conflictFlag = tempFlags;
-            			
-					}
-				}
+			            			ind->t[class1].lectures[lecture1].conflictRoom = 1;
+			            			ind->t[class2].lectures[lecture2].conflictRoom = 1;
+		            			}
+
+		            			if(ind->t[class2].lectures[lecture2].l_teacher == ind->t[class1].lectures[lecture1].l_teacher){
+
+		            				/*printf("Same teacher: %d==%d, %20s==%-20s\n", class1,class2,ind->t[class2].lectures[lecture2].l_teacher->name, ind->t[class1].lectures[lecture1].l_teacher->name);*/
+			            			ind->t[class1].lectures[lecture1].conflictTeacher = 1;
+			            			ind->t[class2].lectures[lecture2].conflictTeacher = 1;
+		            			}
+							}
+						}
+			        }
+		    	}
+
+		    	if(ind->t[class1].lectures[lecture1].conflictRoom || ind->t[class1].lectures[lecture1].conflictTeacher){
+			    	/*printf("%d %d\n", ind->t[class1].lectures[lecture1].conflictRoom, ind->t[class1].lectures[lecture1].conflictTeacher);*/
+		    	}
+
+		        conflicts += 
+		        	ind->t[class1].lectures[lecture1].conflictRoom + 
+		        	ind->t[class1].lectures[lecture1].conflictTeacher;
 	        }
 		}
+
 	}
+		/*printf("%d\n", conflicts);*/
 
 	ind->conflicts = conflicts;
 }
@@ -183,13 +185,20 @@ individual randomIndividual(params *populationParams){
 }
 
 int dayHourQsort(const void * a, const void * b){
-	const lecture *oa = a;
-	const lecture *ob = b;
+	const lecture *oa = (lecture*) a;
+	const lecture *ob = (lecture*) b;
 
-	if(oa->l_datetime.dayOfWeek != ob->l_datetime.dayOfWeek){
-		return oa->l_datetime.dayOfWeek - ob->l_datetime.dayOfWeek;
+	if(oa->init && ob->init){
+		if(oa->l_datetime.dayOfWeek != ob->l_datetime.dayOfWeek){
+			return oa->l_datetime.dayOfWeek - ob->l_datetime.dayOfWeek;
+		}else{
+			return oa->l_datetime.hour - ob->l_datetime.hour;
+		}
 	}else{
-		return oa->l_datetime.hour - ob->l_datetime.hour;
+		if(oa->init){
+			return -1;
+		}
+		return 1;
 	}
 }
 

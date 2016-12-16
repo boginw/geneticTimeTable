@@ -50,10 +50,10 @@ void printLecture(lecture l){
 		l.l_datetime.dayOfWeek,
 		l.l_datetime.hour,
 		l.l_class->name,
-		(l.conflictFlag == 1 || l.conflictFlag == 3) ? "!" : "",
+		(l.conflictRoom) ? "!" : "",
 		l.l_room->name,
 		l.l_subject->name,
-		(l.conflictFlag == 2 || l.conflictFlag == 3) ? "!" : "",
+		(l.conflictTeacher) ? "!" : "",
 		l.l_teacher->name,
 		(l.l_subject->roomRequireLength != 0 ? requirements : "*")
 	);
@@ -104,12 +104,12 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 				strcat(rows[j*4+0],temp);
 
 				sprintf(temp,"| %-17s%c |",
-					tempLecture.l_teacher->name, (tempLecture.conflictFlag == 2 || tempLecture.conflictFlag == 3) ? '!' : ' ');
+					tempLecture.l_teacher->name, (tempLecture.conflictTeacher) ? '!' : ' ');
 
 				strcat(rows[j*4+1],temp);
 
 				sprintf(temp,"| %17s%c |",
-					tempLecture.l_room->name, (tempLecture.conflictFlag == 1 || tempLecture.conflictFlag == 3) ? '!' : ' ');
+					tempLecture.l_room->name, (tempLecture.conflictRoom) ? '!' : ' ');
 
 				strcat(rows[j*4+2],temp);
 
