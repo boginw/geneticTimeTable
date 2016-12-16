@@ -175,9 +175,10 @@ void getRandomDatetimeWithNoLecture(timetable *t, int *day, int*hour){
 
 
 void setFitness(params *populationParams){
-    int i, j, k, l, akk = 0, fitnessRatio, count1, count2, klasse, res_i;
+    int i, j, k, l, m, akk = 0, fitnessRatio, count1, count2, klasse, res_i;
     int test1, test2, test3, test4;
     float value1, value2, res_f;
+    double mellem_resultat;
     int maxConflicts = populationParams->tempPopulation[populationParams->tempPopulationCount - 1].conflicts;
     for (i = 0; i < populationParams->tempPopulationCount; i++){
         akk += (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
@@ -194,10 +195,12 @@ void setFitness(params *populationParams){
             res_i = 0;
             count1 = 0;
             for (k = 1; k < populationParams->tempPopulation[i].t[j].lectureLength; k++) {
+                if (populationParams->tempPopulation[i].t[j].lectures[k-1].init == 1) {
+                    count1++;
+                }
                 if((populationParams->tempPopulation[i].t[j].lectures[k-1].init != 1) || (populationParams->tempPopulation[i].t[j].lectures[k].init != 1)) {
                     continue;
                 }
-                count1++;
                 l = k;
                 if((populationParams->tempPopulation[i].t[j].lectures[k-1].l_datetime.dayOfWeek == populationParams->tempPopulation[i].t[j].lectures[l].l_datetime.dayOfWeek) &&
                    (populationParams->tempPopulation[i].t[j].lectures[k-1].l_room == populationParams->tempPopulation[i].t[j].lectures[l].l_room) &&
@@ -207,7 +210,7 @@ void setFitness(params *populationParams){
                 }
             }
             value1 = (float) (res_i * 11) + 11;
-            value2 = (float) count1;
+            value2 = (float) count1 * 22;
             count2 += (int) value1 / value2 * FLOAT_MULTIPLIER;
         }
         value1 = (float) count2;
@@ -216,47 +219,92 @@ void setFitness(params *populationParams){
         populationParams->akkFitnessPoints += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
     }
 
-    /* SF - Udregn en fitness-værdi baseret på samme lærer i samme fag for en klasse */
-    for (i = 0; i < populationParams->tempPopulationCount; i++) {
-        count1 = 0;
-        count2 = 0;
-        for (j = 0; j < populationParams->classCount; j++) {
-            for (k = 0; k < populationParams->tempPopulation[i].t[j].lectureLength; k++) {
-                if (populationParams->tempPopulation[i].t[j].lectures[k].init != 1) {
-                    break;
-                }
-                /* kode */
-            }
-            count2 += populationParams->tempPopulation[i].t[j].lectureLength;
-        }
-        value1 = (float)count1;
-        value2 = (float)count2;
-        populationParams->tempPopulation[i].fitness += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
-        populationParams->akkFitnessPoints += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
-    }
-
     /* SL - Udregn en fitness-værdi baseret på samme lokale til samme fag for en klasse */
     for (i = 0; i < populationParams->tempPopulationCount; i++) {
-        count1 = 0;
-        count2 = 0;
+        mellem_resultat = 0.0;
         for (j = 0; j < populationParams->classCount; j++) {
-            for (k = 0; k < populationParams->tempPopulation[i].t[j].lectureLength; k++) {
-                if (populationParams->tempPopulation[i].t[j].lectures[k].init != 1) {
-                    break;
+            count1 = 0;
+            for (k = 0; k < populationParams->subjectCount; k++) {
+                for (l = 0; l < populationParams->roomCount; l++) {
+                    count2 = 0;
+                    res_i  = 0;
+                    for (m = 0; m < populationParams->tempPopulation[i].t[j].lectureLength; m++) {
+                        if (populationParams->tempPopulation[i].t[j].lectures[m].init == 1) {
+                            if (populationParams->tempPopulation[i].t[j].lectures[m].l_subject == &populationParams->subjects[k]) {
+                                count2++;
+                                if (populationParams->tempPopulation[i].t[j].lectures[m].l_room == &populationParams->rooms[l]) {
+                                    res_i++;
+                                }
+                            }
+                        } else {
+                            continue;
+                        }
+                    }
+                    if (res_i > count1) {
+                        count1 = res_i;
+                    }
                 }
-                /* kode */
+                if (count2 =! 0) {
+                    value1 = (float) count1;
+                    value2 = (float) count2;
+                    mellem_resultat += value1 / value2 * FLOAT_MULTIPLIER;
+                }
             }
-            count2 += populationParams->tempPopulation[i].t[j].lectureLength;
+            value1 = mellem_resultat;
+            value2 = (float) populationParams->subjectCount;
+            mellem_resultat = value1 / value2;
         }
-        value1 = (float)count1;
-        value2 = (float)count2;
-        populationParams->tempPopulation[i].fitness += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
-        populationParams->akkFitnessPoints += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
+        value1 = mellem_resultat;
+        value2 = (float) populationParams->classCount;
+        populationParams->tempPopulation[i].fitness += (int) (value1 / value2);
+        populationParams->akkFitnessPoints += (int) (value1 / value2);
+    }
+
+    /* SF - Udregn en fitness-værdi baseret på samme lærer i samme fag for en klasse */
+    /* Modificér EM til at få det til at virke */
+    for (i = 0; i < populationParams->tempPopulationCount; i++) {
+        mellem_resultat = 0.0;
+        for (j = 0; j < populationParams->classCount; j++) {
+            count1 = 0;
+            for (k = 0; k < populationParams->subjectCount; k++) {
+                for (l = 0; l < populationParams->teacherCount; l++) {
+                    count2 = 0;
+                    res_i  = 0;
+                    for (m = 0; m < populationParams->tempPopulation[i].t[j].lectureLength; m++) {
+                        if (populationParams->tempPopulation[i].t[j].lectures[m].init == 1) {
+                            if (populationParams->tempPopulation[i].t[j].lectures[m].l_subject == &populationParams->subjects[k]) {
+                                count2++;
+                                if (populationParams->tempPopulation[i].t[j].lectures[m].l_teacher == &populationParams->teachers[l]) {
+                                    res_i++;
+                                }
+                            }
+                        } else {
+                            continue;
+                        }
+                    }
+                    if (res_i > count1) {
+                        count1 = res_i;
+                    }
+                }
+                if (count2 =! 0) {
+                    value1 = (float) count1;
+                    value2 = (float) count2;
+                    mellem_resultat += value1 / value2 * FLOAT_MULTIPLIER;
+                }
+            }
+            value1 = mellem_resultat;
+            value2 = (float) populationParams->subjectCount;
+            mellem_resultat = value1 / value2;
+        }
+        value1 = mellem_resultat;
+        value2 = (float) populationParams->classCount;
+        populationParams->tempPopulation[i].fitness += (int) (value1 / value2);
+        populationParams->akkFitnessPoints += (int) (value1 / value2);
     }
 
     /* EM - Udregn en fitness-værdi baseret på at en klasse opnår minimumskrav. */
     for (i = 0; i < populationParams->tempPopulationCount; i++) {
-        float mellem_resultat = 0.0;
+        mellem_resultat = 0.0;
         count1 = 0;
         count2 = 0;
         res_i  = 0;
