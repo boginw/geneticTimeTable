@@ -49,5 +49,3 @@ int lectureOnDateTime(timetable t, int day, int hour);
 
 
 int dayHourQsort(const void * a, const void * b);
-
-int compareLectures(individual ind, int count);

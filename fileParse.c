@@ -3,7 +3,7 @@
 
 int init(params *populationParams){
     FILE *dataFile;
-    int i,j,lines,res;
+    int i,j,k,lines,res;
     int labelCounter = 0;
     char *buffer;
     char *inlineBuffer;
@@ -44,6 +44,10 @@ int init(params *populationParams){
         }else{
             if(strcmp(lastType,"ROOM") == 0){
                 populationParams->rooms[populationParams->roomCount] = parseRoom(buffer);
+                k = strlen(populationParams->rooms[populationParams->roomCount].name);
+                if (populationParams->rooms[populationParams->roomCount].name[k-1] == '\r') {
+                    populationParams->rooms[populationParams->roomCount].name[k-1]  = '\0';
+                }
 
                 populationParams->roomCount +=1;
             }else if(strcmp(lastType,"SUBJECT") == 0){

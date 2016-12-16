@@ -176,6 +176,7 @@ void getRandomDatetimeWithNoLecture(timetable *t, int *day, int*hour){
 
 void setFitness(params *populationParams){
     int i, j, k, l, akk = 0, fitnessRatio, count1, count2, klasse, res_i;
+    int test1, test2, test3, test4;
     float value1, value2, res_f;
     int maxConflicts = populationParams->tempPopulation[populationParams->tempPopulationCount - 1].conflicts;
     for (i = 0; i < populationParams->tempPopulationCount; i++){
@@ -187,13 +188,16 @@ void setFitness(params *populationParams){
         populationParams->tempPopulation[i].fitness = (float) fitnessRatio;
     }
     /* F2B - Udregn en fitness-værdi baseret på fag i blokke af 2 */
-    res_i = 0;
     for (i = 0; i < populationParams->tempPopulationCount; i++) {
+        count2 = 0;
         for (j = 0; j < populationParams->classCount; j++) {
+            res_i = 0;
+            count1 = 0;
             for (k = 1; k < populationParams->tempPopulation[i].t[j].lectureLength; k++) {
                 if((populationParams->tempPopulation[i].t[j].lectures[k-1].init != 1) || (populationParams->tempPopulation[i].t[j].lectures[k].init != 1)) {
                     continue;
                 }
+                count1++;
                 l = k;
                 if((populationParams->tempPopulation[i].t[j].lectures[k-1].l_datetime.dayOfWeek == populationParams->tempPopulation[i].t[j].lectures[l].l_datetime.dayOfWeek) &&
                    (populationParams->tempPopulation[i].t[j].lectures[k-1].l_room == populationParams->tempPopulation[i].t[j].lectures[l].l_room) &&
@@ -202,7 +206,14 @@ void setFitness(params *populationParams){
                     res_i += 1;
                 }
             }
+            value1 = (float) (res_i * 11) + 11;
+            value2 = (float) count1;
+            count2 += (int) value1 / value2 * FLOAT_MULTIPLIER;
         }
+        value1 = (float) count2;
+        value2 = (float) populationParams->classCount;
+        populationParams->tempPopulation[i].fitness += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
+        populationParams->akkFitnessPoints += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
     }
 
     /* SF - Udregn en fitness-værdi baseret på samme lærer i samme fag for en klasse */
@@ -221,6 +232,7 @@ void setFitness(params *populationParams){
         value1 = (float)count1;
         value2 = (float)count2;
         populationParams->tempPopulation[i].fitness += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
+        populationParams->akkFitnessPoints += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
     }
 
     /* SL - Udregn en fitness-værdi baseret på samme lokale til samme fag for en klasse */
@@ -239,6 +251,7 @@ void setFitness(params *populationParams){
         value1 = (float)count1;
         value2 = (float)count2;
         populationParams->tempPopulation[i].fitness += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
+        populationParams->akkFitnessPoints += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
     }
 
     /* EM - Udregn en fitness-værdi baseret på at en klasse opnår minimumskrav. */
@@ -256,7 +269,7 @@ void setFitness(params *populationParams){
                         if (populationParams->tempPopulation[i].t[j].lectures[k].init != 1) {
                             break;
                         }
-                        printf("DEBUG: %d\n", populationParams->tempPopulation[i].t[j].lectures[k].l_datetime.dayOfWeek);
+                        /*printf("DEBUG: %d\n", populationParams->tempPopulation[i].t[j].lectures[k].l_datetime.dayOfWeek);*/
                         if (populationParams->tempPopulation[i].t[j].lectures[k].l_subject == &populationParams->subjects[l]) {
                             count1++;
                         }
@@ -273,6 +286,7 @@ void setFitness(params *populationParams){
         value1 = mellem_resultat;
         value2 = (float) populationParams->classCount;
         populationParams->tempPopulation[i].fitness += (int) (value1 / value2);
+        populationParams->akkFitnessPoints += (int) (value1 / value2);
     }
 
     /* EF - Udregn en fitness-værdi baseret på samme at en klasse kun undervises i de fag de skal have */
@@ -294,6 +308,7 @@ void setFitness(params *populationParams){
         value1 = (float)count1;
         value2 = (float)count2;
         populationParams->tempPopulation[i].fitness += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
+        populationParams->akkFitnessPoints += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
     }
     /* LF - Udregn en fitness-værdi baseret på at alle lærere underviser i fag som de kan */
     for (i = 0; i < populationParams->tempPopulationCount; i++) {
@@ -318,6 +333,7 @@ void setFitness(params *populationParams){
         value1 = (float)count1;
         value2 = (float)count2;
         populationParams->tempPopulation[i].fitness += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
+        populationParams->akkFitnessPoints += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
     }
 
     /* FLo - Udregn en fitness-værdi baseret på at alle lokaler understøtter de fag der undervises */
@@ -331,7 +347,7 @@ void setFitness(params *populationParams){
                 }
                 if (populationParams->tempPopulation[i].t[j].lectures[k].l_subject->roomRequireLength != 0) {
                     for (l = 0; l < populationParams->tempPopulation[i].t[j].lectures[k].l_subject->roomRequireLength; l++) {
-                        if (strcmp(populationParams->tempPopulation[i].t[j].lectures[k].l_subject->roomRequire[l]->name, populationParams->tempPopulation[i].t[j].lectures[k].l_room->name) == 0) {
+                        if (&populationParams->tempPopulation[i].t[j].lectures[k].l_subject->roomRequire[l] == &populationParams->tempPopulation[i].t[j].lectures[k].l_room) {
                             count1++;
                         }
                     }
@@ -344,32 +360,11 @@ void setFitness(params *populationParams){
         value1 = (float)count1;
         value2 = (float)count2;
         populationParams->tempPopulation[i].fitness += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
+        populationParams->akkFitnessPoints += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
     }
 
 }
 
-
-int compareLectures(individual ind, int count) {
-    int a,b,c; /* iteration counters */
-    int doubleLectures = 0;
-
-
-    for (a = 0; a < count; a++) {
-        for (b = 1; b < ind.t[a].lectureLength; b++) {
-            if ((ind.t[a].lectures[b-1].init != 1) || (ind.t[a].lectures[b].init != 1)) {
-                continue;
-            }
-            c = b;
-            if((ind.t[a].lectures[b-1].l_datetime.dayOfWeek == ind.t[a].lectures[c].l_datetime.dayOfWeek) &&
-            (ind.t[a].lectures[b-1].l_room == ind.t[a].lectures[c].l_room) &&
-            (ind.t[a].lectures[b-1].l_subject == ind.t[a].lectures[c].l_subject) &&
-            (ind.t[a].lectures[b-1].l_teacher == ind.t[a].lectures[c].l_teacher)) {
-                doubleLectures += 1;
-            }
-        }
-    }
-    return doubleLectures;
-}
 
 /*
 void compareLectures(individual *ind, int *consecutiveLectures);
