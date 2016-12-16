@@ -346,14 +346,6 @@ int main(int argc, char const *argv[]){
             populationParams.individuals[i] = randomIndividual(&populationParams);
         }
 
-        /*qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
-        for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
-            if((populationParams.individuals[0].conflicts - populationParams.individuals[i].conflicts) / (float) populationParams.individuals[0].conflicts * 100 > 40){
-                populationParams.individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teacFrs, teacherCount);
-            }
-        }*/
-
-
         if(populationParams.individuals[0].conflicts < lowestConflict || lowestConflict == -1){
             lowestConflict = populationParams.individuals[0].conflicts;
             lowestIndividual = populationParams.individuals[0];
@@ -380,12 +372,14 @@ int main(int argc, char const *argv[]){
                 NUM_OF_GEN
             );
 
+            printf("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
+            	   "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
+            	   "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
+            	   "\b\b\b\b\b\b\b\b\b\b\b\b\b");
 
-
-            for (i = 0; i < 114; i++){
+            /*for (i = 0; i < 114; i++){
                 printf("\b");
-            }
-
+            }*/
 
         }
         
@@ -413,7 +407,7 @@ int main(int argc, char const *argv[]){
     }*/
     /* Dump csv files in folder schedules */
     /*dumpCSV(&populationParams.individuals[0],classCount,intervalLabels);*/
-    printf("Start High: %d\nStart Low: %d\nLowest: %d\nHighest: %d", starthighconflict, startlowconflict, lowestConflict, highestConflict);
+    printf("Generations: %d\nStart High: %d\nStart Low: %d\nLowest: %d\nHighest: %d", j, starthighconflict, startlowconflict, lowestConflict, highestConflict);
     free(populationParams.rooms);
     free(populationParams.subjects);
     free(populationParams.classes);
@@ -498,9 +492,6 @@ void testInd(params *populationParams, individual *pop, int amountOfTimeTables, 
     conflicts(pop, amountOfTimeTables);
 }
 
-
-
-
 void calcFitnessOnPopulation(params *populationParams){
     int i;
     populationParams->akkConflicts = 0;
@@ -562,10 +553,6 @@ int generateInitialPopulation(params *populationParams){
     return conflictsSum;
 }
 
-void killTimetable(timetable *t){
-
-}
-
 int isEmpty(int *array, size_t size){
     int i;
     int empty = 0;
@@ -592,50 +579,6 @@ int shouldMutate(){
 int randomNumber(int min, int max){
     return (rand() % (max + 1 - min)) + min;
 }
-
-/*int generateAllCombinations(void *items, size_t size, int sizeOfVariable, void **finalItems){
-    int i;
-    int j;
-    int k = 0;
-    int endSize = factorial(size);
-
-    char *allCombinations   = calloc(endSize * size, sizeOfVariable);
-    char *tempItems         = calloc(size, sizeOfVariable);
-    *finalItems             = calloc(endSize * size, sizeOfVariable);
-
-    memcpy(tempItems, items, sizeOfVariable * size);
-
-    for (j = 0; j < endSize; j++){
-        for (i = 0; i < size-1; i++){
-            swapn(
-                &(tempItems[i*sizeOfVariable]),
-                &(tempItems[(i+1)*sizeOfVariable]),
-                sizeOfVariable
-            );
-
-            memcpy(
-                &(allCombinations[(k++)*size*sizeOfVariable]),
-                tempItems,
-                sizeOfVariable*size
-            );
-        }
-    }
-    for (j = 0; j < size; j++){
-        for (i = 0; i < size-1; i++){
-
-        }
-    }
-
-    memcpy(
-        *finalItems,
-        allCombinations,
-        endSize*sizeOfVariable
-    );
-
-    free(tempItems);
-    return endSize*size;
-}*/
-
 
 /**
  * Swaps the values of two variables
