@@ -132,6 +132,7 @@ typedef struct params{
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH];
 } params;
 
+void strip(char *s);
 int randomNumber(int min, int max);
 void swapn(void *a, void *b, size_t n);
 int factorial(int n);
@@ -413,7 +414,7 @@ int main(int argc, char const *argv[]){
     }*/
     /* Dump csv files in folder schedules */
     /*dumpCSV(&populationParams.individuals[0],classCount,intervalLabels);*/
-    printf("Start High: %d\nStart Low: %d\nLowest: %d\nHighest: %d", starthighconflict, startlowconflict, lowestConflict, highestConflict);
+    printf("Generations: %d\nStart High: %d\nStart Low: %d\nLowest: %d\nHighest: %d", j, starthighconflict, startlowconflict, lowestConflict, highestConflict);
     free(populationParams.rooms);
     free(populationParams.subjects);
     free(populationParams.classes);
@@ -686,4 +687,16 @@ void prepend(char* s, const char* t){
     {
         s[i] = t[i];
     }
+}
+
+void strip(char *s) {
+    char *p2 = s;
+    while(*s != '\0') {
+        if(*s != '\t' && *s != '\n' && *s != '\r') {
+            *p2++ = *s++;
+        } else {
+            ++s;
+        }
+    }
+    *p2 = '\0';
 }
