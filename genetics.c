@@ -136,7 +136,40 @@ void addSpice(individual *i, params *populationParams){
 
 void addEverythingNice(individual *i, params *populationParams){
 	/* This layer mutates on the top level ie. the total school timetable */
+	int j;
+	int rndClass = randomNumber(0, populationParams->classCount-1);
+	int rndLec = randomNumber(0, i->t[rndClass].lectureLength-1);
+	int nxtLec;
+	lecture *currentLecture = &i->t[rndClass].lectures[rndLec];
+	lecture *nextLecture;
+	lecture *newLecture;
+	nxtLec = lectureOnDateTime(i->t[rndClass], currentLecture->l_datetime.dayOfWeek, currentLecture->l_datetime.hour+1);
+	if(nxtLec > -1){
+		nextLecture = &i->t[rndClass].lectures[nxtLec];
+	}
+	if(currentLecture->l_teacher == nextLecture->l_teacher && currentLecture->l_subject == nextLecture->l_subject){
+		return;
+	}
+	
+	for (j = 0; j < MAX_LECTURES; j++){
+		newLecture = &i->t[rndClass].lectures[j];
 
+		if(newLecture != currentLecture
+		   && newLecture->l_teacher == currentLecture->l_teacher 
+		   && newLecture->l_subject == currentLecture->l_subject){
+
+	   		if(nxtLec == -1){
+	   			newLecture->l_datetime.dayOfWeek = currentLecture->l_datetime.dayOfWeek;
+	   			newLecture->l_datetime.hour = currentLecture->l_datetime.hour+1;
+			}else{
+				nextLecture->l_datetime.dayOfWeek = newLecture->l_datetime.dayOfWeek;
+				nextLecture->l_datetime.hour = newLecture->l_datetime.hour;
+
+				newLecture->l_datetime.dayOfWeek = currentLecture->l_datetime.dayOfWeek;
+	   			newLecture->l_datetime.hour = currentLecture->l_datetime.hour+1;
+			}
+		}
+	}
 }
 
 teacher *findRandomTeacherForSubject(lecture *l, teacher *t, int teacherCount){
