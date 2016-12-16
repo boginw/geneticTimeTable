@@ -24,7 +24,7 @@
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
-#define NUM_OF_GEN     200000
+#define NUM_OF_GEN     200000 /* Max amount of generations to run for */
 
 #define ROOM_CONFLICT       1
 #define TEACHER_CONFLICT    2
@@ -136,7 +136,6 @@ void strip(char *s);
 int randomNumber(int min, int max);
 void swapn(void *a, void *b, size_t n);
 int factorial(int n);
-int generateAllCombinations(void *items, size_t size, int sizeOfVariable, void **finalItems);
 int isEmpty(int *array, size_t size);
 int shouldMutate();
 void prepend(char* s, const char* t);
@@ -147,6 +146,7 @@ void prepend(char* s, const char* t);
 #include "scheduleControl.c"
 #include "print.c"
 #include "genetics.c"
+#include "tests.c"
 
 void testInd(params *populationParams, individual *pop, int amountOfTimeTables, int val, ...);
 
@@ -156,6 +156,7 @@ int main(int argc, char const *argv[]){
     int i,j; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
     int lowestConflict = -1, highestConflict = 0, startlowconflict, starthighconflict;
+
     char progressLine[50] = ">";
     int curProg = 1;
 
@@ -164,8 +165,6 @@ int main(int argc, char const *argv[]){
 
     int lastBestGen = 0;
 
-    individual conflictTest;
-    individual conflictTest2[2];
 
     individual lowestIndividual;
 
@@ -220,104 +219,12 @@ int main(int argc, char const *argv[]){
 
 
     if(argc > 2 && strcmp(argv[2],"--tests") == 0){
+    	printf("\nRunning tests\n------------------------------\n");
+    	printf("conflicts:              %s\n", testConflicts(&populationParams) ? "Passed" : "Failed");
+    	printf("randomNumber:           %s\n", testRandomNumber() ? "Passed" : "Failed");
+    	printf("isEmpty:                %s\n", testIsEmpty() ? "Passed" : "Failed");
 
-        conflictTest2[0].t[0].lectures[0].init = 1;
-        conflictTest2[0].t[0].lectures[0].free = 0;
-        conflictTest2[0].t[0].lectures[0].l_class   =  &populationParams.classes[0];
-        conflictTest2[0].t[0].lectures[0].l_subject = &populationParams.subjects[0];
-        conflictTest2[0].t[0].lectures[0].l_datetime.dayOfWeek = 1;
-        conflictTest2[0].t[0].lectures[0].l_datetime.hour = 0;
-        conflictTest2[0].t[0].lectureLength = 1;
-
-        conflictTest2[0].t[1].lectures[0].init = 1;
-        conflictTest2[0].t[1].lectures[0].free = 0;
-        conflictTest2[0].t[1].lectures[0].l_class   =  &populationParams.classes[0];
-        conflictTest2[0].t[1].lectures[0].l_subject = &populationParams.subjects[0];
-        conflictTest2[0].t[1].lectures[0].l_datetime.dayOfWeek = 0;
-        conflictTest2[0].t[1].lectures[0].l_datetime.hour = 0;
-        conflictTest2[0].t[1].lectureLength = 1;
-
-        conflictTest2[0].t[2].lectures[0].init = 1;
-        conflictTest2[0].t[2].lectures[0].free = 0;
-        conflictTest2[0].t[2].lectures[0].l_class   =  &populationParams.classes[0];
-        conflictTest2[0].t[2].lectures[0].l_subject = &populationParams.subjects[0];
-        conflictTest2[0].t[2].lectures[0].l_datetime.dayOfWeek = 1;
-        conflictTest2[0].t[2].lectures[0].l_datetime.hour = 0;
-        conflictTest2[0].t[2].lectureLength = 1;
-
-        conflictTest2[0].t[3].lectures[0].init = 1;
-        conflictTest2[0].t[3].lectures[0].free = 0;
-        conflictTest2[0].t[3].lectures[0].l_class   =  &populationParams.classes[0];
-        conflictTest2[0].t[3].lectures[0].l_subject = &populationParams.subjects[0];
-        conflictTest2[0].t[3].lectures[0].l_datetime.dayOfWeek = 0;
-        conflictTest2[0].t[3].lectures[0].l_datetime.hour = 0;
-        conflictTest2[0].t[3].lectureLength = 1;
-
-        conflictTest2[0].t[4].lectures[0].init = 1;
-        conflictTest2[0].t[4].lectures[0].free = 0;
-        conflictTest2[0].t[4].lectures[0].l_class   =  &populationParams.classes[0];
-        conflictTest2[0].t[4].lectures[0].l_subject = &populationParams.subjects[0];
-        conflictTest2[0].t[4].lectures[0].l_datetime.dayOfWeek = 4;
-        conflictTest2[0].t[4].lectures[0].l_datetime.hour = 1;
-        conflictTest2[0].t[4].lectureLength = 1;
-
-        conflictTest2[0].t[5].lectures[0].init = 1;
-        conflictTest2[0].t[5].lectures[0].free = 0;
-        conflictTest2[0].t[5].lectures[0].l_class   =  &populationParams.classes[0];
-        conflictTest2[0].t[5].lectures[0].l_subject = &populationParams.subjects[0];
-        conflictTest2[0].t[5].lectures[0].l_datetime.dayOfWeek = 4;
-        conflictTest2[0].t[5].lectures[0].l_datetime.hour = 1;
-        conflictTest2[0].t[5].lectureLength = 1;
-
-
-
-        conflictTest2[0].t[0].lectures[0].l_room    =    &populationParams.rooms[0];
-        conflictTest2[0].t[1].lectures[0].l_room    =    &populationParams.rooms[1];
-        conflictTest2[0].t[2].lectures[0].l_room    =    &populationParams.rooms[2];
-        conflictTest2[0].t[3].lectures[0].l_room    =    &populationParams.rooms[3];
-        conflictTest2[0].t[4].lectures[0].l_room    =    &populationParams.rooms[4];
-        conflictTest2[0].t[5].lectures[0].l_room    =    &populationParams.rooms[5];
-
-        conflictTest2[0].t[0].lectures[0].l_teacher = &populationParams.teachers[5];
-        conflictTest2[0].t[1].lectures[0].l_teacher = &populationParams.teachers[1];
-        conflictTest2[0].t[2].lectures[0].l_teacher = &populationParams.teachers[1]; 
-        conflictTest2[0].t[3].lectures[0].l_teacher = &populationParams.teachers[5];
-        conflictTest2[0].t[4].lectures[0].l_teacher = &populationParams.teachers[5];
-        conflictTest2[0].t[5].lectures[0].l_teacher = &populationParams.teachers[5];
-
-
-        conflicts(&conflictTest2[0], 8);
-        printTimeTable(conflictTest2[0].t[0], populationParams.intervalLabels);
-        printTimeTable(conflictTest2[0].t[1], populationParams.intervalLabels);
-        printTimeTable(conflictTest2[0].t[2], populationParams.intervalLabels);
-        printTimeTable(conflictTest2[0].t[3], populationParams.intervalLabels);
-        printTimeTable(conflictTest2[0].t[4], populationParams.intervalLabels);
-        printTimeTable(conflictTest2[0].t[5], populationParams.intervalLabels);
-        printf("Expected:  8, Conflicts: %2d\n", conflictTest2[0].conflicts);
-		
-
-        /*testInd(&populationParams, &conflictTest2[0], 4, 1,0, 1,0, 1,0, 1,0);
-        testInd(&populationParams, &conflictTest2[1], 4, 2,0, 2,0, 1,0, 2,0);
-        conflicts(&conflictTest2[0], populationParams.classCount);
-
-        printTimeTable(conflictTest2[0].t[0], populationParams.intervalLabels);
-        printTimeTable(conflictTest2[0].t[1], populationParams.intervalLabels);
-        printTimeTable(conflictTest2[0].t[2], populationParams.intervalLabels);
-        printTimeTable(conflictTest2[0].t[3], populationParams.intervalLabels);
-        printf("\n----------------------------------\n");
-        conflicts(&conflictTest2[1], populationParams.classCount);
-
-    	qsort(conflictTest2, 2, sizeof(individual), conflictsQsort);
-        printTimeTable(conflictTest2[1].t[0], populationParams.intervalLabels);
-        printTimeTable(conflictTest2[1].t[1], populationParams.intervalLabels);
-        printTimeTable(conflictTest2[1].t[2], populationParams.intervalLabels);
-        printTimeTable(conflictTest2[1].t[3], populationParams.intervalLabels);
-
-
-        printf("Expected:  0, Conflicts: %2d\n", conflictTest2[0].conflicts);
-        printf("Expected:  0, Conflicts: %2d\n", conflictTest2[1].conflicts);*/
-
-        exit(0);
+    	exit(0);
     }
 
 
@@ -347,14 +254,6 @@ int main(int argc, char const *argv[]){
             populationParams.individuals[i] = randomIndividual(&populationParams);
         }
 
-        /*qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
-        for (i = 1; i < MAX_INDIVIDUALS - 1; i++){
-            if((populationParams.individuals[0].conflicts - populationParams.individuals[i].conflicts) / (float) populationParams.individuals[0].conflicts * 100 > 40){
-                populationParams.individuals[i] = randomIndividual(rooms, roomCount, subjects, subjectCount, classes, classCount, teacFrs, teacherCount);
-            }
-        }*/
-
-
         if(populationParams.individuals[0].conflicts < lowestConflict || lowestConflict == -1){
             lowestConflict = populationParams.individuals[0].conflicts;
             lowestIndividual = populationParams.individuals[0];
@@ -371,7 +270,6 @@ int main(int argc, char const *argv[]){
                 curProg++;
             }
 
-            /*printTimeTable(populationParams.individuals[0].t[0], intervalLabels);*/
             printf("%3d%% [%-50s] conflicts: %3d | lowest: %3d | generation: %6d/%-6d",
                 (int) ((((float) j) / NUM_OF_GEN) * 100),
                 progressLine,
@@ -381,13 +279,9 @@ int main(int argc, char const *argv[]){
                 NUM_OF_GEN
             );
 
-
-
             for (i = 0; i < 114; i++){
                 printf("\b");
             }
-
-
         }
         
         if(populationParams.individuals[0].conflicts == 0){
@@ -406,15 +300,8 @@ int main(int argc, char const *argv[]){
         printTimeTable(lowestIndividual.t[i], populationParams.intervalLabels);
     }
 
-
-    /* Conflicts preview */
-    /*qsort(populationParams.individuals, MAX_INDIVIDUALSs, sizeof(populationParams.individuals), conflictsQsort);
-    for (i = 0; i < MAX_INDIVIDUALSs; i++){
-        printf("Ind: %2d, conflicts: %d\n", i, populationParams.individuals[i].conflicts);
-    }*/
-    /* Dump csv files in folder schedules */
-    /*dumpCSV(&populationParams.individuals[0],classCount,intervalLabels);*/
     printf("Generations: %d\nStart High: %d\nStart Low: %d\nLowest: %d\nHighest: %d", j, starthighconflict, startlowconflict, lowestConflict, highestConflict);
+
     free(populationParams.rooms);
     free(populationParams.subjects);
     free(populationParams.classes);
@@ -440,22 +327,10 @@ void selection(params *populationParams){
             for(p=rouletteCount; p<rouletteCount+prop; p++){
                 roulette[p] = i;
             }
-        }/*else{
-            deadpool[deadpoolCount] = i;
-            deadpoolCount++;
-        }*/
+        }
         rouletteCount += prop;
     }
 
-    /*if(rouletteCount <= 100){
-
-        p=0;
-        for(i=rouletteCount; i < 100; i++){
-            roulette[i] = deadpool[randomNumber(0,deadpoolCount-1)];
-            p++;
-        }
-        rouletteCount+=p;
-    }*/
 
     for(i=0; i < MAX_INDIVIDUALS-1; i++){
         rouletteSelector = roulette[randomNumber(0,99)];
@@ -467,38 +342,6 @@ void selection(params *populationParams){
     qsort(populationParams->individuals, populationParams->individualsCount, sizeof(individual), conflictsQsort);
     free(roulette);
 }
-
-void testInd(params *populationParams, individual *pop, int amountOfTimeTables, int val, ...){
-	int i;
-	int arg1;
-	int arg2;
-	va_list arguments;
-
-	va_start(arguments, val);
-
-	for (i = 0; i < amountOfTimeTables; i++){
-		pop->t[i].lectures[0].init = 1;
-	    pop->t[i].lectures[0].free = 0;
-
-	    arg1 = va_arg(arguments, int);
-	    arg2 = va_arg(arguments, int);
-
-	    pop->t[i].lectures[0].l_room    = &populationParams->rooms[arg1];
-	    pop->t[i].lectures[0].l_teacher = &populationParams->teachers[arg2];
-	    pop->t[i].lectures[0].l_class   = &populationParams->classes[0];
-	    pop->t[i].lectures[0].l_subject = &populationParams->subjects[0];
-	    pop->t[i].lectures[0].l_datetime.dayOfWeek = 0;
-	    pop->t[i].lectures[0].l_datetime.hour = 0;
-	    pop->t[i].lectureLength = 1;
-
-	    printf("Room #%d, Teacher #%d\n", arg1, arg2);
-	}
-
-	va_end(arguments);
-
-    conflicts(pop, amountOfTimeTables);
-}
-
 
 
 
@@ -563,9 +406,11 @@ int generateInitialPopulation(params *populationParams){
     return conflictsSum;
 }
 
-void killTimetable(timetable *t){
 
-}
+
+
+
+
 
 int isEmpty(int *array, size_t size){
     int i;
@@ -593,50 +438,6 @@ int shouldMutate(){
 int randomNumber(int min, int max){
     return (rand() % (max + 1 - min)) + min;
 }
-
-/*int generateAllCombinations(void *items, size_t size, int sizeOfVariable, void **finalItems){
-    int i;
-    int j;
-    int k = 0;
-    int endSize = factorial(size);
-
-    char *allCombinations   = calloc(endSize * size, sizeOfVariable);
-    char *tempItems         = calloc(size, sizeOfVariable);
-    *finalItems             = calloc(endSize * size, sizeOfVariable);
-
-    memcpy(tempItems, items, sizeOfVariable * size);
-
-    for (j = 0; j < endSize; j++){
-        for (i = 0; i < size-1; i++){
-            swapn(
-                &(tempItems[i*sizeOfVariable]),
-                &(tempItems[(i+1)*sizeOfVariable]),
-                sizeOfVariable
-            );
-
-            memcpy(
-                &(allCombinations[(k++)*size*sizeOfVariable]),
-                tempItems,
-                sizeOfVariable*size
-            );
-        }
-    }
-    for (j = 0; j < size; j++){
-        for (i = 0; i < size-1; i++){
-
-        }
-    }
-
-    memcpy(
-        *finalItems,
-        allCombinations,
-        endSize*sizeOfVariable
-    );
-
-    free(tempItems);
-    return endSize*size;
-}*/
-
 
 /**
  * Swaps the values of two variables
