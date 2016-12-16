@@ -57,15 +57,15 @@ Class time,[],ONCE_A_WEEK
 
 ### TEACHER ###
 # Format: Navn, er klasseleder, hvis ja så for hvilken klasse, liste over de fag læreren må undervise i, hvor mange timer læreren max må undervise i om ugen
-Verner Frank,1,1A,[Class time;Physical Activity;Math;Geography;Biology;Social Studies;Basic Science],-1
-Finn Storm,0,0,[Physical Activity;Physics/Chemistry;Danish;English;Christianity],5
-Thorbjorn Toft,1,2B,[Class time;Physical Activity;History;German;French;Visual Arts;Basic Science],5
-Johan Rohde,1,2A,[Class time;Physical Activity;French;Math;Sports;Music;Visual Arts;Design],5
+Verner Frank,1,1A,[Class time;Physical Activity;Math;Geography;Biology;Social Studies;Basic Science],8
+Finn Storm,0,0,[Physical Activity;Physics/Chemistry;Danish;English;Christianity],8
+Thorbjorn Toft,1,2B,[Class time;Physical Activity;History;German;French;Visual Arts;Basic Science],8
+Johan Rohde,1,2A,[Class time;Physical Activity;French;Math;Sports;Music;Visual Arts;Design],8
 Sofus Eskildsen,1,1B,[Class time;Physical Activity;Danish;English;Christianity;History;Basic Science],8
-Helge Eriksen,0,0,[Physical Activity;Math;Geography;Biology;Social Studies],-1
-Allan Balle,0,0,[Physical Activity;Physics/Chemistry;Danish;English;Christianity],5
-Vagn Kofod,0,0,[Physical Activity;History;German;French;Visual Arts],5
-Jimmy Pallesen,1,9C,[Class time;Physical Activity;French;Math;Sports;Music;Visual Arts;Design],5
+Helge Eriksen,0,0,[Physical Activity;Math;Geography;Biology;Social Studies],8
+Allan Balle,0,0,[Physical Activity;Physics/Chemistry;Danish;English;Christianity],8
+Vagn Kofod,0,0,[Physical Activity;History;German;French;Visual Arts],8
+Jimmy Pallesen,1,9C,[Class time;Physical Activity;French;Math;Sports;Music;Visual Arts;Design],8
 Ib Matthiesen,0,0,[Physical Activity;Danish;English;Christianity;History],8
 
 ### TIMEINTERVALS ###
