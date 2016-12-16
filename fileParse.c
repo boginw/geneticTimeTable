@@ -208,37 +208,49 @@ subject parseSubject(char *line, room* rooms, int roomCount){
     int i;
     int len;
     subjectBuffer = calloc(256, sizeof(char));
-    hoursBuffer = calloc(100, sizeof(char));
-    curSub = calloc(MAX_NAME_LENGTH, sizeof(char));
+    hoursBuffer   = calloc(100, sizeof(char));
+    curSub        = calloc(MAX_NAME_LENGTH, sizeof(char));
+
     if(subjectBuffer == NULL || hoursBuffer == NULL || curSub == NULL){
         printf("Not enough ram, sorry...\n");
         exit(EXIT_FAILURE);
     }
+
     sscanf(line," %[^,],%[^,],%s",
         returnSubject.name,
         subjectBuffer,
         hoursBuffer
     );
 
-    len = strlen(hoursBuffer);
-    for (i = 0; i < len; i++){
-        if(hoursBuffer[i] != ','){
-            curSub[curSubI] = hoursBuffer[i];
-            curSubI++;
-            if(i+2 == len){
-                curSub[curSubI] = hoursBuffer[i+1];
-                curSubI++;
-                hoursBuffer[i+1] = ',';
-            }
-        }else{
-            curSub[curSubI] = '\0';
-            curSubI = 0;
-            returnSubject.perYear[year++] = atoi(curSub);
+    if(strcmp("ONCE_A_DAY",hoursBuffer)==0){
+        for (i = 0; i < MAX_YEAR; i++){
+            returnSubject.perYear[i] = SCHOOL_DAYS_YEAR;
         }
-    }
+    }else if(strcmp("ONCE_A_WEEK",hoursBuffer)==0){
+        for (i = 0; i < MAX_YEAR; i++){
+            returnSubject.perYear[i] = WEEK_LENGTH;
+        }
+    }else{
+        len = strlen(hoursBuffer);
+        for (i = 0; i < len; i++){
+            if(hoursBuffer[i] != ','){
+                curSub[curSubI] = hoursBuffer[i];
+                curSubI++;
+                if(i+2 == len){
+                    curSub[curSubI] = hoursBuffer[i+1];
+                    curSubI++;
+                    hoursBuffer[i+1] = ',';
+                }
+            }else{
+                curSub[curSubI] = '\0';
+                curSubI = 0;
+                returnSubject.perYear[year++] = atoi(curSub);
+            }
+        }
 
-    returnSubject.roomRequireLength = 0;
-    returnSubject.roomRequireLength = findRoomsFromString(subjectBuffer,returnSubject.roomRequire, rooms, roomCount);
+
+        returnSubject.roomRequireLength = findRoomsFromString(subjectBuffer,returnSubject.roomRequire, rooms, roomCount);
+    }
     free(subjectBuffer);
     free(hoursBuffer);
     free(curSub);

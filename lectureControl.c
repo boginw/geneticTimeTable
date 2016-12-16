@@ -46,11 +46,9 @@ int isTeacherCorrect(lecture *l){
 
 lecture randomLecture(params *populationParams){
 	lecture r_lecture;
-
-	while((r_lecture.l_subject = 
-				&populationParams->subjects[randomNumber(0,populationParams->subjectCount-1)]) && 
+	while((r_lecture.l_subject = &populationParams->subjects[randomNumber(0,populationParams->subjectCount-1)]) &&
 				r_lecture.l_subject->perYear[r_lecture.l_class->year+1] == 0){
-		
+
 		r_lecture.l_subject = &populationParams->subjects[
 			randomNumber(0,populationParams->subjectCount-1)
 		];
@@ -58,7 +56,7 @@ lecture randomLecture(params *populationParams){
 
 	r_lecture = randomLectureForClassAndSubject(
 		populationParams,
-		&populationParams->classes[randomNumber(0,populationParams->classCount-1)], 
+		&populationParams->classes[randomNumber(0,populationParams->classCount-1)],
 		r_lecture.l_subject
 	);
 
@@ -81,7 +79,8 @@ lecture randomLectureForClassAndSubject(params *populationParams, class *curClas
 	if(r_lecture.l_subject->roomRequireLength > 0){
 		r_lecture.l_room = r_lecture.l_subject->roomRequire[randomNumber(0,r_lecture.l_subject->roomRequireLength-1)];
 	}else{
-		r_lecture.l_room = &populationParams->rooms[randomNumber(0,populationParams->roomCount-1)];
+		r_lecture.l_room = curClass->classRoom;
+		/*r_lecture.l_room = &populationParams->rooms[randomNumber(0,populationParams->roomCount-1)];*/
 	}
 
 	while((r_lecture.l_teacher = &populationParams->teachers[randomNumber(0,populationParams->teacherCount-1)])){

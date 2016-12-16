@@ -38,7 +38,8 @@ Room 7
 Math,[],0,150,150,150,150,150,150,150,150,150
 Geography,[],0,0,0,0,0,0,0,60,30,30
 Biology,[],0,0,0,0,0,0,0,60,60,30
-Physics/Chemistry,[Room 6],0,0,0,0,0,0,60,60,90
+Physics/Chemistry,[Room 6],0,0,0,0,0,0,0,60,60,90
+Basic Science,[],0,30,60,60,90,60,60,0,0,0
 Danish,[],0,330,300,270,210,210,210,210,210,210
 English,[],0,30,30,60,60,90,90,90,90,90
 Christianity,[],0,60,30,30,30,30,60,0,30,30
@@ -50,20 +51,22 @@ Sports,[],0,60,60,60,90,90,90,60,60,60
 Music,[],0,60,60,60,60,60,30,0,0,0
 Visual Arts,[],0,30,60,60,60,30,0,0,0,0
 Design,[],0,0,0,0,90,120,120,60,0,0
+Physical Activity,[],ONCE_A_DAY
+Class time,[],ONCE_A_WEEK
 
 
 ### TEACHER ###
 # Format: Navn, er klasseleder, hvis ja så for hvilken klasse, liste over de fag læreren må undervise i, hvor mange timer læreren max må undervise i om ugen
-Verner Frank,1,1A,[Math;Geography;Biology;Social Studies],-1
-Finn Storm,0,0,[Physics/Chemistry;Danish;English;Christianity],5
-Thorbjorn Toft,1,2B,[History;German;French;Visual Arts],5
-Johan Rohde,1,2A,[French;Math;Sports;Music;Visual Arts;Design],5
-Sofus Eskildsen,1,1B,[Danish;English;Christianity;History],8
-Helge Eriksen,1,1A,[Math;Geography;Biology;Social Studies],-1
-Allan Balle,0,0,[Physics/Chemistry;Danish;English;Christianity],5
-Vagn Kofod,1,2B,[History;German;French;Visual Arts],5
-Jimmy Pallesen,1,2A,[French;Math;Sports;Music;Visual Arts;Design],5
-Ib Matthiesen,1,1B,[Danish;English;Christianity;History],8
+Verner Frank,1,1A,[Class time;Physical Activity;Math;Geography;Biology;Social Studies;Basic Science],-1
+Finn Storm,0,0,[Physical Activity;Physics/Chemistry;Danish;English;Christianity],5
+Thorbjorn Toft,1,2B,[Class time;Physical Activity;History;German;French;Visual Arts;Basic Science],5
+Johan Rohde,1,2A,[Class time;Physical Activity;French;Math;Sports;Music;Visual Arts;Design],5
+Sofus Eskildsen,1,1B,[Class time;Physical Activity;Danish;English;Christianity;History;Basic Science],8
+Helge Eriksen,0,0,[Physical Activity;Math;Geography;Biology;Social Studies],-1
+Allan Balle,0,0,[Physical Activity;Physics/Chemistry;Danish;English;Christianity],5
+Vagn Kofod,0,0,[Physical Activity;History;German;French;Visual Arts],5
+Jimmy Pallesen,1,9C,[Class time;Physical Activity;French;Math;Sports;Music;Visual Arts;Design],5
+Ib Matthiesen,0,0,[Physical Activity;Danish;English;Christianity;History],8
 
 ### TIMEINTERVALS ###
 8:00,8:45
