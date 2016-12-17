@@ -24,7 +24,7 @@
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
-#define NUM_OF_GEN     200000 /* Max amount of generations to run for */
+#define NUM_OF_GEN     20000 /* Max amount of generations to run for */
 
 #define ROOM_CONFLICT       1
 #define TEACHER_CONFLICT    2
@@ -221,7 +221,7 @@ int main(int argc, char const *argv[]){
     	printf("conflicts:              %s\n", testConflicts(&populationParams) ? "Passed" : "Failed");
     	printf("randomNumber:           %s\n", testRandomNumber() ? "Passed" : "Failed");
     	printf("isEmpty:                %s\n", testIsEmpty() ? "Passed" : "Failed");
-
+    	printf("countSequencedLectures: %s\n", testCountSequencedLectures(&populationParams) ? "Passed" : "Failed");
     	exit(0);
     }
 
@@ -268,16 +268,16 @@ int main(int argc, char const *argv[]){
                 curProg++;
             }
 
-            printf("%3d%% [%-50s] conflicts: %3d | lowest: %3d | generation: %6d/%-6d",
+            printf("%3d%% [%-50s] conflicts: %3d | fitness: %9d | generation: %6d/%-6d",
                 (int) ((((float) j) / NUM_OF_GEN) * 100),
                 progressLine,
                 populationParams.individuals[0].conflicts,
-                lowestConflict,
+                populationParams.individuals[0].fitness,
                 j,
                 NUM_OF_GEN
             );
 
-            for (i = 0; i < 114; i++){
+            for (i = 0; i < 122; i++){
                 printf("\b");
             }
         }
@@ -320,9 +320,10 @@ void selection(params *populationParams){
         if(populationParams->akkFitnessPoints == 0){
             populationParams->akkFitnessPoints = 1;
         }
+
         prop = (((float)populationParams->tempPopulation[i].fitness) / ((float)populationParams->akkFitnessPoints))*100;
         if(prop > 0){
-            for(p=rouletteCount; p<rouletteCount+prop; p++){
+            for(p = rouletteCount; p < rouletteCount+prop; p++){
                 roulette[p] = i;
             }
         }

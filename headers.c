@@ -49,3 +49,5 @@ int lectureOnDateTime(timetable t, int day, int hour);
 
 
 int dayHourQsort(const void * a, const void * b);
+
+int countSequencedLectures(timetable *t, int *lectureCount);
