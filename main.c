@@ -24,7 +24,7 @@
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
-#define NUM_OF_GEN       2000 /* Max amount of generations to run for */
+#define NUM_OF_GEN     200000 /* Max amount of generations to run for */
 
 #define ROOM_CONFLICT       1
 #define TEACHER_CONFLICT    2
@@ -148,8 +148,6 @@ void prepend(char* s, const char* t);
 #include "genetics.c"
 #include "tests.c"
 
-void testInd(params *populationParams, individual *pop, int amountOfTimeTables, int val, ...);
-
 int main(int argc, char const *argv[]){
     /* VARIABLES BEGIN */
     params populationParams;
@@ -254,7 +252,7 @@ int main(int argc, char const *argv[]){
             populationParams.individuals[i] = randomIndividual(&populationParams);
         }
 
-        if(populationParams.individuals[0].fitness < lowestConflict || lowestConflict == -1){
+        if(populationParams.individuals[0].conflicts < lowestConflict || lowestConflict == -1){
             lowestConflict = populationParams.individuals[0].conflicts;
             lowestIndividual = populationParams.individuals[0];
             lastBestGen = j;
@@ -265,33 +263,33 @@ int main(int argc, char const *argv[]){
         }
 
         if(j % 20 == 0){
-            if(curProg * 2 < (int) ((((float) j) / NUM_OF_GEN) * 100) ){
+            if(curProg*2 < (int) ((((float) j) / NUM_OF_GEN) * 100) ){
                 prepend(progressLine, "=");
                 curProg++;
             }
 
-            printf("%3d%% [%-50s] fitness: %3d | conflicts: %3d | generation: %6d/%-6d",
+            printf("%3d%% [%-50s] conflicts: %3d | lowest: %3d | generation: %6d/%-6d",
                 (int) ((((float) j) / NUM_OF_GEN) * 100),
                 progressLine,
-                populationParams.individuals[0].fitness,
                 populationParams.individuals[0].conflicts,
+                lowestConflict,
                 j,
                 NUM_OF_GEN
             );
 
-            for (i = 0; i < 118; i++){
+            for (i = 0; i < 114; i++){
                 printf("\b");
             }
         }
-        
-        /*if(populationParams.individuals[0].conflicts == 0){
+
+        if(populationParams.individuals[0].conflicts == 0){
         	lowestIndividual = populationParams.individuals[0];
 
 			conflicts(&lowestIndividual, populationParams.classCount);
 			if(lowestIndividual.conflicts == 0){
         		break;
 			}
-        }*/
+        }
     }
 
     /* Uncomment for demo of schedules */

@@ -3,7 +3,7 @@
 
 int init(params *populationParams){
     FILE *dataFile;
-    int i,j,lines,res;
+    int i,j,k,lines,res;
     int labelCounter = 0;
     char *buffer;
     char *inlineBuffer;
@@ -44,6 +44,10 @@ int init(params *populationParams){
         }else{
             if(strcmp(lastType,"ROOM") == 0){
                 populationParams->rooms[populationParams->roomCount] = parseRoom(buffer);
+                k = strlen(populationParams->rooms[populationParams->roomCount].name);
+                if (populationParams->rooms[populationParams->roomCount].name[k-1] == '\r') {
+                    populationParams->rooms[populationParams->roomCount].name[k-1]  = '\0';
+                }
 
                 populationParams->roomCount +=1;
             }else if(strcmp(lastType,"SUBJECT") == 0){
@@ -62,7 +66,7 @@ int init(params *populationParams){
                     &populationParams->classes[populationParams->classCount].year
                 );
 
-                populationParams->classes[populationParams->classCount].classRoom = 
+                populationParams->classes[populationParams->classCount].classRoom =
                     findRoom(inlineBuffer, populationParams->rooms, populationParams->roomCount);
 
                 populationParams->classCount+=1;
@@ -75,14 +79,14 @@ int init(params *populationParams){
                     &populationParams->teachers[populationParams->teacherCount].maxWorkHoursPerDay
                 );
 
-                populationParams->teachers[populationParams->teacherCount].leaderOfClass = 
+                populationParams->teachers[populationParams->teacherCount].leaderOfClass =
                     findClass(shortBuffer, populationParams->classes, populationParams->classCount);
-                
-                populationParams->teachers[populationParams->teacherCount].canTeachLength = 
+
+                populationParams->teachers[populationParams->teacherCount].canTeachLength =
                     findSubjectsFromString(
-                        inlineBuffer, 
-                        populationParams->teachers[populationParams->teacherCount].canTeach, 
-                        populationParams->subjects, 
+                        inlineBuffer,
+                        populationParams->teachers[populationParams->teacherCount].canTeach,
+                        populationParams->subjects,
                         populationParams->subjectCount
                     );
 
@@ -119,18 +123,18 @@ int init(params *populationParams){
 
         printf("\nClasses:\n");
         for (i = 0; i < populationParams->classCount; i++){
-            printf("%d => %s, Classroom: %s\n", 
-                i+1, 
-                populationParams->classes[i].name, 
+            printf("%d => %s, Classroom: %s\n",
+                i+1,
+                populationParams->classes[i].name,
                 populationParams->classes[i].classRoom->name
             );
         }
 
         printf("\nSubjects:\n");
         for (i = 0; i < populationParams->subjectCount; i++){
-            printf("%2d => %17s, roomRequire: %s\n", 
-                i+1, 
-                populationParams->subjects[i].name, 
+            printf("%2d => %17s, roomRequire: %s\n",
+                i+1,
+                populationParams->subjects[i].name,
                 (populationParams->subjects[i].roomRequireLength != 0 ? populationParams->subjects[i].roomRequire[0]->name : "*"));
         }
 
@@ -144,10 +148,10 @@ int init(params *populationParams){
                 strcat(requirements,populationParams->teachers[i].canTeach[j]->name);
             }
 
-            printf("%2d => %15s, isClassleader: %s, %s\n", 
-                i+1, 
-                populationParams->teachers[i].name, 
-                (populationParams->teachers[i].isClassleader ? populationParams->teachers[i].leaderOfClass->name : "no"), 
+            printf("%2d => %15s, isClassleader: %s, %s\n",
+                i+1,
+                populationParams->teachers[i].name,
+                (populationParams->teachers[i].isClassleader ? populationParams->teachers[i].leaderOfClass->name : "no"),
                 requirements
             );
         }
@@ -249,6 +253,7 @@ subject parseSubject(char *line, room* rooms, int roomCount){
             }
         }
 
+
         returnSubject.roomRequireLength = findRoomsFromString(subjectBuffer,returnSubject.roomRequire, rooms, roomCount);
     }
     free(subjectBuffer);
@@ -345,6 +350,8 @@ int findSubjectsFromString(char *subjectString, subject* subjectsFound[MAX_SUBJE
             subjectsFound[curSubj++] = findSubject(tmpName,subjects,subjectCount);
         }
     }
+
+    free(tmpName);
 
     return curSubj;
 }

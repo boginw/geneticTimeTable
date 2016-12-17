@@ -75,7 +75,9 @@ lecture randomLectureForClassAndSubject(params *populationParams, class *curClas
 		r_lecture.free = 1;
 		return r_lecture;
 	}*/
-
+/**
+ * HER MALTE
+ */
 	if(r_lecture.l_subject->roomRequireLength > 0){
 		r_lecture.l_room = r_lecture.l_subject->roomRequire[randomNumber(0,r_lecture.l_subject->roomRequireLength-1)];
 	}else{
@@ -119,7 +121,9 @@ lecture randomLectureForClass(params *populationParams, class *curClass){
 	while((r_lecture.l_subject = &populationParams->subjects[randomNumber(0,populationParams->subjectCount-1)]) && r_lecture.l_subject->perYear[r_lecture.l_class->year+1] == 0){
 		r_lecture.l_subject = &populationParams->subjects[randomNumber(0,populationParams->subjectCount-1)];
 	}
-
+/**
+ * HER MALTE
+ */
 	if(r_lecture.l_subject->roomRequireLength > 0){
 		r_lecture.l_room = r_lecture.l_subject->roomRequire[randomNumber(0,r_lecture.l_subject->roomRequireLength-1)];
 	}else{
@@ -145,4 +149,3 @@ lecture randomLectureForClass(params *populationParams, class *curClass){
 
 	return r_lecture;
 }
-
