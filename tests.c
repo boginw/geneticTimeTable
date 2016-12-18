@@ -2,7 +2,7 @@
 
 int testConflicts(params *populationParams){
 
-    individual conflictTest2[2];
+    /*individual conflictTest2[2];
 
     conflictTest2[0].t[0].lectures[0].init = 1;
     conflictTest2[0].t[0].lectures[0].free = 0;
@@ -71,16 +71,17 @@ int testConflicts(params *populationParams){
 
     conflicts(&conflictTest2[0], 8);
 
-    /*printTimeTable(conflictTest2[0].t[0], populationParams->intervalLabels);
+    *//*printTimeTable(conflictTest2[0].t[0], populationParams->intervalLabels);
     printTimeTable(conflictTest2[0].t[1], populationParams->intervalLabels);
     printTimeTable(conflictTest2[0].t[2], populationParams->intervalLabels);
     printTimeTable(conflictTest2[0].t[3], populationParams->intervalLabels);
     printTimeTable(conflictTest2[0].t[4], populationParams->intervalLabels);
     printTimeTable(conflictTest2[0].t[5], populationParams->intervalLabels);
-    printf("Expected:  8, Conflicts: %2d\n", conflictTest2[0].conflicts);*/
+    printf("Expected:  8, Conflicts: %2d\n", conflictTest2[0].conflicts);*//*
 
 
-    return conflictTest2[0].conflicts == 2;
+    return conflictTest2[0].conflicts == 2;*/
+    return 0;
 }
 
 
@@ -101,78 +102,4 @@ int testIsEmpty(){
 	int arr1[] = {1,2,3,4,5};
 	int arr2[] = {0,0,0,0,0};
 	return !isEmpty(arr1, 5) && isEmpty(arr2, 5);
-}
-
-int testCountSequencedLectures(params *populationParams){
-    individual lectureTest[2];
-
-    int count;
-
-    lectureTest[0].t[0].lectures[0].init = 1;
-    lectureTest[0].t[0].lectures[0].free = 0;
-    lectureTest[0].t[0].lectures[1].init = 1;
-    lectureTest[0].t[0].lectures[1].free = 0;
-    lectureTest[0].t[0].lectures[2].init = 1;
-    lectureTest[0].t[0].lectures[2].free = 0;
-    lectureTest[0].t[0].lectures[3].init = 1;
-    lectureTest[0].t[0].lectures[3].free = 0;
-
-    lectureTest[0].t[1].lectures[0].init = 1;
-    lectureTest[0].t[1].lectures[0].free = 0;
-    lectureTest[0].t[1].lectures[1].init = 1;
-    lectureTest[0].t[1].lectures[1].free = 0;
-
-
-    lectureTest[0].t[0].lectures[0].l_class   =  &populationParams->classes[0];
-    lectureTest[0].t[0].lectures[0].l_subject = &populationParams->subjects[0];
-    lectureTest[0].t[0].lectures[0].l_datetime.dayOfWeek = 0;
-    lectureTest[0].t[0].lectures[0].l_datetime.hour = 0;
-    lectureTest[0].t[0].lectureLength = 1;
-
-    lectureTest[0].t[0].lectures[1].l_class   =  &populationParams->classes[0];
-    lectureTest[0].t[0].lectures[1].l_subject = &populationParams->subjects[0];
-    lectureTest[0].t[0].lectures[1].l_datetime.dayOfWeek = 0;
-    lectureTest[0].t[0].lectures[1].l_datetime.hour = 1;
-
-    lectureTest[0].t[0].lectures[2].l_class   =  &populationParams->classes[0];
-    lectureTest[0].t[0].lectures[2].l_subject = &populationParams->subjects[1];
-    lectureTest[0].t[0].lectures[2].l_datetime.dayOfWeek = 1;
-    lectureTest[0].t[0].lectures[2].l_datetime.hour = 0;
-
-    lectureTest[0].t[0].lectures[3].l_class   =  &populationParams->classes[0];
-    lectureTest[0].t[0].lectures[3].l_subject = &populationParams->subjects[1];
-    lectureTest[0].t[0].lectures[3].l_datetime.dayOfWeek = 1;
-    lectureTest[0].t[0].lectures[3].l_datetime.hour = 1;
-
-    lectureTest[0].t[0].lectureLength = 4;
-
-    lectureTest[0].t[1].lectures[0].l_class   =  &populationParams->classes[1];
-    lectureTest[0].t[1].lectures[0].l_subject = &populationParams->subjects[0];
-    lectureTest[0].t[1].lectures[0].l_datetime.dayOfWeek = 0;
-    lectureTest[0].t[1].lectures[0].l_datetime.hour = 0;
-
-    lectureTest[0].t[1].lectures[1].l_class   =  &populationParams->classes[1];
-    lectureTest[0].t[1].lectures[1].l_subject = &populationParams->subjects[1];
-    lectureTest[0].t[1].lectures[1].l_datetime.dayOfWeek = 0;
-    lectureTest[0].t[1].lectures[1].l_datetime.hour = 1;
-    lectureTest[0].t[1].lectureLength = 2;
-
-
-    lectureTest[0].t[0].lectures[0].l_room    =    &populationParams->rooms[0];
-    lectureTest[0].t[0].lectures[1].l_room    =    &populationParams->rooms[0];
-    lectureTest[0].t[0].lectures[2].l_room    =    &populationParams->rooms[1];
-    lectureTest[0].t[0].lectures[3].l_room    =    &populationParams->rooms[1];
-
-    lectureTest[0].t[1].lectures[0].l_room    =    &populationParams->rooms[0];
-    lectureTest[0].t[1].lectures[1].l_room    =    &populationParams->rooms[0];
-
-    lectureTest[0].t[0].lectures[0].l_teacher = &populationParams->teachers[0];
-    lectureTest[0].t[0].lectures[1].l_teacher = &populationParams->teachers[0];
-    lectureTest[0].t[0].lectures[2].l_teacher = &populationParams->teachers[1]; 
-    lectureTest[0].t[0].lectures[3].l_teacher = &populationParams->teachers[1];
-
-    lectureTest[0].t[1].lectures[0].l_teacher = &populationParams->teachers[1];
-    lectureTest[0].t[1].lectures[1].l_teacher = &populationParams->teachers[1];
-
-    return countSequencedLectures(&lectureTest[0].t[0], &count) == 2 && countSequencedLectures(&lectureTest[0].t[1], &count) == 0;
 }

@@ -9,7 +9,7 @@
 
 #define MAX_NAME_LENGTH   255
 #define MAX_LABEL_LENGTH   12
-#define MAX_YEAR            9
+#define MAX_YEAR           10
 
 #define MAX_SUBJECTS       20
 #define MAX_ROOMS          10
@@ -20,6 +20,7 @@
 
 #define SCHOOL_DAYS_YEAR  200
 #define WEEK_LENGTH         5
+#define MINUTES_IN_HOUR    60 
 #define MAX_LECTURES       45
 #define MUTATION_CHANCE     1
 #define MAX_MUTATIONS       7
@@ -28,6 +29,15 @@
 
 #define ROOM_CONFLICT       1
 #define TEACHER_CONFLICT    2
+
+
+#define FITNESS_FOR_TEACHERHOURS             100
+#define FITNESS_FOR_CONFLICTS                300
+#define FITNESS_FOR_SAME_TEACHER_SUBJECT     100
+#define FITNESS_FOR_CLASS_MIN_HOURS          20
+#define FITNESS_FOR_CLASS_SUBJECTS           100
+#define FITNESS_FOR_TEACHER_SUBJECT          100
+#define FITNESS_FOR_ROOM_REQ_SUBJECT         100
 
 /**
  * ASSUMPTIONS:
@@ -52,6 +62,7 @@ typedef struct class{
 
 /* Selve faget */
 typedef struct subject{
+	int   id;
     char  name[MAX_NAME_LENGTH]; /* navn på faget */
     int   perYear[MAX_YEAR]; /* timer krævet pr år */
     room* roomRequire[MAX_ROOMS]; /* array af pointers til kompatible rum, hvis tomt klasse lokale */
@@ -61,12 +72,13 @@ typedef struct subject{
 
 /* Selve læren */
 typedef struct teacher{
+	int      id;
     char     name[MAX_NAME_LENGTH]; /* Lærens navn */
     int      isClassleader; /* boolean klasselærer eller ej */
     class*   leaderOfClass; /* pointer til klassen de er klasselærer for */
     subject* canTeach[MAX_SUBJECTS]; /* array af pointers til kompatible fag */
     int      canTeachLength; /* Antal pointers i canTeach array'et */
-    int      maxWorkHoursPerDay; /* Maks antal arbejdstimer pr dag */
+    int      maxWorkHours; /* Maks antal arbejdstimer pr uge */
 } teacher;
 
 /* Timestamp
@@ -83,7 +95,6 @@ typedef struct datetime{
 typedef struct lecture{
     int     init; /* boolean værdi afgører om den er i et skema eller ej */
     int     free; /* hvorvidt om det er en fri time */
-    int     conflictFlag; /* */
     int     conflictRoom;
     int     conflictTeacher;
     room    *l_room; /* pointer til det rum selve lektionen foregår i */
@@ -221,9 +232,11 @@ int main(int argc, char const *argv[]){
     	printf("conflicts:              %s\n", testConflicts(&populationParams) ? "Passed" : "Failed");
     	printf("randomNumber:           %s\n", testRandomNumber() ? "Passed" : "Failed");
     	printf("isEmpty:                %s\n", testIsEmpty() ? "Passed" : "Failed");
-    	printf("countSequencedLectures: %s\n", testCountSequencedLectures(&populationParams) ? "Passed" : "Failed");
     	exit(0);
     }
+
+
+
 
 
     generateInitialPopulation(&populationParams);
@@ -268,7 +281,7 @@ int main(int argc, char const *argv[]){
                 curProg++;
             }
 
-            printf("%3d%% [%-50s] conflicts: %3d | fitness: %9d | generation: %6d/%-6d",
+            printf("%3d%% [%-50s] confl: %3d | fit: %9d | gen: %6d/%-6d",
                 (int) ((((float) j) / NUM_OF_GEN) * 100),
                 progressLine,
                 populationParams.individuals[0].conflicts,
@@ -277,7 +290,7 @@ int main(int argc, char const *argv[]){
                 NUM_OF_GEN
             );
 
-            for (i = 0; i < 122; i++){
+            for (i = 0; i < 200; i++){
                 printf("\b");
             }
         }
@@ -285,7 +298,7 @@ int main(int argc, char const *argv[]){
         if(populationParams.individuals[0].conflicts == 0){
         	lowestIndividual = populationParams.individuals[0];
 
-			conflicts(&lowestIndividual, populationParams.classCount);
+			conflictsAndPreperation(&lowestIndividual, &populationParams);
 			if(lowestIndividual.conflicts == 0){
         		break;
 			}
@@ -327,9 +340,9 @@ void selection(params *populationParams){
                 roulette[p] = i;
             }
         }
+
         rouletteCount += prop;
     }
-
 
     for(i=0; i < MAX_INDIVIDUALS-1; i++){
         rouletteSelector = roulette[randomNumber(0,99)];
@@ -346,10 +359,15 @@ void selection(params *populationParams){
 
 void calcFitnessOnPopulation(params *populationParams){
     int i;
-    populationParams->akkConflicts = 0;
+    populationParams->akkConflicts     = 0;
+    populationParams->akkFitnessPoints = 0;
     for(i = 0; i < populationParams->tempPopulationCount-1; i++){
-        conflicts(&populationParams->tempPopulation[i], populationParams->classCount);
-        populationParams->akkConflicts += populationParams->tempPopulation[i].conflicts;
+
+		conflictsAndPreperation(&populationParams->tempPopulation[i], populationParams);
+        populationParams->akkConflicts     += populationParams->tempPopulation[i].conflicts;
+    	populationParams->akkFitnessPoints += populationParams->tempPopulation[i].fitness;
+
+
         if(populationParams->tempPopulation[i].conflicts > populationParams->biggestConflicts){
             populationParams->biggestConflicts = populationParams->tempPopulation[i].conflicts;
         }
@@ -387,7 +405,7 @@ void crossoverPopulation(params *populationParams){
                     &populationParams->childrens[i+1],
                     &populationParams->individuals[i],
                     &populationParams->individuals[i+1],
-                    populationParams->classCount
+                    populationParams
                 );
         countChildren++;
     }

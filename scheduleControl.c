@@ -4,93 +4,6 @@ int fitness(individual ind){
 	return 0;
 }
 
-/**
- * Counts conflicts of rooms and teachers in a single individuals
- * @param ind				individuals
- * @param classCount amount of classes
- */
-void conflicts(individual *ind, int classCount){
-	int class1,   class2,
-	    lecture1, lecture2,
-	    day,      hour,
-	    conflicts = 0;
-
-
-	/*printf("\n");*/
-	for (class1 = 0; class1 < classCount; class1++){
-		qsort(&ind->t[class1], ind->t[class1].lectureLength, sizeof(lecture), dayHourQsort);
-	}
-
-	for (class1 = 0; class1 < classCount; class1++){
-		for(lecture1 = 0; lecture1 < ind->t[class1].lectureLength; lecture1++){
-			ind->t[class1].lectures[lecture1].conflictFlag    = 0;
-			ind->t[class1].lectures[lecture1].conflictTeacher = 0;
-			ind->t[class1].lectures[lecture1].conflictRoom    = 0;
-		}
-	}
-
-	for (class1 = 0; class1 < classCount; class1++){
-		for(lecture1 = 0; lecture1 < ind->t[class1].lectureLength; lecture1++){
-
-			day  = ind->t[class1].lectures[lecture1].l_datetime.dayOfWeek;
-	        hour = ind->t[class1].lectures[lecture1].l_datetime.hour;
-
-			/*printf("Lecture #%d => day:%d hour:%d\n", lecture1, ind->t[class1].lectures[lecture1].l_datetime.dayOfWeek, hour); */
-
-			/* Don't check empty lectures */
-			if(ind->t[class1].lectures[lecture1].init == 1){
-
-
-		        if(class1 + 1 != classCount){
-		            
-					for(class2 = class1 + 1; class2 < classCount; class2++){
-
-						/* Foreach lecture in other classes where day is less or equal to the day */
-						for(
-							lecture2 = 0; 
-							lecture2 < ind->t[class2].lectureLength &&
-								ind->t[class2].lectures[lecture2].l_datetime.dayOfWeek <= day;
-							lecture2++
-						){
-
-							/* If same day and hour */
-							if(ind->t[class2].lectures[lecture2].l_datetime.dayOfWeek == day && 
-									ind->t[class2].lectures[lecture2].l_datetime.hour == hour){
-
-		            			if(ind->t[class2].lectures[lecture2].l_room == ind->t[class1].lectures[lecture1].l_room){
-
-		            				/*printf("Same room:    %d==%d\n", class1,class2);*/
-
-			            			ind->t[class1].lectures[lecture1].conflictRoom = 1;
-			            			ind->t[class2].lectures[lecture2].conflictRoom = 1;
-		            			}
-
-		            			if(ind->t[class2].lectures[lecture2].l_teacher == ind->t[class1].lectures[lecture1].l_teacher){
-
-		            				/*printf("Same teacher: %d==%d, %20s==%-20s\n", class1,class2,ind->t[class2].lectures[lecture2].l_teacher->name, ind->t[class1].lectures[lecture1].l_teacher->name);*/
-			            			ind->t[class1].lectures[lecture1].conflictTeacher = 1;
-			            			ind->t[class2].lectures[lecture2].conflictTeacher = 1;
-		            			}
-							}
-						}
-			        }
-		    	}
-
-		    	if(ind->t[class1].lectures[lecture1].conflictRoom || ind->t[class1].lectures[lecture1].conflictTeacher){
-			    	/*printf("%d %d\n", ind->t[class1].lectures[lecture1].conflictRoom, ind->t[class1].lectures[lecture1].conflictTeacher);*/
-		    	}
-
-		        conflicts += 
-		        	ind->t[class1].lectures[lecture1].conflictRoom + 
-		        	ind->t[class1].lectures[lecture1].conflictTeacher;
-	        }
-		}
-
-	}
-		/*printf("%d\n", conflicts);*/
-
-	ind->conflicts = conflicts;
-}
 
 /**
  * Returns count of dublicates in an array
@@ -149,9 +62,13 @@ individual randomIndividual(params *populationParams){
 		r_individual.t[c].forClass = &populationParams->classes[c];
 		/* Get all the required hours for class */
 		for (s = 0; s < populationParams->subjectCount; s++){
-		    hoursPerWeek[s] = ceil(
-		    	populationParams->subjects[s].perYear[populationParams->classes[c].year] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH)
-		    );
+			if(populationParams->subjects[s].perYear[populationParams->classes[c].year] > 0){
+			    hoursPerWeek[s] = ceil(
+			    	populationParams->subjects[s].perYear[populationParams->classes[c].year] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH)
+			    );	
+			}else{
+				hoursPerWeek[s] = 0;
+			}
 		  /*  if(strcmp(classes[c].name, "1B") == 0 && hoursPerWeek[s] > 0){
 		    	 printf("%s skal have %d antal timer i %s om ugen hvilket er %d om året\n", classes[c].name, hoursPerWeek[s], subjects[s].name, subjects[s].perYear[classes[c].year]);
 			}*/
@@ -178,7 +95,7 @@ individual randomIndividual(params *populationParams){
 		qsort(&r_individual.t[c], MAX_LECTURES, sizeof(lecture), dayHourQsort);
 	}
 
-	conflicts(&r_individual,populationParams->classCount);
+	conflictsAndPreperation(&r_individual, populationParams);
 
 	free(hoursPerWeek);
 	return r_individual;

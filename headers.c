@@ -41,7 +41,7 @@ char *initials(char *name);
 void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]);
 
 int fitness(individual ind);
-void conflicts(individual *ind, int classCount);
+void conflictsAndPreperation(individual *ind, params *populationParams);
 int dublicateCount(const void *items, const size_t numberOfItems, const size_t itemSize);
 int conflictsQsort(const void * a, const void * b);
 individual randomIndividual(params *populationParams);
@@ -50,4 +50,4 @@ int lectureOnDateTime(timetable t, int day, int hour);
 
 int dayHourQsort(const void * a, const void * b);
 
-int countSequencedLectures(timetable *t, int *lectureCount);
+int isSameLectureSequent(lecture *l1, lecture *l2);

@@ -47,6 +47,7 @@ int init(params *populationParams){
                 populationParams->roomCount +=1;
             }else if(strcmp(lastType,"SUBJECT") == 0){
                 populationParams->subjects[populationParams->subjectCount] = parseSubject(buffer, populationParams->rooms, populationParams->roomCount);
+                populationParams->subjects[populationParams->subjectCount].id = populationParams->subjectCount;
                 populationParams->subjectCount +=1;
             }else if(strcmp(lastType,"CLASS") == 0){
                 res = sscanf(buffer," %[^,],%[^,],%d ",
@@ -71,7 +72,7 @@ int init(params *populationParams){
                     &populationParams->teachers[populationParams->teacherCount].isClassleader,
                     shortBuffer,
                     inlineBuffer,
-                    &populationParams->teachers[populationParams->teacherCount].maxWorkHoursPerDay
+                    &populationParams->teachers[populationParams->teacherCount].maxWorkHours
                 );
 
                 populationParams->teachers[populationParams->teacherCount].leaderOfClass =
@@ -85,7 +86,9 @@ int init(params *populationParams){
                         populationParams->subjectCount
                     );
 
-                populationParams->teacherCount+=1;
+                populationParams->teachers[populationParams->teacherCount].id = populationParams->teacherCount;
+
+                populationParams->teacherCount += 1;
             }else if(strcmp(lastType,"TIMEINTERVALS") == 0){
                 res = sscanf(buffer," %s ",
                     populationParams->intervalLabels[labelCounter++]
@@ -231,7 +234,7 @@ subject parseSubject(char *line, room* rooms, int roomCount){
             returnSubject.perYear[i] = WEEK_LENGTH;
         }
     }else{
-        len = strlen(hoursBuffer);
+        /*len = strlen(hoursBuffer);
         for (i = 0; i < len; i++){
             if(hoursBuffer[i] != ','){
                 curSub[curSubI] = hoursBuffer[i];
@@ -246,10 +249,32 @@ subject parseSubject(char *line, room* rooms, int roomCount){
                 curSubI = 0;
                 returnSubject.perYear[year++] = atoi(curSub);
             }
-        }
+        }*/
 
-
+        sscanf(hoursBuffer,"%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+            &returnSubject.perYear[0],
+            &returnSubject.perYear[1],
+            &returnSubject.perYear[2],
+            &returnSubject.perYear[3],
+            &returnSubject.perYear[4],
+            &returnSubject.perYear[5],
+            &returnSubject.perYear[6],
+            &returnSubject.perYear[7],
+            &returnSubject.perYear[8],
+            &returnSubject.perYear[9]
+        );
         returnSubject.roomRequireLength = findRoomsFromString(subjectBuffer,returnSubject.roomRequire, rooms, roomCount);
+        returnSubject.totalHours = 
+            returnSubject.perYear[0]+
+            returnSubject.perYear[1]+
+            returnSubject.perYear[2]+
+            returnSubject.perYear[3]+
+            returnSubject.perYear[4]+
+            returnSubject.perYear[5]+
+            returnSubject.perYear[6]+
+            returnSubject.perYear[7]+
+            returnSubject.perYear[8]+
+            returnSubject.perYear[9];
     }
     free(subjectBuffer);
     free(hoursBuffer);
