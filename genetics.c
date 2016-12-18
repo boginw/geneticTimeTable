@@ -247,7 +247,6 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
     /* Save acc null hours */
     ind->nullHours = nullHoursAcc;
 
-
     free(teacherTotalHours);
     free(teacherPreperation);
 }
@@ -427,22 +426,31 @@ void setFitness(params *populationParams){
     float value1, value2, res_f;
     double mellem_resultat;*/
 
-    int i, fitnessRatio;
+    int i, fitnessRatio, nullHoursRatio;
     int accFitness = 0;
     int accNullHours = 0;
     int maxConflicts = populationParams->biggestConflicts;
+    int maxNullHours = populationParams->biggestNullHours;
 
 
     for (i = 0; i < populationParams->tempPopulationCount; i++){
-        accFitness += (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
-        accNullHours += (1);
+        accFitness   += (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
+        accNullHours += (((maxNullHours - populationParams->tempPopulation[i].nullHours) / (float) maxNullHours)) * 100;
     }
 
     for (i = 0; i < populationParams->tempPopulationCount; i++){
         fitnessRatio = (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
         fitnessRatio = fitnessRatio / (float) accFitness * FITNESS_FOR_CONFLICTS;
+
+
+        nullHoursRatio = (((maxNullHours - populationParams->tempPopulation[i].nullHours) / (float) maxNullHours)) * 100;
+        nullHoursRatio = nullHoursRatio / (float) accNullHours * FITNESS_FOR_NULL_HOURS;
+
         populationParams->tempPopulation[i].fitness += (float) fitnessRatio;
+        populationParams->tempPopulation[i].fitness += (float) nullHoursRatio;
         populationParams->akkFitnessPoints += (float) fitnessRatio;
+        populationParams->akkFitnessPoints += (float) nullHoursRatio;
+
         if(fitnessRatio < 0){
             printf("An error should be fixed... To dangorous to continue.\n");
             exit(0);

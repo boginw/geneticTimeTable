@@ -14,7 +14,7 @@
 #define MAX_SUBJECTS       20
 #define MAX_ROOMS          10
 #define MAX_CLASSES        10
-#define MAX_TEACHERS       10
+#define MAX_TEACHERS       20
 #define MAX_TIMETABLES     10
 #define MAX_INDIVIDUALS    35
 
@@ -23,23 +23,23 @@
 #define MINUTES_IN_HOUR    60 
 #define MAX_LECTURES       45
 #define MUTATION_CHANCE     5
-#define MAX_MUTATIONS      10
+#define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
 #define NUM_OF_GEN      20000 /* Max amount of generations to run for */
 
 #define ROOM_CONFLICT       1
 #define TEACHER_CONFLICT    2
 
-#define KILL_SHIT_GEN 2000
+#define KILL_SHIT_GEN 3000
 
-
-#define FITNESS_FOR_TEACHERHOURS             100
+#define FITNESS_FOR_TEACHERHOURS             1000
 #define FITNESS_FOR_CONFLICTS                300000
+#define FITNESS_FOR_NULL_HOURS               600000
 #define FITNESS_FOR_SAME_TEACHER_SUBJECT     100
-#define FITNESS_FOR_CLASS_MIN_HOURS          200
-#define FITNESS_FOR_CLASS_SUBJECTS           100
-#define FITNESS_FOR_TEACHER_SUBJECT          100
-#define FITNESS_FOR_ROOM_REQ_SUBJECT         100
+#define FITNESS_FOR_CLASS_MIN_HOURS          20000
+#define FITNESS_FOR_CLASS_SUBJECTS           1000
+#define FITNESS_FOR_TEACHER_SUBJECT          1000
+#define FITNESS_FOR_ROOM_REQ_SUBJECT         1000
 
 /**
  * ASSUMPTIONS:
@@ -143,6 +143,7 @@ typedef struct params{
     long int akkConflicts;
     long int nullHoursAcc;
     int biggestConflicts;
+    int biggestNullHours;
 
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH];
 } params;
@@ -282,7 +283,7 @@ int main(int argc, char const *argv[]){
             lastBestGen         = j;
         }
 
-        if(j % 20 == 0){
+        if(j % 50 == 0){
             if(curProg*2 < (int) ((((float) j) / NUM_OF_GEN) * 100) ){
                 prepend(progressLine, "=");
                 curProg++;
@@ -323,14 +324,18 @@ int main(int argc, char const *argv[]){
     	   "Generations: %11d\n"
     	   "Start fitness: %9d\n"
     	   "Start conflicts: %7d\n"
+    	   "Start null hours: %6d\n"
     	   "-------------------------\n"
     	   "Final fitness: %9d\n"
-    	   "Final conflicts: %7d\n",
+    	   "Final conflicts: %7d\n"
+    	   "Final null hours: %6d\n",
     	   j,
     	   startFitness,
     	   startConflict,
+    	   startConflict,
     	   bestIndividual.fitness,
-    	   bestIndividual.conflicts
+    	   bestIndividual.conflicts,
+    	   bestIndividual.nullHours
     );
 
     free(populationParams.rooms);
@@ -382,16 +387,22 @@ void calcFitnessOnPopulation(params *populationParams){
     populationParams->akkConflicts     = 0;
     populationParams->akkFitnessPoints = 0;
     populationParams->biggestConflicts = 0;
+    populationParams->nullHoursAcc     = 0;
 
     for(i = 0; i < populationParams->tempPopulationCount; i++){
 
 		conflictsAndPreperation(&populationParams->tempPopulation[i], populationParams);
         populationParams->akkConflicts     += populationParams->tempPopulation[i].conflicts;
     	populationParams->akkFitnessPoints += populationParams->tempPopulation[i].fitness;
+    	populationParams->nullHoursAcc     += populationParams->tempPopulation[i].nullHours;
 
 
         if(populationParams->tempPopulation[i].conflicts > populationParams->biggestConflicts){
             populationParams->biggestConflicts = populationParams->tempPopulation[i].conflicts;
+        }
+
+        if(populationParams->tempPopulation[i].nullHours > populationParams->biggestNullHours){
+            populationParams->biggestNullHours = populationParams->tempPopulation[i].nullHours;
         }
     }
     setFitness(populationParams);
