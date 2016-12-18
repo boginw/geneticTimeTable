@@ -60,13 +60,13 @@ Class time,[],ONCE_A_WEEK
 Verner Frank,1,1A,[Class time;Physical Activity;Math;Geography;Biology],37
 Finn Storm,0,0,[Physical Activity;Social Studies;Basic Science;History],37
 Thorbjorn Toft,1,2B,[Class time;Physical Activity;Danish;English;Christianity],37
-Johan Rohde,1,2A,[Class time;Physical Activity;French;Visual Arts;Sports],37
+Johan Rohde,1,2A,[Class time;Physical Activity;French;Visual Arts;Design;Sports],37
 Sofus Eskildsen,1,1B,[Class time;Physical Activity;Math;Music;Physics/Chemistry],37
 Helge Eriksen,0,0,[Physical Activity;Geography;Biology;Social Studies],37
 Allan Balle,0,0,[Physical Activity;Basic Science;History;Danish],37
 Vagn Kofod,0,0,[Physical Activity;English;Christianity;French],37
-Jimmy Pallesen,1,9C,[Class time;Physical Activity;Visual Arts;Sports;Music],37
-Ib Matthiesen,0,0,[Physical Activity;Danish;English;Physics/Chemistry],37
+Jimmy Pallesen,1,9C,[Class time;Physical Activity;Visual Arts;Design;Sports;German],37
+Ib Matthiesen,0,0,[Physical Activity;German;English;Physics/Chemistry],37
 
 ### TIMEINTERVALS ###
 8:00,8:45
