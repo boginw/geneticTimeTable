@@ -85,7 +85,6 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
         day,      hour, 
         teacherIndex,
         tempMaxHours,
-        accumulativeCorrectSubject,
         totalLectures = 0,
         conflicts = 0;
 
@@ -102,6 +101,8 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
     int curYear;
     int tempSubjectSum = 0;
     int requiredSubjectCounter = 0;
+    int accumulativeCorrectSubject = 0;
+    int nullHoursAcc = 0;
 
     int *teacherTotalHours  = calloc(populationParams->teacherCount, sizeof(int));
     int *teacherPreperation = calloc(populationParams->teacherCount, sizeof(int));
@@ -127,7 +128,7 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
 
         /* Sum total lectures for subject for class per day */
         for (subjectIndex = 0; subjectIndex < populationParams->subjectCount; subjectIndex++){
-            tempSubjectSum += ceil(populationParams->subjects[subjectIndex].perYear[curYear] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
+            tempSubjectSum += (int) ceil(populationParams->subjects[subjectIndex].perYear[curYear] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
         }
 
         for(lecture1 = 0; lecture1 < ind->t[class1].lectureLength; lecture1++){
@@ -168,6 +169,16 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
                     /* Last lecture is not the same, so add hour */
                     teacherPreperation[ind->t[class1].lectures[lecture1].l_teacher->id] += 10;
                 }
+
+
+                /* If next lecture is more than 1 hour away */
+                if(lecture1 + 1 != ind->t[class1].lectureLength && 
+                        ind->t[class1].lectures[lecture1].l_datetime.dayOfWeek == ind->t[class1].lectures[lecture1 + 1].l_datetime.dayOfWeek &&
+                        ind->t[class1].lectures[lecture1].l_datetime.hour + 1  != ind->t[class1].lectures[lecture1 + 1].l_datetime.hour){
+
+                    nullHoursAcc += 1;
+                }
+
 
                 /* Don't check last timetable for conflicts */
                 if(class1 + 1 != populationParams->classCount){
@@ -232,6 +243,10 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
 
     /* Save conflicts */
     ind->conflicts = conflicts;
+
+    /* Save acc null hours */
+    ind->nullHours = nullHoursAcc;
+
 
     free(teacherTotalHours);
     free(teacherPreperation);
@@ -413,19 +428,26 @@ void setFitness(params *populationParams){
     double mellem_resultat;*/
 
     int i, fitnessRatio;
-    int akk = 0;
-    int maxConflicts = populationParams->tempPopulation[populationParams->tempPopulationCount - 1].conflicts;
+    int accFitness = 0;
+    int accNullHours = 0;
+    int maxConflicts = populationParams->biggestConflicts;
+
 
     for (i = 0; i < populationParams->tempPopulationCount; i++){
-        akk += (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
+        accFitness += (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
+        accNullHours += (1);
     }
 
     for (i = 0; i < populationParams->tempPopulationCount; i++){
         fitnessRatio = (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
-        fitnessRatio = fitnessRatio / (float) akk * FITNESS_FOR_CONFLICTS;
+        fitnessRatio = fitnessRatio / (float) accFitness * FITNESS_FOR_CONFLICTS;
         populationParams->tempPopulation[i].fitness += (float) fitnessRatio;
+        populationParams->akkFitnessPoints += (float) fitnessRatio;
+        if(fitnessRatio < 0){
+            printf("An error should be fixed... To dangorous to continue.\n");
+            exit(0);
+        }
     }
-
     /*int i, biggest;
     if(populationParams->biggestConflicts > 0){
         biggest = populationParams->biggestConflicts;
@@ -568,59 +590,6 @@ void setFitness(params *populationParams){
                     break;
                 }
                 if (populationParams->tempPopulation[i].t[j].lectures[k].l_subject->perYear[klasse] != 0) {
-                    count1++;
-                }
-            }
-            count2 += populationParams->tempPopulation[i].t[j].lectureLength;
-        }
-        value1 = (float)count1;
-        value2 = (float)count2;
-        populationParams->tempPopulation[i].fitness += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
-        populationParams->akkFitnessPoints += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
-    }*/
-
-    /* LF - Udregn en fitness-værdi baseret på at alle lærere underviser i fag som de kan */
-    /*for (i = 0; i < populationParams->tempPopulationCount; i++) {
-        count1 = 0;
-        count2 = 0;
-        for (j = 0; j < populationParams->classCount; j++) {
-            for (k = 0; k < populationParams->tempPopulation[i].t[j].lectureLength; k++) {
-                if (populationParams->tempPopulation[i].t[j].lectures[k].init != 1) {
-                    break;
-                }
-                if (populationParams->tempPopulation[i].t[j].lectures[k].l_teacher->canTeachLength != 0) {
-                    for (l = 0; l < populationParams->tempPopulation[i].t[j].lectures[k].l_teacher->canTeachLength; l++) {
-                        if (strcmp(populationParams->tempPopulation[i].t[j].lectures[k].l_teacher->canTeach[l]->name, populationParams->tempPopulation[i].t[j].lectures[k].l_subject->name) == 0) {
-                            count1++;
-                            break;
-                        }
-                    }
-                }
-            }
-            count2 += populationParams->tempPopulation[i].t[j].lectureLength;
-        }
-        value1 = (float)count1;
-        value2 = (float)count2;
-        populationParams->tempPopulation[i].fitness += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
-        populationParams->akkFitnessPoints += (int) ((value1 / value2) * FLOAT_MULTIPLIER);
-    }*/
-
-    /* FLo - Udregn en fitness-værdi baseret på at alle lokaler understøtter de fag der undervises */
-    /*for (i = 0; i < populationParams->tempPopulationCount; i++) {
-        count1 = 0;
-        count2 = 0;
-        for (j = 0; j < populationParams->classCount; j++) {
-            for (k = 0; k < populationParams->tempPopulation[i].t[j].lectureLength; k++) {
-                if (populationParams->tempPopulation[i].t[j].lectures[k].init != 1) {
-                    break;
-                }
-                if (populationParams->tempPopulation[i].t[j].lectures[k].l_subject->roomRequireLength != 0) {
-                    for (l = 0; l < populationParams->tempPopulation[i].t[j].lectures[k].l_subject->roomRequireLength; l++) {
-                        if (&populationParams->tempPopulation[i].t[j].lectures[k].l_subject->roomRequire[l] == &populationParams->tempPopulation[i].t[j].lectures[k].l_room) {
-                            count1++;
-                        }
-                    }
-                } else {
                     count1++;
                 }
             }

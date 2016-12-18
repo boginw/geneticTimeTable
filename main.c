@@ -22,19 +22,21 @@
 #define WEEK_LENGTH         5
 #define MINUTES_IN_HOUR    60 
 #define MAX_LECTURES       45
-#define MUTATION_CHANCE     1
-#define MAX_MUTATIONS       7
+#define MUTATION_CHANCE     5
+#define MAX_MUTATIONS      10
 #define FREE_LECTURE_CH    30
-#define NUM_OF_GEN     20000 /* Max amount of generations to run for */
+#define NUM_OF_GEN      20000 /* Max amount of generations to run for */
 
 #define ROOM_CONFLICT       1
 #define TEACHER_CONFLICT    2
 
+#define KILL_SHIT_GEN 2000
+
 
 #define FITNESS_FOR_TEACHERHOURS             100
-#define FITNESS_FOR_CONFLICTS                300
+#define FITNESS_FOR_CONFLICTS                300000
 #define FITNESS_FOR_SAME_TEACHER_SUBJECT     100
-#define FITNESS_FOR_CLASS_MIN_HOURS          20
+#define FITNESS_FOR_CLASS_MIN_HOURS          200
 #define FITNESS_FOR_CLASS_SUBJECTS           100
 #define FITNESS_FOR_TEACHER_SUBJECT          100
 #define FITNESS_FOR_ROOM_REQ_SUBJECT         100
@@ -118,6 +120,7 @@ typedef struct individual{
     int fitness; /* fitness værdien for individet */
     int conflicts; /* antal konflikter på tværs af skolen i individet. */
     int mutations; /* antal mutationer foretaget */
+    int nullHours;
 } individual;
 
 typedef struct params{
@@ -136,8 +139,9 @@ typedef struct params{
     int individualsCount;
     int childrensCount;
     int tempPopulationCount;
-    int akkFitnessPoints;
-    int akkConflicts;
+    long int akkFitnessPoints;
+    long int akkConflicts;
+    long int nullHoursAcc;
     int biggestConflicts;
 
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH];
@@ -164,7 +168,6 @@ int main(int argc, char const *argv[]){
     params populationParams;
     int i,j; /* iteration counters */
     int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
-    int lowestConflict = -1, highestConflict = 0, startlowconflict, starthighconflict;
 
     char progressLine[50] = ">";
     int curProg = 1;
@@ -173,9 +176,14 @@ int main(int argc, char const *argv[]){
 
 
     int lastBestGen = 0;
+    individual bestIndividual;
+    int highestFitnessScore = 0;
 
+    /* Stats */
+    int startConflict;
+    int startFitness;
+    int killingCount = 0;
 
-    individual lowestIndividual;
 
     populationParams.rooms          = calloc(MAX_ROOMS,           sizeof(room));
     populationParams.subjects       = calloc(MAX_SUBJECTS,        sizeof(subject));
@@ -235,17 +243,12 @@ int main(int argc, char const *argv[]){
     	exit(0);
     }
 
-
-
-
-
     generateInitialPopulation(&populationParams);
-    qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), conflictsQsort);
+    qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), fitnessQsort);
     printf("First conflicts: %3d\n", populationParams.individuals[0].conflicts);
     /* Conflicts preview */
-    starthighconflict = populationParams.individuals[MAX_INDIVIDUALS-1].conflicts;
-    startlowconflict  = populationParams.individuals[0].conflicts;
-
+    startConflict = populationParams.individuals[0].conflicts;
+    startFitness  = populationParams.individuals[0].fitness;
 
     for (j = 0; j < NUM_OF_GEN; j++){
         crossoverPopulation(&populationParams);
@@ -253,26 +256,30 @@ int main(int argc, char const *argv[]){
         mutatePopulation(&populationParams);
         calcFitnessOnPopulation(&populationParams);
         selection(&populationParams);
-        if(lastBestGen + 2000 < j){
-            printf("new \n");
-            for (i = 0 ; i < MAX_INDIVIDUALS-5; i++){
-                populationParams.individuals[MAX_INDIVIDUALS-1-i] = randomIndividual(&populationParams);
+
+        /* If no progress in x generations, generate new random individual */
+        if(lastBestGen + KILL_SHIT_GEN < j){
+			printf("#%d: Killing worst individuals",++killingCount); 
+            for (i = 0; i < 200; i++){
+           		printf(" ");
             }
+            printf("\n");
+            for (i = 0 ; i < MAX_INDIVIDUALS - 5; i++){
+                populationParams.individuals[MAX_INDIVIDUALS - 1 - i] = randomIndividual(&populationParams);
+            }
+
             lastBestGen = j;
         }
-        /* Replace shit populationParams.individuals */
-        for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
+
+        /* Replace shit individuals */
+        /*for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
             populationParams.individuals[i] = randomIndividual(&populationParams);
-        }
+        }*/
 
-        if(populationParams.individuals[0].conflicts < lowestConflict || lowestConflict == -1){
-            lowestConflict = populationParams.individuals[0].conflicts;
-            lowestIndividual = populationParams.individuals[0];
-            lastBestGen = j;
-        }
-
-        if(populationParams.individuals[MAX_INDIVIDUALS-1].conflicts > highestConflict){
-            highestConflict = populationParams.individuals[MAX_INDIVIDUALS-1].conflicts;
+        if(populationParams.individuals[0].fitness > highestFitnessScore){
+            highestFitnessScore = populationParams.individuals[0].fitness;
+            bestIndividual      = populationParams.individuals[0];
+            lastBestGen         = j;
         }
 
         if(j % 20 == 0){
@@ -281,7 +288,7 @@ int main(int argc, char const *argv[]){
                 curProg++;
             }
 
-            printf("%3d%% [%-50s] confl: %3d | fit: %9d | gen: %6d/%-6d",
+            printf("%3d%% [%-50s] confl: %3d | fit: %7d | gen: %6d/%-6d",
                 (int) ((((float) j) / NUM_OF_GEN) * 100),
                 progressLine,
                 populationParams.individuals[0].conflicts,
@@ -295,23 +302,36 @@ int main(int argc, char const *argv[]){
             }
         }
 
-        if(populationParams.individuals[0].conflicts == 0){
-        	lowestIndividual = populationParams.individuals[0];
+        /*if(populationParams.individuals[0].conflicts == 0){
+        	bestIndividual = populationParams.individuals[0];
 
-			conflictsAndPreperation(&lowestIndividual, &populationParams);
-			if(lowestIndividual.conflicts == 0){
+			conflictsAndPreperation(&bestIndividual, &populationParams);
+			if(bestIndividual.conflicts == 0){
         		break;
 			}
-        }
+        }*/
     }
 
     /* Uncomment for demo of schedules */
     for (i = 0; i < populationParams.classCount; i++){
-        printf("\nClass %s, conflicts: %d\n", lowestIndividual.t[i].forClass->name, lowestIndividual.t[i].numOfConflicts);
-        printTimeTable(lowestIndividual.t[i], populationParams.intervalLabels);
+        printf("\nClass %s, conflicts: %d\n", bestIndividual.t[i].forClass->name, bestIndividual.t[i].numOfConflicts);
+        printTimeTable(bestIndividual.t[i], populationParams.intervalLabels);
     }
 
-    printf("Generations: %d\nStart High: %d\nStart Low: %d\nLowest: %d\nHighest: %d", j, starthighconflict, startlowconflict, lowestConflict, highestConflict);
+    printf("\nResults:\n"
+    	   "-------------------------\n"
+    	   "Generations: %11d\n"
+    	   "Start fitness: %9d\n"
+    	   "Start conflicts: %7d\n"
+    	   "-------------------------\n"
+    	   "Final fitness: %9d\n"
+    	   "Final conflicts: %7d\n",
+    	   j,
+    	   startFitness,
+    	   startConflict,
+    	   bestIndividual.fitness,
+    	   bestIndividual.conflicts
+    );
 
     free(populationParams.rooms);
     free(populationParams.subjects);
@@ -334,7 +354,7 @@ void selection(params *populationParams){
             populationParams->akkFitnessPoints = 1;
         }
 
-        prop = (((float)populationParams->tempPopulation[i].fitness) / ((float)populationParams->akkFitnessPoints))*100;
+        prop = (((float)populationParams->tempPopulation[i].fitness) / (populationParams->akkFitnessPoints)) * 100;
         if(prop > 0){
             for(p = rouletteCount; p < rouletteCount+prop; p++){
                 roulette[p] = i;
@@ -345,13 +365,13 @@ void selection(params *populationParams){
     }
 
     for(i=0; i < MAX_INDIVIDUALS-1; i++){
-        rouletteSelector = roulette[randomNumber(0,99)];
+        rouletteSelector = roulette[randomNumber(0,rouletteCount)];
         populationParams->individuals[i] = populationParams->tempPopulation[rouletteSelector];
     }
     memset(populationParams->tempPopulation, '\0', (populationParams->tempPopulationCount*sizeof(individual)));
     populationParams->tempPopulationCount = 0;
     populationParams->akkFitnessPoints    = 0;
-    qsort(populationParams->individuals, populationParams->individualsCount, sizeof(individual), conflictsQsort);
+    qsort(populationParams->individuals, populationParams->individualsCount, sizeof(individual), fitnessQsort);
     free(roulette);
 }
 
@@ -361,7 +381,9 @@ void calcFitnessOnPopulation(params *populationParams){
     int i;
     populationParams->akkConflicts     = 0;
     populationParams->akkFitnessPoints = 0;
-    for(i = 0; i < populationParams->tempPopulationCount-1; i++){
+    populationParams->biggestConflicts = 0;
+
+    for(i = 0; i < populationParams->tempPopulationCount; i++){
 
 		conflictsAndPreperation(&populationParams->tempPopulation[i], populationParams);
         populationParams->akkConflicts     += populationParams->tempPopulation[i].conflicts;

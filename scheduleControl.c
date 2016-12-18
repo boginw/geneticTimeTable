@@ -40,6 +40,13 @@ int conflictsQsort(const void * a, const void * b){
 	const individual *oa = a;
 	const individual *ob = b;
 
+	return (ob->conflicts - oa->conflicts);
+}
+
+int fitnessQsort(const void * a, const void * b){
+	const individual *oa = a;
+	const individual *ob = b;
+
 	return (ob->fitness - oa->fitness);
 }
 

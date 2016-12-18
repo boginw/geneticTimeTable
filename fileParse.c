@@ -205,11 +205,8 @@ subject parseSubject(char *line, room* rooms, int roomCount){
     char *subjectBuffer;
     char *hoursBuffer;
     char *curSub;
-    int curSubI = 0;
-    int year = 0;
     subject returnSubject;
     int i;
-    int len;
     subjectBuffer = calloc(256, sizeof(char));
     hoursBuffer   = calloc(100, sizeof(char));
     curSub        = calloc(MAX_NAME_LENGTH, sizeof(char));
