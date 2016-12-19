@@ -57,16 +57,16 @@ Class time,[],ONCE_A_WEEK
 
 ### TEACHER ###
 # Format: Navn, er klasseleder, hvis ja så for hvilken klasse, liste over de fag læreren må undervise i, hvor mange timer læreren max må undervise i om ugen
-Verner Frank,1,1A,[Class time;Physical Activity;Math;Geography;Biology;Social Studies;Basic Science],37
-Finn Storm,0,0,[Physical Activity;Physics/Chemistry;Danish;English;Christianity],37
-Thorbjorn Toft,1,2B,[Class time;Physical Activity;History;Danish;German;French;Visual Arts;Basic Science],37
-Johan Rohde,1,2A,[Class time;Physical Activity;Danish;French;Math;Sports;Music;Visual Arts;Design],37
-Sofus Eskildsen,1,1B,[Class time;Physical Activity;Danish;English;Christianity;History;Basic Science],37
-Helge Eriksen,0,0,[Physical Activity;Math;Geography;Biology;Social Studies],37
-Allan Balle,0,0,[Physical Activity;Physics/Chemistry;Danish;English;Christianity],37
-Vagn Kofod,0,0,[Physical Activity;History;German;Danish;French;Visual Arts],37
-Jimmy Pallesen,1,9C,[Class time;Physical Activity;Danish;French;Math;Sports;Music;Visual Arts;Design],37
-Ib Matthiesen,0,0,[Physical Activity;Danish;English;Christianity;History],37
+Verner Frank,1,1A,[Class time;Physical Activity;Math;Geography;Biology],37
+Finn Storm,0,0,[Physical Activity;Social Studies;Basic Science;History],37
+Thorbjorn Toft,1,2B,[Class time;Physical Activity;Danish;English;Christianity],37
+Johan Rohde,1,2A,[Class time;Physical Activity;French;Visual Arts;Design;Sports],37
+Sofus Eskildsen,1,1B,[Class time;Physical Activity;Math;Music;Physics/Chemistry],37
+Helge Eriksen,0,0,[Physical Activity;Geography;Biology;Social Studies],37
+Allan Balle,0,0,[Physical Activity;Basic Science;History;Danish],37
+Vagn Kofod,0,0,[Physical Activity;English;Christianity;French],37
+Jimmy Pallesen,1,9C,[Class time;Physical Activity;Visual Arts;Design;Sports;German],37
+Ib Matthiesen,0,0,[Physical Activity;German;English;Physics/Chemistry],37
 
 ### TIMEINTERVALS ###
 8:00,8:45
