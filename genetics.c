@@ -5,24 +5,24 @@ int mutation_size         =  100;
 int crossover_probability =   90;
 int mutation_probability  =   10;
 
+/**
+ * @brief      Do the Crossover on a individuel
+ *
+ * @param      child1            The child 1's point for presisting the data
+ * @param      child2            The child 2's point for presisting the data
+ * @param[in]  p1                The parrnt 1's data pointer
+ * @param[in]  p2                The parent 2's data pointer
+ * @param      populationParams  The population parameters
+ */
 void crossover(individual *child1, individual *child2, const individual *p1, const individual *p2, params *populationParams){
     int i,p,c,l;
     int first;
     int *cp = calloc(MAX_LECTURES, sizeof(int));
     *child1 = *p1;
     *child2 = *p2;
-
-    /* check probability of crossover operation */
-    /*if( randomNumber(0,100) > crossover_probability ){
-
-        return *p1;
-    }*/
-
-    /* make new code by combining parent codes */
     first = randomNumber(0,1);
-    for (c = 0; c < populationParams->classCount; c++){
-        /* determine crossover point (randomly) */
 
+    for (c = 0; c < populationParams->classCount; c++){
         for(i = crossover_points; i > 0; i--){
             while( 1 ){
                 p = randomNumber(0,MAX_LECTURES-1);
@@ -35,25 +35,16 @@ void crossover(individual *child1, individual *child2, const individual *p1, con
 
         for (l = 0; l < MAX_LECTURES; l++){
             memset(cp, 0, MAX_LECTURES * sizeof(int));
-
             if(child1->t[c].lectures[l].init != 1 || child2->t[c].lectures[l].init != 1){
                 continue;
             }
-
             if(first){
-                /*swapn(
-                    &child1->t[c].lectures[l],
-                    &child2.t[c].lectures[l],
-                    sizeof(lecture)
-                );*/
-
-                child1->t[c].lectures[l] = child2->t[c].lectures[l];
+               child1->t[c].lectures[l] = child2->t[c].lectures[l];
             }else{
                 child2->t[c].lectures[l] = child1->t[c].lectures[l];
             }
 
             if( cp[ l ] ){
-                /* change source chromosome */
                 first = !first;
             }
 
@@ -70,7 +61,6 @@ void crossover(individual *child1, individual *child2, const individual *p1, con
     conflictsAndPreperation(child1,populationParams);
     conflictsAndPreperation(child2,populationParams);
     free(cp);
-
 }
 
 
@@ -79,10 +69,17 @@ void crossover(individual *child1, individual *child2, const individual *p1, con
  * @param ind               individuals
  * @param classCount amount of classes
  */
+
+/**
+ * @brief      Counts conflicts and prepare data for fitness function on a single individual.
+ *
+ * @param      ind               The ind
+ * @param      populationParams  The population parameters
+ */
 void conflictsAndPreperation(individual *ind, params *populationParams){
     int class1,   class2,
         lecture1, lecture2,
-        day,      hour, 
+        day,      hour,
         teacherIndex,
         tempMaxHours,
         totalLectures = 0,
@@ -105,9 +102,9 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
     int nullHoursAcc = 0;
     int accHourCount = 0;
 
-    int *teacherTotalHours  = calloc(populationParams->teacherCount,  sizeof(int));
-    int *teacherPreperation = calloc(populationParams->teacherCount,  sizeof(int));
-    int *differentTeachers  = calloc(populationParams->subjectsCount, sizeof(int));
+    int *teacherTotalHours  = calloc(populationParams->teacherCount, sizeof(int));
+    int *teacherPreperation = calloc(populationParams->teacherCount, sizeof(int));
+    int *differentTeachers  = calloc(populationParams->subjectCount, sizeof(int));
 
     /* Reset fitness points */
     ind->fitness = 0;
@@ -131,8 +128,8 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
         /* Sum total lectures for subject for class per day */
         for (subjectIndex = 0; subjectIndex < populationParams->subjectCount; subjectIndex++){
             tempSubjectSum += (int) ceil(populationParams->subjects[subjectIndex].perYear[curYear] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
-        }
-
+        
+}
         for(lecture1 = 0; lecture1 < ind->t[class1].lectureLength; lecture1++){
 
             day  = ind->t[class1].lectures[lecture1].l_datetime.dayOfWeek;
@@ -143,7 +140,7 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
 
                 /* Count total inited lectures */
                 totalLectures += 1;
-                
+
                 /* If class should have subject */
                 if (ind->t[class1].lectures[lecture1].l_subject->perYear[curYear] != 0) {
                     accumulativeCorrectSubject += 1;
@@ -176,7 +173,7 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
 
 
                 /* If next lecture is more than 1 hour away */
-                if(lecture1 + 1 != ind->t[class1].lectureLength && 
+                if(lecture1 + 1 != ind->t[class1].lectureLength &&
                         ind->t[class1].lectures[lecture1].l_datetime.dayOfWeek == ind->t[class1].lectures[lecture1 + 1].l_datetime.dayOfWeek &&
                         ind->t[class1].lectures[lecture1].l_datetime.hour + 1  != ind->t[class1].lectures[lecture1 + 1].l_datetime.hour){
 
@@ -185,19 +182,19 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
 
                 /* Don't check last timetable for conflicts */
                 if(class1 + 1 != populationParams->classCount){
-                    
+
                     for(class2 = class1 + 1; class2 < populationParams->classCount; class2++){
 
                         /* Foreach lecture in other classes where day is less or equal to the day */
                         for(
-                            lecture2 = 0; 
+                            lecture2 = 0;
                             lecture2 < ind->t[class2].lectureLength &&
                                 ind->t[class2].lectures[lecture2].l_datetime.dayOfWeek <= day;
                             lecture2++
                         ){
 
                             /* If same day and hour */
-                            if(ind->t[class2].lectures[lecture2].l_datetime.dayOfWeek == day && 
+                            if(ind->t[class2].lectures[lecture2].l_datetime.dayOfWeek == day &&
                                     ind->t[class2].lectures[lecture2].l_datetime.hour == hour){
 
                                 /* Same room */
@@ -219,8 +216,8 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
                 }
 
                 /* Count total conflicts */
-                conflicts += 
-                    ind->t[class1].lectures[lecture1].conflictRoom + 
+                conflicts +=
+                    ind->t[class1].lectures[lecture1].conflictRoom +
                     ind->t[class1].lectures[lecture1].conflictTeacher;
             }
         }
@@ -233,14 +230,14 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
     for (teacherIndex = 0; teacherIndex < populationParams->teacherCount; teacherIndex++){
         tempMaxHours = populationParams->teachers[teacherIndex].maxWorkHours;
 
-        tempTotalWorkHours = (          teacherTotalHours[teacherIndex]        * lectionTime     ) + 
+        tempTotalWorkHours = (          teacherTotalHours[teacherIndex]        * lectionTime     ) +
                              ( ((float) teacherPreperation[teacherIndex] / 10) * preperationTime );
 
         tempWorkHoursPreperationNormalized = (tempMaxHours - (tempTotalWorkHours / MINUTES_IN_HOUR)) / tempMaxHours;
 
+        ind->fitness += FITNESS_FOR_PREPARATION_TIME / ((float) teacherPreperation[teacherIndex] / 10);
         ind->fitness += FITNESS_FOR_TEACHERHOURS * (1 - tempWorkHoursPreperationNormalized);
     }
-
     
     /*ind->fitness += FITNESS_FOR_CLASS_MIN_HOURS * (1 - (tempSubjectSum - accHourCount) / tempSubjectSum);*/
 
@@ -257,8 +254,20 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
     free(teacherTotalHours);
     free(teacherPreperation);
     free(differentTeachers);
+
+    if(ind->fitness < 0){
+        printf("%d\n", ind->fitness);
+    }
 }
 
+/**
+ * @brief      Determines if two sequent lectures are the same.
+ *
+ * @param      l1    The first lecture
+ * @param      l2    The second lecture
+ *
+ * @return     True if same lecture sequent, False otherwise.
+ */
 int isSameLectureSequent(lecture *l1, lecture *l2){
     return (l2->init                 == 1) &&
            (l1->l_datetime.hour - 1  == l2->l_datetime.hour) &&
@@ -268,17 +277,24 @@ int isSameLectureSequent(lecture *l1, lecture *l2){
            (l1->l_teacher            == l2->l_teacher);
 }
 
+/**
+ * @brief      Starts the mutation process by calling a random amount of mutations.
+ *
+ * @param      i                 The individual who should be affected by the mutation
+ * @param      populationParams  The population parameters
+ */
 void mutate(individual *i, params *populationParams){
-    /* TODO
-     * vælg valg der skal muteres
-     * vælge hvordan det skal muterer
-     * muterer det
-     * returner og afslut
-     */
     int amountOfMutations = randomNumber(1, MAX_MUTATIONS);
     weapon_x(i, amountOfMutations, populationParams);
 }
 
+/**
+ * @brief      The recursive function who makes sure that n-number of mutations is taken place
+ *
+ * @param      i                  The individual who should be affected by the mutation
+ * @param[in]  amountOfMutations  The amount of mutations
+ * @param      populationParams   The population parameters
+ */
 void weapon_x(individual *i, int amountOfMutations, params *populationParams){
     if(amountOfMutations < 1){
         return;
@@ -288,6 +304,12 @@ void weapon_x(individual *i, int amountOfMutations, params *populationParams){
     weapon_x(i, (amountOfMutations-1), populationParams);
 }
 
+/**
+ * @brief      Determines which mutation should be executed on the individual.
+ *
+ * @param      i                 The individual who should be affected by the mutation
+ * @param      populationParams  The population parameters
+ */
 void injectSerumX(individual *i, params *populationParams){
     int ingredient = randomNumber(1,3);
     switch(ingredient){
@@ -303,8 +325,14 @@ void injectSerumX(individual *i, params *populationParams){
     }
 }
 
+/**
+ * @brief      Mutates the individual by moving a random lecture in a random timetable
+ *             to a place within the timetable where there isn't a lecture already.
+ *
+ * @param      i                 The individual who should be affected by the mutation
+ * @param      populationParams  The population parameters
+ */
 void addSugar(individual *i, params *populationParams){
-    /* This layer mutates on the top level ie. the total school timetable */
     int rndClass = randomNumber(0, populationParams->classCount-1);
     int rndLec = randomNumber(0, i->t[rndClass].lectureLength-1);
     int rndDay, rndHour;
@@ -313,9 +341,14 @@ void addSugar(individual *i, params *populationParams){
     i->t[rndClass].lectures[rndLec].l_datetime.hour=rndHour;
 }
 
-
+/**
+ * @brief      Mutates the individual by change the teacher of a random lecture on a random timetable
+ *             to a new teacher, it is required that the new teacher actually is able to teach the subject.
+ *
+ * @param      i                 The individual who should be affected by the mutation
+ * @param      populationParams  The population parameters
+ */
 void addSpice(individual *i, params *populationParams){
-    /* This layer mutates on the top level ie. the total school timetable */
     int rndClass = randomNumber(0, populationParams->classCount-1);
     int rndLec = randomNumber(0, i->t[rndClass].lectureLength-1);
     lecture *thelecture = &i->t[rndClass].lectures[rndLec];
@@ -324,12 +357,18 @@ void addSpice(individual *i, params *populationParams){
         return;
     }
 
-    thelecture->l_teacher = findRandomTeacherForSubject(thelecture, populationParams->teachers, populationParams->teacherCount);
+    thelecture->l_teacher = findRandomTeacherForSubject(thelecture, populationParams);
 }
 
-
+/**
+ * @brief      Mutates the individual by place two random lectures of same subject sequently in a random timetable
+ *             this is done by selecting a random lecture, searching for a lecture with the same subject and
+ *             swap it with either the lecture before or after the selected one.
+ *
+ * @param      i                 The individual who should be affected by the mutation
+ * @param      populationParams  The population parameters
+ */
 void addEverythingNice(individual *i, params *populationParams){
-    /* This layer mutates on the top level ie. the total school timetable */
     int j;
     int rndClass = randomNumber(0, populationParams->classCount-1);
     int rndLec   = randomNumber(0, i->t[rndClass].lectureLength-1);
@@ -338,13 +377,13 @@ void addEverythingNice(individual *i, params *populationParams){
     int prevOrNext;
 
     int nextLec = lectureOnDateTime(
-            i->t[rndClass], 
-            currentLecture->l_datetime.dayOfWeek, 
+            i->t[rndClass],
+            currentLecture->l_datetime.dayOfWeek,
             currentLecture->l_datetime.hour + 1);
 
     int prevLec = lectureOnDateTime(
-            i->t[rndClass], 
-            currentLecture->l_datetime.dayOfWeek, 
+            i->t[rndClass],
+            currentLecture->l_datetime.dayOfWeek,
             currentLecture->l_datetime.hour - 1);
 
     if(currentLecture->l_datetime.hour == MAX_LECTURES / WEEK_LENGTH){
@@ -394,14 +433,31 @@ void addEverythingNice(individual *i, params *populationParams){
     }
 }
 
-teacher *findRandomTeacherForSubject(lecture *l, teacher *t, int teacherCount){
-    int rndTeacher = randomNumber(0, teacherCount-1);
-    if(teacherCanTeach(t[rndTeacher].canTeach, t[rndTeacher].canTeachLength, l->l_subject->name)){
-        return &t[rndTeacher];
+/**
+ * @brief      Finds a random teacher for a given subject, it only returns a teacher who is actually able to teach the subject
+ *
+ * @param      l                 The individual who should be affected by the mutation
+ * @param      populationParams  The population parameters
+ *
+ * @return     Pointer to the teacher.
+ */
+teacher *findRandomTeacherForSubject(lecture *l, params *populationParams){
+    int rndTeacher = randomNumber(0, populationParams->teacherCount-1);
+    if(teacherCanTeach(populationParams->teachers[rndTeacher].canTeach, populationParams->teachers[rndTeacher].canTeachLength, l->l_subject->name)){
+        return &populationParams->teachers[rndTeacher];
     }
-    return findRandomTeacherForSubject(l,t,teacherCount);
+    return findRandomTeacherForSubject(l, populationParams);
 }
 
+/**
+ * @brief      Determines wether or not a given teacher can teach the given subject
+ *
+ * @param      canTeach        Indicates if teach
+ * @param[in]  canTeachLength  Indicates if teach length
+ * @param      subjectName     The subject name
+ *
+ * @return     1 if trie, 0 otherwise
+ */
 int teacherCanTeach(subject **canTeach, int canTeachLength, char *subjectName){
     int i;
 
@@ -417,6 +473,13 @@ int teacherCanTeach(subject **canTeach, int canTeachLength, char *subjectName){
     return 0;
 }
 
+/**
+ * @brief      Gets the a random datetime with no lecture.
+ *
+ * @param      t     The individual who should be affected by the mutation
+ * @param      day   The day
+ * @param      hour  The hour
+ */
 void getRandomDatetimeWithNoLecture(timetable *t, int *day, int*hour){
     int rndDay = randomNumber(0, WEEK_LENGTH-1);
     int rndHour = randomNumber(0,(MAX_LECTURES/WEEK_LENGTH)-1);
@@ -428,7 +491,11 @@ void getRandomDatetimeWithNoLecture(timetable *t, int *day, int*hour){
     getRandomDatetimeWithNoLecture(t, day, hour);
 }
 
-
+/**
+ * @brief      Sets the fitness scorer.
+ *
+ * @param      populationParams  The population parameters
+ */
 void setFitness(params *populationParams){
     /*int i, j, k, l, m, fitnessRatio, count1, count2, res_i, klasse;
     float value1, value2, res_f;
@@ -520,49 +587,3 @@ void setFitness(params *populationParams){
     }*/
 
 }
-
-
-
-/*
-void compareLectures(individual *ind, int *consecutiveLectures);
-*/
-
-/*
-void calcFitnessOnPopulation(params *populationParams) {
-      int i;
-      int *consecutiveLectures;
-      consecutiveLectures = calloc(MAX_INDIVIDUALS,sizeof(int));
-      populationParams->akkConflicts = 0;
-      for(i = 0; i < populationParams->tempPopulationCount-1; i++){
-          conflicts(&populationParams->tempPopulation[i], populationParams->classCount);
-        populationParams->akkConflicts += populationParams->tempPopulation[i].conflicts;
-        if (populationParams->tempPopulation[i].conflicts > populationParams->biggestConflicts){
-              populationParams->biggestConflicts = populationParams->tempPopulation[i].conflicts;
-        }
-        compareLectures(&populationParams->tempPopulation[i], consecutiveLectures[i]);
-      }
-      setFitness(populationParams);
-}
-*/
-
-/*
-void compareLectures(individual *ind, int *consecutiveLectures){
-      int a,b,c; *//* iteration counters *//*
-      int doubleLectures = 0;
-
-
-    for (a = 0; a < MAX_TIMETABLES; a++){
-        for (b = 0; b < MAX_LECTURES; b++){
-            c = b + 1;
-            if(ind->t[a].lectures[b].l_datetime.dayOfWeek == ind->t[a].lectures[c].l_datetime.dayOfWeek &&
-            strcmp(ind->t[a].lectures[b].l_room->name,ind->t[a].lectures[c].l_room->name) == 0 &&
-            ind->t[a].lectures[b].l_subject == ind->t[a].lectures[c].l_subject &&
-            ind->t[a].lectures[b].l_teacher == ind->t[a].lectures[c].l_teacher){
-                doubleLectures += 1;
-            }
-        }
-    }
-    *consecutiveLectures = doubleLectures;
-}
-
-*/
