@@ -99,14 +99,16 @@ $(document).ready(function(){initNavTree('main_8c.html','');});
 <code>#include &lt;ctype.h&gt;</code><br />
 <code>#include &lt;math.h&gt;</code><br />
 <code>#include &lt;stdarg.h&gt;</code><br />
-<code>#include &quot;<a class="el" href="headers_8c.html">headers.c</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="file_parse_8c.html">fileParse.c</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="lecture_control_8c.html">lectureControl.c</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="schedule_control_8c.html">scheduleControl.c</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="print_8c.html">print.c</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="genetics_8c.html">genetics.c</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="tests_8c.html">tests.c</a>&quot;</code><br />
-</div><table class="memberdecls">
+<code>#include &quot;<a class="el" href="headers_8c_source.html">headers.c</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="file_parse_8c_source.html">fileParse.c</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="lecture_control_8c_source.html">lectureControl.c</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="schedule_control_8c_source.html">scheduleControl.c</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="print_8c_source.html">print.c</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="genetics_8c_source.html">genetics.c</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tests_8c_source.html">tests.c</a>&quot;</code><br />
+</div>
+<p><a href="main_8c_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structroom.html">room</a></td></tr>
@@ -160,19 +162,19 @@ Macros</h2></td></tr>
 <tr class="separator:af8cbd9406d158c8b8f262963e9470d80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1791ad1ee4e87d6d65a80cb97c936f12"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a1791ad1ee4e87d6d65a80cb97c936f12">MAX_MUTATIONS</a>&#160;&#160;&#160;10</td></tr>
 <tr class="separator:a1791ad1ee4e87d6d65a80cb97c936f12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5af961e06e04545c3e025f69232743e4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a5af961e06e04545c3e025f69232743e4">NUM_OF_GEN</a>&#160;&#160;&#160;30000 /* Max amount of generations to run for */</td></tr>
+<tr class="memitem:a5af961e06e04545c3e025f69232743e4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a5af961e06e04545c3e025f69232743e4">NUM_OF_GEN</a>&#160;&#160;&#160;8000</td></tr>
 <tr class="separator:a5af961e06e04545c3e025f69232743e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b33f47944fb3cd104207fb2a4c917be"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a4b33f47944fb3cd104207fb2a4c917be">KILL_SHIT_GEN</a>&#160;&#160;&#160;4000</td></tr>
 <tr class="separator:a4b33f47944fb3cd104207fb2a4c917be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0076e8fc35e45f2c3fd989fcdd8f12ca"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a0076e8fc35e45f2c3fd989fcdd8f12ca">FITNESS_FOR_CONFLICTS</a>&#160;&#160;&#160;300</td></tr>
+<tr class="memitem:a0076e8fc35e45f2c3fd989fcdd8f12ca"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a0076e8fc35e45f2c3fd989fcdd8f12ca">FITNESS_FOR_CONFLICTS</a>&#160;&#160;&#160;600</td></tr>
 <tr class="separator:a0076e8fc35e45f2c3fd989fcdd8f12ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae65072d513aa77432355aa0442f39844"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ae65072d513aa77432355aa0442f39844">FITNESS_FOR_NULL_HOURS</a>&#160;&#160;&#160;100</td></tr>
+<tr class="memitem:ae65072d513aa77432355aa0442f39844"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ae65072d513aa77432355aa0442f39844">FITNESS_FOR_NULL_HOURS</a>&#160;&#160;&#160;110</td></tr>
 <tr class="separator:ae65072d513aa77432355aa0442f39844"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab854bc7b6b5bf615ad98800f66594432"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ab854bc7b6b5bf615ad98800f66594432">FITNESS_FOR_PREPARATION_TIME</a>&#160;&#160;&#160;100</td></tr>
+<tr class="memitem:ab854bc7b6b5bf615ad98800f66594432"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ab854bc7b6b5bf615ad98800f66594432">FITNESS_FOR_PREPARATION_TIME</a>&#160;&#160;&#160;20</td></tr>
 <tr class="separator:ab854bc7b6b5bf615ad98800f66594432"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a0dd0e0f93721f50bc66f92b1c43e48"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a3a0dd0e0f93721f50bc66f92b1c43e48">FITNESS_FOR_CLASS_MIN_HOURS</a>&#160;&#160;&#160;7</td></tr>
+<tr class="memitem:a3a0dd0e0f93721f50bc66f92b1c43e48"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a3a0dd0e0f93721f50bc66f92b1c43e48">FITNESS_FOR_CLASS_MIN_HOURS</a>&#160;&#160;&#160;10</td></tr>
 <tr class="separator:a3a0dd0e0f93721f50bc66f92b1c43e48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00d7f25780951db2d554678f369cbf0c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a00d7f25780951db2d554678f369cbf0c">FITNESS_FOR_TEACHERHOURS</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memitem:a00d7f25780951db2d554678f369cbf0c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a00d7f25780951db2d554678f369cbf0c">FITNESS_FOR_TEACHERHOURS</a>&#160;&#160;&#160;20</td></tr>
 <tr class="separator:a00d7f25780951db2d554678f369cbf0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -201,28 +203,33 @@ Functions</h2></td></tr>
 <tr class="memitem:abf9e6b7e6f15df4b525a2e7705ba3089"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#abf9e6b7e6f15df4b525a2e7705ba3089">main</a> (int argc, char const *argv[])</td></tr>
 <tr class="separator:abf9e6b7e6f15df4b525a2e7705ba3089"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60d7b493a6c0e9ce6d4c46296f763301"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a60d7b493a6c0e9ce6d4c46296f763301">selection</a> (<a class="el" href="structparams.html">params</a> *populationParams)</td></tr>
+<tr class="memdesc:a60d7b493a6c0e9ce6d4c46296f763301"><td class="mdescLeft">&#160;</td><td class="mdescRight">The selection function for the Genetic Algorithm.  <a href="#a60d7b493a6c0e9ce6d4c46296f763301">More...</a><br /></td></tr>
 <tr class="separator:a60d7b493a6c0e9ce6d4c46296f763301"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac313f967048d86b190bcfecb747d8daa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ac313f967048d86b190bcfecb747d8daa">calcFitnessOnPopulation</a> (<a class="el" href="structparams.html">params</a> *populationParams)</td></tr>
+<tr class="memdesc:ac313f967048d86b190bcfecb747d8daa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the fitness on population.  <a href="#ac313f967048d86b190bcfecb747d8daa">More...</a><br /></td></tr>
 <tr class="separator:ac313f967048d86b190bcfecb747d8daa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adef02ce7cc49fda732bf007f0f5208b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#adef02ce7cc49fda732bf007f0f5208b9">mutatePopulation</a> (<a class="el" href="structparams.html">params</a> *populationParams)</td></tr>
+<tr class="memdesc:adef02ce7cc49fda732bf007f0f5208b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutate Population.  <a href="#adef02ce7cc49fda732bf007f0f5208b9">More...</a><br /></td></tr>
 <tr class="separator:adef02ce7cc49fda732bf007f0f5208b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e92356203e5ce2544ad1817aa62163e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a9e92356203e5ce2544ad1817aa62163e">mergePopulation</a> (<a class="el" href="structparams.html">params</a> *populationParams)</td></tr>
+<tr class="memdesc:a9e92356203e5ce2544ad1817aa62163e"><td class="mdescLeft">&#160;</td><td class="mdescRight">meger population, since crossover produces a new array containing childrens and we want an array of parents+childrens for the other GA functions.  <a href="#a9e92356203e5ce2544ad1817aa62163e">More...</a><br /></td></tr>
 <tr class="separator:a9e92356203e5ce2544ad1817aa62163e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a241593c34e596f03584fb7214a753f10"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a241593c34e596f03584fb7214a753f10">crossoverPopulation</a> (<a class="el" href="structparams.html">params</a> *populationParams)</td></tr>
+<tr class="memdesc:a241593c34e596f03584fb7214a753f10"><td class="mdescLeft">&#160;</td><td class="mdescRight">The crossover workflow function.  <a href="#a241593c34e596f03584fb7214a753f10">More...</a><br /></td></tr>
 <tr class="separator:a241593c34e596f03584fb7214a753f10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe7d9036f014124f049c8f3432886e74"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#abe7d9036f014124f049c8f3432886e74">generateInitialPopulation</a> (<a class="el" href="structparams.html">params</a> *populationParams)</td></tr>
 <tr class="separator:abe7d9036f014124f049c8f3432886e74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae958dfbc5be0b7aab57e4a73d6b9a0b4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ae958dfbc5be0b7aab57e4a73d6b9a0b4">isEmpty</a> (int *array, size_t size)</td></tr>
+<tr class="memdesc:ae958dfbc5be0b7aab57e4a73d6b9a0b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if array is empty.  <a href="#ae958dfbc5be0b7aab57e4a73d6b9a0b4">More...</a><br /></td></tr>
 <tr class="separator:ae958dfbc5be0b7aab57e4a73d6b9a0b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a295cb61448f1a5abe8b4ac0de16a4531"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a295cb61448f1a5abe8b4ac0de16a4531">shouldMutate</a> ()</td></tr>
-<tr class="separator:a295cb61448f1a5abe8b4ac0de16a4531"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a221d185be3302082e06b9e004bb18c4b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a221d185be3302082e06b9e004bb18c4b">randomNumber</a> (int min, int max)</td></tr>
+<tr class="memdesc:a221d185be3302082e06b9e004bb18c4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates a random number.  <a href="#a221d185be3302082e06b9e004bb18c4b">More...</a><br /></td></tr>
 <tr class="separator:a221d185be3302082e06b9e004bb18c4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0121cac97074b5d3dcdf66ee0194b24d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a0121cac97074b5d3dcdf66ee0194b24d">swapn</a> (void *a, void *b, size_t n)</td></tr>
-<tr class="separator:a0121cac97074b5d3dcdf66ee0194b24d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dcfd4b7d4dab4c330a6d8ffee6927f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a7dcfd4b7d4dab4c330a6d8ffee6927f8">prepend</a> (char *s, const char *t)</td></tr>
+<tr class="memdesc:a7dcfd4b7d4dab4c330a6d8ffee6927f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepends string to other string.  <a href="#a7dcfd4b7d4dab4c330a6d8ffee6927f8">More...</a><br /></td></tr>
 <tr class="separator:a7dcfd4b7d4dab4c330a6d8ffee6927f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76299b86e144434260dcab80323ec9da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a76299b86e144434260dcab80323ec9da">strip</a> (char *s)</td></tr>
+<tr class="memdesc:a76299b86e144434260dcab80323ec9da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Strips all unneccesary system characters this allow c to read file more consistently across systems.  <a href="#a76299b86e144434260dcab80323ec9da">More...</a><br /></td></tr>
 <tr class="separator:a76299b86e144434260dcab80323ec9da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -240,10 +247,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define FITNESS_FOR_CLASS_MIN_HOURS&#160;&#160;&#160;7</td>
+          <td class="memname">#define FITNESS_FOR_CLASS_MIN_HOURS&#160;&#160;&#160;10</td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00051">51</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -254,10 +263,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define FITNESS_FOR_CONFLICTS&#160;&#160;&#160;300</td>
+          <td class="memname">#define FITNESS_FOR_CONFLICTS&#160;&#160;&#160;600</td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00048">48</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -268,10 +279,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define FITNESS_FOR_NULL_HOURS&#160;&#160;&#160;100</td>
+          <td class="memname">#define FITNESS_FOR_NULL_HOURS&#160;&#160;&#160;110</td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00049">49</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -282,10 +295,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define FITNESS_FOR_PREPARATION_TIME&#160;&#160;&#160;100</td>
+          <td class="memname">#define FITNESS_FOR_PREPARATION_TIME&#160;&#160;&#160;20</td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00050">50</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -296,10 +311,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define FITNESS_FOR_TEACHERHOURS&#160;&#160;&#160;1</td>
+          <td class="memname">#define FITNESS_FOR_TEACHERHOURS&#160;&#160;&#160;20</td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00052">52</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -315,6 +332,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="main_8c_source.html#l00046">46</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="aa322a61b17e1d56852d53d5ef6a728c6"></a>
@@ -328,6 +347,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00034">34</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -343,6 +364,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="main_8c_source.html#l00037">37</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="a40953fb1d014188b77bbf6d21d0b3e6c"></a>
@@ -356,6 +379,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00029">29</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -371,6 +396,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="main_8c_source.html#l00042">42</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="a1791ad1ee4e87d6d65a80cb97c936f12"></a>
@@ -384,6 +411,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00044">44</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -399,6 +428,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="main_8c_source.html#l00028">28</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="a251d94cd24a2ca3369fc3f8eca8c19ae"></a>
@@ -412,6 +443,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00033">33</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -427,6 +460,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="main_8c_source.html#l00032">32</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="a3fb996f20bbe5e89b2dce6ccbf876132"></a>
@@ -440,6 +475,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00035">35</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -455,6 +492,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="main_8c_source.html#l00036">36</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="a59bcbb5f6896e44dfd79fa63508cfec3"></a>
@@ -468,6 +507,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00030">30</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -483,6 +524,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="main_8c_source.html#l00041">41</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="af8cbd9406d158c8b8f262963e9470d80"></a>
@@ -497,6 +540,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="main_8c_source.html#l00043">43</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="a5af961e06e04545c3e025f69232743e4"></a>
@@ -506,10 +551,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define NUM_OF_GEN&#160;&#160;&#160;30000 /* Max amount of generations to run for */</td>
+          <td class="memname">#define NUM_OF_GEN&#160;&#160;&#160;8000</td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00045">45</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -525,6 +572,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="main_8c_source.html#l00039">39</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="a65f5fcd4660fcf5c3ec102a0e35a9478"></a>
@@ -538,6 +587,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00040">40</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -685,6 +736,16 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Calculates the fitness on population. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">populationParams</td><td>The population parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00362">362</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="a241593c34e596f03584fb7214a753f10"></a>
@@ -703,6 +764,16 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The crossover workflow function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">populationParams</td><td>The population parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00426">426</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="abe7d9036f014124f049c8f3432886e74"></a>
@@ -720,6 +791,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00441">441</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -749,6 +822,18 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Determines if array is empty. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">array</td><td>The array </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if empty, False otherwise. </dd></dl>
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00459">459</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="abf9e6b7e6f15df4b525a2e7705ba3089"></a>
@@ -777,6 +862,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="main_8c_source.html#l00152">152</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="a9e92356203e5ce2544ad1817aa62163e"></a>
@@ -795,6 +882,16 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>meger population, since crossover produces a new array containing childrens and we want an array of parents+childrens for the other GA functions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">populationParams</td><td>The population parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00408">408</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="adef02ce7cc49fda732bf007f0f5208b9"></a>
@@ -812,6 +909,16 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Mutate Population. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">populationParams</td><td>The population parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00393">393</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -841,6 +948,17 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Prepends string to other string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">s</td><td>The target string </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>The string that needs to be prepended the target </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00487">487</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="a221d185be3302082e06b9e004bb18c4b"></a>
@@ -868,14 +986,18 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Generates a random number </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Generates a random number. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">min</td><td>smallest possible number </td></tr>
-    <tr><td class="paramname">max</td><td>largest possible number </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">min</td><td>The minimum possible number </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">max</td><td>The maximum possible number</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>random number between min and max </dd></dl>
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00476">476</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -895,22 +1017,15 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="a295cb61448f1a5abe8b4ac0de16a4531"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a295cb61448f1a5abe8b4ac0de16a4531">&sect;&nbsp;</a></span>shouldMutate()</h2>
+<p>The selection function for the Genetic Algorithm. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">populationParams</td><td>The population parameters </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int shouldMutate </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Definition at line <a class="el" href="main_8c_source.html#l00324">324</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -930,47 +1045,15 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="a0121cac97074b5d3dcdf66ee0194b24d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0121cac97074b5d3dcdf66ee0194b24d">&sect;&nbsp;</a></span>swapn()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void swapn </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>n</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Swaps the values of two variables </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Strips all unneccesary system characters this allow c to read file more consistently across systems. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">a</td><td>first var </td></tr>
-    <tr><td class="paramname">b</td><td>seconds var </td></tr>
-    <tr><td class="paramname">n</td><td>size of variables </td></tr>
+    <tr><td class="paramname">s</td><td>the string </td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00505">505</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>
@@ -987,6 +1070,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="main_8c_source.html#l00055">55</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
 </div>
 </div>
 <a id="ac3e1795766a80ec63b157951b4b9a7d4"></a>
@@ -1000,7 +1085,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>ASSUMPTIONS: every room has enough space for an entire class there are 10 different classyears </p>
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00054">54</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
 </div>
 </div>

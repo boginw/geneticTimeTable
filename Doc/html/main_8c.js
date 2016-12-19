@@ -50,9 +50,7 @@ var main_8c =
     [ "prepend", "main_8c.html#a7dcfd4b7d4dab4c330a6d8ffee6927f8", null ],
     [ "randomNumber", "main_8c.html#a221d185be3302082e06b9e004bb18c4b", null ],
     [ "selection", "main_8c.html#a60d7b493a6c0e9ce6d4c46296f763301", null ],
-    [ "shouldMutate", "main_8c.html#a295cb61448f1a5abe8b4ac0de16a4531", null ],
     [ "strip", "main_8c.html#a76299b86e144434260dcab80323ec9da", null ],
-    [ "swapn", "main_8c.html#a0121cac97074b5d3dcdf66ee0194b24d", null ],
     [ "conflictOnly", "main_8c.html#af9346191d451d4221822369744f702a5", null ],
     [ "debug", "main_8c.html#ac3e1795766a80ec63b157951b4b9a7d4", null ]
 ];

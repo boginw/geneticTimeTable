@@ -14,6 +14,7 @@ var searchData=
   ['fitness_5ffor_5fnull_5fhours',['FITNESS_FOR_NULL_HOURS',['../main_8c.html#ae65072d513aa77432355aa0442f39844',1,'main.c']]],
   ['fitness_5ffor_5fpreparation_5ftime',['FITNESS_FOR_PREPARATION_TIME',['../main_8c.html#ab854bc7b6b5bf615ad98800f66594432',1,'main.c']]],
   ['fitness_5ffor_5fteacherhours',['FITNESS_FOR_TEACHERHOURS',['../main_8c.html#a00d7f25780951db2d554678f369cbf0c',1,'main.c']]],
+  ['fitnessconflictsdata',['fitnessConflictsData',['../genetics_8c.html#aead18a8ad8114b200eb4ed94b23a662b',1,'fitnessConflictsData(individual *ind, params *populationParams):&#160;genetics.c'],['../headers_8c.html#aead18a8ad8114b200eb4ed94b23a662b',1,'fitnessConflictsData(individual *ind, params *populationParams):&#160;genetics.c']]],
   ['fitnessqsort',['fitnessQsort',['../headers_8c.html#a1f6ecc382430f436c8a8c6079ac12787',1,'fitnessQsort(const void *a, const void *b):&#160;scheduleControl.c'],['../schedule_control_8c.html#a1f6ecc382430f436c8a8c6079ac12787',1,'fitnessQsort(const void *a, const void *b):&#160;scheduleControl.c']]],
   ['float_5fmultiplier',['FLOAT_MULTIPLIER',['../genetics_8c.html#a559ffa67605b9a6c627f633614d3d6a7',1,'genetics.c']]],
   ['free',['free',['../structlecture.html#a4573817871ec032055c7d539617626fe',1,'lecture']]]

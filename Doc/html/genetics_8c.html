@@ -89,6 +89,8 @@ $(document).ready(function(){initNavTree('genetics_8c.html','');});
 <div class="title">genetics.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a href="genetics_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -100,12 +102,14 @@ Functions</h2></td></tr>
 <tr class="memitem:ac1dff20aa00b14902af2a0119e63d28c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="genetics_8c.html#ac1dff20aa00b14902af2a0119e63d28c">crossover</a> (<a class="el" href="structindividual.html">individual</a> *child1, <a class="el" href="structindividual.html">individual</a> *child2, const <a class="el" href="structindividual.html">individual</a> *p1, const <a class="el" href="structindividual.html">individual</a> *p2, <a class="el" href="structparams.html">params</a> *populationParams)</td></tr>
 <tr class="memdesc:ac1dff20aa00b14902af2a0119e63d28c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do the Crossover on a individuel.  <a href="#ac1dff20aa00b14902af2a0119e63d28c">More...</a><br /></td></tr>
 <tr class="separator:ac1dff20aa00b14902af2a0119e63d28c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57dec049f65edbdacf0a5de26a99313d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="genetics_8c.html#a57dec049f65edbdacf0a5de26a99313d">conflictsAndPreperation</a> (<a class="el" href="structindividual.html">individual</a> *ind, <a class="el" href="structparams.html">params</a> *populationParams)</td></tr>
-<tr class="memdesc:a57dec049f65edbdacf0a5de26a99313d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts conflicts and prepare data for fitness function on a single individual.  <a href="#a57dec049f65edbdacf0a5de26a99313d">More...</a><br /></td></tr>
-<tr class="separator:a57dec049f65edbdacf0a5de26a99313d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aead18a8ad8114b200eb4ed94b23a662b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="genetics_8c.html#aead18a8ad8114b200eb4ed94b23a662b">fitnessConflictsData</a> (<a class="el" href="structindividual.html">individual</a> *ind, <a class="el" href="structparams.html">params</a> *populationParams)</td></tr>
+<tr class="memdesc:aead18a8ad8114b200eb4ed94b23a662b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts conflicts and prepare data for fitness function on a single individual.  <a href="#aead18a8ad8114b200eb4ed94b23a662b">More...</a><br /></td></tr>
+<tr class="separator:aead18a8ad8114b200eb4ed94b23a662b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46b5aa1295ee787e9624f78702ead9f8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="genetics_8c.html#a46b5aa1295ee787e9624f78702ead9f8">isSameLectureSequent</a> (<a class="el" href="structlecture.html">lecture</a> *l1, <a class="el" href="structlecture.html">lecture</a> *l2)</td></tr>
 <tr class="memdesc:a46b5aa1295ee787e9624f78702ead9f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if two sequent lectures are the same.  <a href="#a46b5aa1295ee787e9624f78702ead9f8">More...</a><br /></td></tr>
 <tr class="separator:a46b5aa1295ee787e9624f78702ead9f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a295cb61448f1a5abe8b4ac0de16a4531"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="genetics_8c.html#a295cb61448f1a5abe8b4ac0de16a4531">shouldMutate</a> ()</td></tr>
+<tr class="separator:a295cb61448f1a5abe8b4ac0de16a4531"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99ebc1c22dc366c49404150f9765265c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="genetics_8c.html#a99ebc1c22dc366c49404150f9765265c">mutate</a> (<a class="el" href="structindividual.html">individual</a> *i, <a class="el" href="structparams.html">params</a> *populationParams)</td></tr>
 <tr class="memdesc:a99ebc1c22dc366c49404150f9765265c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the mutation process by calling a random amount of mutations.  <a href="#a99ebc1c22dc366c49404150f9765265c">More...</a><br /></td></tr>
 <tr class="separator:a99ebc1c22dc366c49404150f9765265c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,6 +165,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00001">1</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
@@ -199,6 +205,8 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00391">391</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
 </div>
 </div>
 <a id="ae29485d68498b550f0904576b5537345"></a>
@@ -235,6 +243,8 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00373">373</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
 
 </div>
 </div>
@@ -273,44 +283,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-</div>
-</div>
-<a id="a57dec049f65edbdacf0a5de26a99313d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57dec049f65edbdacf0a5de26a99313d">&sect;&nbsp;</a></span>conflictsAndPreperation()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void conflictsAndPreperation </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structindividual.html">individual</a> *&#160;</td>
-          <td class="paramname"><em>ind</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structparams.html">params</a> *&#160;</td>
-          <td class="paramname"><em>populationParams</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Counts conflicts and prepare data for fitness function on a single individual. </p>
-<p>Counts conflicts of rooms and teachers in a single individuals </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">ind</td><td>individuals </td></tr>
-    <tr><td class="paramname">classCount</td><td>amount of classes </td></tr>
-    <tr><td class="paramname">ind</td><td>The ind </td></tr>
-    <tr><td class="paramname">populationParams</td><td>The population parameters </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00357">357</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
 
 </div>
 </div>
@@ -370,6 +343,8 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00017">17</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
 </div>
 </div>
 <a id="ae061b440c4349098c1fd58319636450a"></a>
@@ -407,6 +382,49 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to the teacher. </dd></dl>
+
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00473">473</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
+</div>
+</div>
+<a id="aead18a8ad8114b200eb4ed94b23a662b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aead18a8ad8114b200eb4ed94b23a662b">&sect;&nbsp;</a></span>fitnessConflictsData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fitnessConflictsData </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structindividual.html">individual</a> *&#160;</td>
+          <td class="paramname"><em>ind</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structparams.html">params</a> *&#160;</td>
+          <td class="paramname"><em>populationParams</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Counts conflicts and prepare data for fitness function on a single individual. </p>
+<p>Counts conflicts of rooms and teachers in a single individuals </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ind</td><td>individuals </td></tr>
+    <tr><td class="paramname">classCount</td><td>amount of classes </td></tr>
+    <tr><td class="paramname">ind</td><td>The ind </td></tr>
+    <tr><td class="paramname">populationParams</td><td>The population parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00079">79</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
 
 </div>
 </div>
@@ -452,6 +470,8 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00512">512</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
 </div>
 </div>
 <a id="af9fd78aca1127b29f2587c2dc2a5b004"></a>
@@ -488,6 +508,8 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00335">335</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
 
 </div>
 </div>
@@ -527,6 +549,8 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if same lecture sequent, False otherwise. </dd></dl>
 
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00285">285</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
 </div>
 </div>
 <a id="a99ebc1c22dc366c49404150f9765265c"></a>
@@ -564,6 +588,8 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00308">308</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
 </div>
 </div>
 <a id="aa521e8cd2d7968deeb428bcbf1733b7f"></a>
@@ -589,6 +615,27 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00528">528</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
+</div>
+</div>
+<a id="a295cb61448f1a5abe8b4ac0de16a4531"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a295cb61448f1a5abe8b4ac0de16a4531">&sect;&nbsp;</a></span>shouldMutate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int shouldMutate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00294">294</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
 
 </div>
 </div>
@@ -635,6 +682,8 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>1 if trie, 0 otherwise </dd></dl>
 
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00490">490</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
 </div>
 </div>
 <a id="a607c7e15b989a428f2d82fead8ce15ca"></a>
@@ -679,6 +728,8 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00320">320</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -694,6 +745,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00003">3</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
 </div>
 </div>
 <a id="a3090ea1e8c01a9cb65c020c79be21e95"></a>
@@ -707,6 +760,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00005">5</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
 
 </div>
 </div>
@@ -722,6 +777,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00006">6</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
+
 </div>
 </div>
 <a id="a4ddbafc0927da2a42e1728da53b002e2"></a>
@@ -735,6 +792,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="genetics_8c_source.html#l00004">4</a> of file <a class="el" href="genetics_8c_source.html">genetics.c</a>.</p>
 
 </div>
 </div>

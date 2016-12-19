@@ -10,10 +10,12 @@
 \item 
 void \hyperlink{genetics_8c_ac1dff20aa00b14902af2a0119e63d28c}{crossover} (\hyperlink{structindividual}{individual} $\ast$child1, \hyperlink{structindividual}{individual} $\ast$child2, const \hyperlink{structindividual}{individual} $\ast$p1, const \hyperlink{structindividual}{individual} $\ast$p2, \hyperlink{structparams}{params} $\ast$population\+Params)
 \begin{DoxyCompactList}\small\item\em Do the Crossover on a individuel. \end{DoxyCompactList}\item 
-void \hyperlink{genetics_8c_a57dec049f65edbdacf0a5de26a99313d}{conflicts\+And\+Preperation} (\hyperlink{structindividual}{individual} $\ast$ind, \hyperlink{structparams}{params} $\ast$population\+Params)
+void \hyperlink{genetics_8c_aead18a8ad8114b200eb4ed94b23a662b}{fitness\+Conflicts\+Data} (\hyperlink{structindividual}{individual} $\ast$ind, \hyperlink{structparams}{params} $\ast$population\+Params)
 \begin{DoxyCompactList}\small\item\em Counts conflicts and prepare data for fitness function on a single individual. \end{DoxyCompactList}\item 
 int \hyperlink{genetics_8c_a46b5aa1295ee787e9624f78702ead9f8}{is\+Same\+Lecture\+Sequent} (\hyperlink{structlecture}{lecture} $\ast$l1, \hyperlink{structlecture}{lecture} $\ast$l2)
 \begin{DoxyCompactList}\small\item\em Determines if two sequent lectures are the same. \end{DoxyCompactList}\item 
+int \hyperlink{genetics_8c_a295cb61448f1a5abe8b4ac0de16a4531}{should\+Mutate} ()
+\item 
 void \hyperlink{genetics_8c_a99ebc1c22dc366c49404150f9765265c}{mutate} (\hyperlink{structindividual}{individual} $\ast$i, \hyperlink{structparams}{params} $\ast$population\+Params)
 \begin{DoxyCompactList}\small\item\em Starts the mutation process by calling a random amount of mutations. \end{DoxyCompactList}\item 
 void \hyperlink{genetics_8c_a607c7e15b989a428f2d82fead8ce15ca}{weapon\+\_\+x} (\hyperlink{structindividual}{individual} $\ast$i, int amount\+Of\+Mutations, \hyperlink{structparams}{params} $\ast$population\+Params)
@@ -56,6 +58,10 @@ int \hyperlink{genetics_8c_a55b9fd39552641e641964022af03b659}{mutation\+\_\+prob
 
 
 
+Definition at line 1 of file genetics.\+c.
+
+
+
 \subsection{Function Documentation}
 \hypertarget{genetics_8c_a472435c331f5015320121db96c8af9aa}{}\label{genetics_8c_a472435c331f5015320121db96c8af9aa} 
 \index{genetics.\+c@{genetics.\+c}!add\+Everything\+Nice@{add\+Everything\+Nice}}
@@ -74,6 +80,10 @@ Mutates the individual by place two random lectures of same subject sequently in
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 391 of file genetics.\+c.
+
 \hypertarget{genetics_8c_ae29485d68498b550f0904576b5537345}{}\label{genetics_8c_ae29485d68498b550f0904576b5537345} 
 \index{genetics.\+c@{genetics.\+c}!add\+Spice@{add\+Spice}}
 \index{add\+Spice@{add\+Spice}!genetics.\+c@{genetics.\+c}}
@@ -91,6 +101,10 @@ Mutates the individual by change the teacher of a random lecture on a random tim
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 373 of file genetics.\+c.
+
 \hypertarget{genetics_8c_a94978bcace066864f2cf7ac67d6d8ff9}{}\label{genetics_8c_a94978bcace066864f2cf7ac67d6d8ff9} 
 \index{genetics.\+c@{genetics.\+c}!add\+Sugar@{add\+Sugar}}
 \index{add\+Sugar@{add\+Sugar}!genetics.\+c@{genetics.\+c}}
@@ -108,27 +122,10 @@ Mutates the individual by moving a random lecture in a random timetable to a pla
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
-\hypertarget{genetics_8c_a57dec049f65edbdacf0a5de26a99313d}{}\label{genetics_8c_a57dec049f65edbdacf0a5de26a99313d} 
-\index{genetics.\+c@{genetics.\+c}!conflicts\+And\+Preperation@{conflicts\+And\+Preperation}}
-\index{conflicts\+And\+Preperation@{conflicts\+And\+Preperation}!genetics.\+c@{genetics.\+c}}
-\subsubsection{\texorpdfstring{conflicts\+And\+Preperation()}{conflictsAndPreperation()}}
-{\footnotesize\ttfamily void conflicts\+And\+Preperation (\begin{DoxyParamCaption}\item[{\hyperlink{structindividual}{individual} $\ast$}]{ind,  }\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
 
 
+Definition at line 357 of file genetics.\+c.
 
-Counts conflicts and prepare data for fitness function on a single individual. 
-
-Counts conflicts of rooms and teachers in a single individuals 
-\begin{DoxyParams}{Parameters}
-{\em ind} & individuals \\
-\hline
-{\em class\+Count} & amount of classes \\
-\hline
-{\em ind} & The ind \\
-\hline
-{\em population\+Params} & The population parameters \\
-\hline
-\end{DoxyParams}
 \hypertarget{genetics_8c_ac1dff20aa00b14902af2a0119e63d28c}{}\label{genetics_8c_ac1dff20aa00b14902af2a0119e63d28c} 
 \index{genetics.\+c@{genetics.\+c}!crossover@{crossover}}
 \index{crossover@{crossover}!genetics.\+c@{genetics.\+c}}
@@ -152,6 +149,10 @@ Do the Crossover on a individuel.
  & {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 17 of file genetics.\+c.
+
 \hypertarget{genetics_8c_ae061b440c4349098c1fd58319636450a}{}\label{genetics_8c_ae061b440c4349098c1fd58319636450a} 
 \index{genetics.\+c@{genetics.\+c}!find\+Random\+Teacher\+For\+Subject@{find\+Random\+Teacher\+For\+Subject}}
 \index{find\+Random\+Teacher\+For\+Subject@{find\+Random\+Teacher\+For\+Subject}!genetics.\+c@{genetics.\+c}}
@@ -172,6 +173,35 @@ Finds a random teacher for a given subject, it only returns a teacher who is act
 \begin{DoxyReturn}{Returns}
 Pointer to the teacher. 
 \end{DoxyReturn}
+
+
+Definition at line 473 of file genetics.\+c.
+
+\hypertarget{genetics_8c_aead18a8ad8114b200eb4ed94b23a662b}{}\label{genetics_8c_aead18a8ad8114b200eb4ed94b23a662b} 
+\index{genetics.\+c@{genetics.\+c}!fitness\+Conflicts\+Data@{fitness\+Conflicts\+Data}}
+\index{fitness\+Conflicts\+Data@{fitness\+Conflicts\+Data}!genetics.\+c@{genetics.\+c}}
+\subsubsection{\texorpdfstring{fitness\+Conflicts\+Data()}{fitnessConflictsData()}}
+{\footnotesize\ttfamily void fitness\+Conflicts\+Data (\begin{DoxyParamCaption}\item[{\hyperlink{structindividual}{individual} $\ast$}]{ind,  }\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
+
+
+
+Counts conflicts and prepare data for fitness function on a single individual. 
+
+Counts conflicts of rooms and teachers in a single individuals 
+\begin{DoxyParams}{Parameters}
+{\em ind} & individuals \\
+\hline
+{\em class\+Count} & amount of classes \\
+\hline
+{\em ind} & The ind \\
+\hline
+{\em population\+Params} & The population parameters \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 79 of file genetics.\+c.
+
 \hypertarget{genetics_8c_a5cf127d6ac71040989f925cf19bb7e16}{}\label{genetics_8c_a5cf127d6ac71040989f925cf19bb7e16} 
 \index{genetics.\+c@{genetics.\+c}!get\+Random\+Datetime\+With\+No\+Lecture@{get\+Random\+Datetime\+With\+No\+Lecture}}
 \index{get\+Random\+Datetime\+With\+No\+Lecture@{get\+Random\+Datetime\+With\+No\+Lecture}!genetics.\+c@{genetics.\+c}}
@@ -191,6 +221,10 @@ Gets the a random datetime with no lecture.
 {\em hour} & The hour \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 512 of file genetics.\+c.
+
 \hypertarget{genetics_8c_af9fd78aca1127b29f2587c2dc2a5b004}{}\label{genetics_8c_af9fd78aca1127b29f2587c2dc2a5b004} 
 \index{genetics.\+c@{genetics.\+c}!inject\+SerumX@{inject\+SerumX}}
 \index{inject\+SerumX@{inject\+SerumX}!genetics.\+c@{genetics.\+c}}
@@ -208,6 +242,10 @@ Determines which mutation should be executed on the individual.
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 335 of file genetics.\+c.
+
 \hypertarget{genetics_8c_a46b5aa1295ee787e9624f78702ead9f8}{}\label{genetics_8c_a46b5aa1295ee787e9624f78702ead9f8} 
 \index{genetics.\+c@{genetics.\+c}!is\+Same\+Lecture\+Sequent@{is\+Same\+Lecture\+Sequent}}
 \index{is\+Same\+Lecture\+Sequent@{is\+Same\+Lecture\+Sequent}!genetics.\+c@{genetics.\+c}}
@@ -228,6 +266,10 @@ Determines if two sequent lectures are the same.
 \begin{DoxyReturn}{Returns}
 True if same lecture sequent, False otherwise. 
 \end{DoxyReturn}
+
+
+Definition at line 285 of file genetics.\+c.
+
 \hypertarget{genetics_8c_a99ebc1c22dc366c49404150f9765265c}{}\label{genetics_8c_a99ebc1c22dc366c49404150f9765265c} 
 \index{genetics.\+c@{genetics.\+c}!mutate@{mutate}}
 \index{mutate@{mutate}!genetics.\+c@{genetics.\+c}}
@@ -245,6 +287,10 @@ Starts the mutation process by calling a random amount of mutations.
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 308 of file genetics.\+c.
+
 \hypertarget{genetics_8c_aa521e8cd2d7968deeb428bcbf1733b7f}{}\label{genetics_8c_aa521e8cd2d7968deeb428bcbf1733b7f} 
 \index{genetics.\+c@{genetics.\+c}!set\+Fitness@{set\+Fitness}}
 \index{set\+Fitness@{set\+Fitness}!genetics.\+c@{genetics.\+c}}
@@ -260,6 +306,20 @@ Sets the fitness scorer.
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 528 of file genetics.\+c.
+
+\hypertarget{genetics_8c_a295cb61448f1a5abe8b4ac0de16a4531}{}\label{genetics_8c_a295cb61448f1a5abe8b4ac0de16a4531} 
+\index{genetics.\+c@{genetics.\+c}!should\+Mutate@{should\+Mutate}}
+\index{should\+Mutate@{should\+Mutate}!genetics.\+c@{genetics.\+c}}
+\subsubsection{\texorpdfstring{should\+Mutate()}{shouldMutate()}}
+{\footnotesize\ttfamily int should\+Mutate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 294 of file genetics.\+c.
+
 \hypertarget{genetics_8c_a73e512bd6f99a5448ed11e3aa677c9e7}{}\label{genetics_8c_a73e512bd6f99a5448ed11e3aa677c9e7} 
 \index{genetics.\+c@{genetics.\+c}!teacher\+Can\+Teach@{teacher\+Can\+Teach}}
 \index{teacher\+Can\+Teach@{teacher\+Can\+Teach}!genetics.\+c@{genetics.\+c}}
@@ -282,6 +342,10 @@ Determines wether or not a given teacher can teach the given subject.
 \begin{DoxyReturn}{Returns}
 1 if trie, 0 otherwise 
 \end{DoxyReturn}
+
+
+Definition at line 490 of file genetics.\+c.
+
 \hypertarget{genetics_8c_a607c7e15b989a428f2d82fead8ce15ca}{}\label{genetics_8c_a607c7e15b989a428f2d82fead8ce15ca} 
 \index{genetics.\+c@{genetics.\+c}!weapon\+\_\+x@{weapon\+\_\+x}}
 \index{weapon\+\_\+x@{weapon\+\_\+x}!genetics.\+c@{genetics.\+c}}
@@ -303,6 +367,10 @@ The recursive function who makes sure that n-\/number of mutations is taken plac
 \end{DoxyParams}
 
 
+Definition at line 320 of file genetics.\+c.
+
+
+
 \subsection{Variable Documentation}
 \hypertarget{genetics_8c_a85f077f7266177dd5d6452230d3e4d7f}{}\label{genetics_8c_a85f077f7266177dd5d6452230d3e4d7f} 
 \index{genetics.\+c@{genetics.\+c}!crossover\+\_\+points@{crossover\+\_\+points}}
@@ -310,11 +378,19 @@ The recursive function who makes sure that n-\/number of mutations is taken plac
 \subsubsection{\texorpdfstring{crossover\+\_\+points}{crossover\_points}}
 {\footnotesize\ttfamily int crossover\+\_\+points = 10}
 
+
+
+Definition at line 3 of file genetics.\+c.
+
 \hypertarget{genetics_8c_a3090ea1e8c01a9cb65c020c79be21e95}{}\label{genetics_8c_a3090ea1e8c01a9cb65c020c79be21e95} 
 \index{genetics.\+c@{genetics.\+c}!crossover\+\_\+probability@{crossover\+\_\+probability}}
 \index{crossover\+\_\+probability@{crossover\+\_\+probability}!genetics.\+c@{genetics.\+c}}
 \subsubsection{\texorpdfstring{crossover\+\_\+probability}{crossover\_probability}}
 {\footnotesize\ttfamily int crossover\+\_\+probability = 90}
+
+
+
+Definition at line 5 of file genetics.\+c.
 
 \hypertarget{genetics_8c_a55b9fd39552641e641964022af03b659}{}\label{genetics_8c_a55b9fd39552641e641964022af03b659} 
 \index{genetics.\+c@{genetics.\+c}!mutation\+\_\+probability@{mutation\+\_\+probability}}
@@ -322,9 +398,17 @@ The recursive function who makes sure that n-\/number of mutations is taken plac
 \subsubsection{\texorpdfstring{mutation\+\_\+probability}{mutation\_probability}}
 {\footnotesize\ttfamily int mutation\+\_\+probability = 10}
 
+
+
+Definition at line 6 of file genetics.\+c.
+
 \hypertarget{genetics_8c_a4ddbafc0927da2a42e1728da53b002e2}{}\label{genetics_8c_a4ddbafc0927da2a42e1728da53b002e2} 
 \index{genetics.\+c@{genetics.\+c}!mutation\+\_\+size@{mutation\+\_\+size}}
 \index{mutation\+\_\+size@{mutation\+\_\+size}!genetics.\+c@{genetics.\+c}}
 \subsubsection{\texorpdfstring{mutation\+\_\+size}{mutation\_size}}
 {\footnotesize\ttfamily int mutation\+\_\+size = 100}
+
+
+
+Definition at line 4 of file genetics.\+c.
 

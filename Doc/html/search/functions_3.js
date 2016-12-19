@@ -7,5 +7,6 @@ var searchData=
   ['findsubject',['findSubject',['../file_parse_8c.html#a4da7a6ee777da6220499e59ee0716810',1,'fileParse.c']]],
   ['findsubjectsfromstring',['findSubjectsFromString',['../file_parse_8c.html#a2df7e8dac172816cf2c5cb420116f35f',1,'findSubjectsFromString(char *subjectString, subject *subjectsFound[MAX_SUBJECTS], subject *subjects, int subjectCount):&#160;fileParse.c'],['../headers_8c.html#a2df7e8dac172816cf2c5cb420116f35f',1,'findSubjectsFromString(char *subjectString, subject *subjectsFound[MAX_SUBJECTS], subject *subjects, int subjectCount):&#160;fileParse.c']]],
   ['findteacher',['findTeacher',['../file_parse_8c.html#ac2255d0ccfc0267d7047167aa78a67c4',1,'fileParse.c']]],
+  ['fitnessconflictsdata',['fitnessConflictsData',['../genetics_8c.html#aead18a8ad8114b200eb4ed94b23a662b',1,'fitnessConflictsData(individual *ind, params *populationParams):&#160;genetics.c'],['../headers_8c.html#aead18a8ad8114b200eb4ed94b23a662b',1,'fitnessConflictsData(individual *ind, params *populationParams):&#160;genetics.c']]],
   ['fitnessqsort',['fitnessQsort',['../headers_8c.html#a1f6ecc382430f436c8a8c6079ac12787',1,'fitnessQsort(const void *a, const void *b):&#160;scheduleControl.c'],['../schedule_control_8c.html#a1f6ecc382430f436c8a8c6079ac12787',1,'fitnessQsort(const void *a, const void *b):&#160;scheduleControl.c']]]
 ];

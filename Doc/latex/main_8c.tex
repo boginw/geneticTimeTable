@@ -69,19 +69,19 @@ struct \hyperlink{structparams}{params}
 \item 
 \#define \hyperlink{main_8c_a1791ad1ee4e87d6d65a80cb97c936f12}{M\+A\+X\+\_\+\+M\+U\+T\+A\+T\+I\+O\+NS}~10
 \item 
-\#define \hyperlink{main_8c_a5af961e06e04545c3e025f69232743e4}{N\+U\+M\+\_\+\+O\+F\+\_\+\+G\+EN}~30000 /$\ast$ Max amount of generations to run for $\ast$/
+\#define \hyperlink{main_8c_a5af961e06e04545c3e025f69232743e4}{N\+U\+M\+\_\+\+O\+F\+\_\+\+G\+EN}~8000
 \item 
 \#define \hyperlink{main_8c_a4b33f47944fb3cd104207fb2a4c917be}{K\+I\+L\+L\+\_\+\+S\+H\+I\+T\+\_\+\+G\+EN}~4000
 \item 
-\#define \hyperlink{main_8c_a0076e8fc35e45f2c3fd989fcdd8f12ca}{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+O\+N\+F\+L\+I\+C\+TS}~300
+\#define \hyperlink{main_8c_a0076e8fc35e45f2c3fd989fcdd8f12ca}{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+O\+N\+F\+L\+I\+C\+TS}~600
 \item 
-\#define \hyperlink{main_8c_ae65072d513aa77432355aa0442f39844}{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+N\+U\+L\+L\+\_\+\+H\+O\+U\+RS}~100
+\#define \hyperlink{main_8c_ae65072d513aa77432355aa0442f39844}{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+N\+U\+L\+L\+\_\+\+H\+O\+U\+RS}~110
 \item 
-\#define \hyperlink{main_8c_ab854bc7b6b5bf615ad98800f66594432}{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+P\+R\+E\+P\+A\+R\+A\+T\+I\+O\+N\+\_\+\+T\+I\+ME}~100
+\#define \hyperlink{main_8c_ab854bc7b6b5bf615ad98800f66594432}{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+P\+R\+E\+P\+A\+R\+A\+T\+I\+O\+N\+\_\+\+T\+I\+ME}~20
 \item 
-\#define \hyperlink{main_8c_a3a0dd0e0f93721f50bc66f92b1c43e48}{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+L\+A\+S\+S\+\_\+\+M\+I\+N\+\_\+\+H\+O\+U\+RS}~7
+\#define \hyperlink{main_8c_a3a0dd0e0f93721f50bc66f92b1c43e48}{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+L\+A\+S\+S\+\_\+\+M\+I\+N\+\_\+\+H\+O\+U\+RS}~10
 \item 
-\#define \hyperlink{main_8c_a00d7f25780951db2d554678f369cbf0c}{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+T\+E\+A\+C\+H\+E\+R\+H\+O\+U\+RS}~1
+\#define \hyperlink{main_8c_a00d7f25780951db2d554678f369cbf0c}{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+T\+E\+A\+C\+H\+E\+R\+H\+O\+U\+RS}~20
 \end{DoxyCompactItemize}
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
@@ -110,29 +110,25 @@ typedef struct \hyperlink{structparams}{params} \hyperlink{main_8c_ad1ddd1b1769f
 int \hyperlink{main_8c_abf9e6b7e6f15df4b525a2e7705ba3089}{main} (int argc, char const $\ast$argv\mbox{[}$\,$\mbox{]})
 \item 
 void \hyperlink{main_8c_a60d7b493a6c0e9ce6d4c46296f763301}{selection} (\hyperlink{structparams}{params} $\ast$population\+Params)
-\item 
+\begin{DoxyCompactList}\small\item\em The selection function for the Genetic Algorithm. \end{DoxyCompactList}\item 
 void \hyperlink{main_8c_ac313f967048d86b190bcfecb747d8daa}{calc\+Fitness\+On\+Population} (\hyperlink{structparams}{params} $\ast$population\+Params)
-\item 
+\begin{DoxyCompactList}\small\item\em Calculates the fitness on population. \end{DoxyCompactList}\item 
 void \hyperlink{main_8c_adef02ce7cc49fda732bf007f0f5208b9}{mutate\+Population} (\hyperlink{structparams}{params} $\ast$population\+Params)
-\item 
+\begin{DoxyCompactList}\small\item\em Mutate Population. \end{DoxyCompactList}\item 
 void \hyperlink{main_8c_a9e92356203e5ce2544ad1817aa62163e}{merge\+Population} (\hyperlink{structparams}{params} $\ast$population\+Params)
-\item 
+\begin{DoxyCompactList}\small\item\em meger population, since crossover produces a new array containing childrens and we want an array of parents+childrens for the other GA functions. \end{DoxyCompactList}\item 
 void \hyperlink{main_8c_a241593c34e596f03584fb7214a753f10}{crossover\+Population} (\hyperlink{structparams}{params} $\ast$population\+Params)
-\item 
+\begin{DoxyCompactList}\small\item\em The crossover workflow function. \end{DoxyCompactList}\item 
 int \hyperlink{main_8c_abe7d9036f014124f049c8f3432886e74}{generate\+Initial\+Population} (\hyperlink{structparams}{params} $\ast$population\+Params)
 \item 
 int \hyperlink{main_8c_ae958dfbc5be0b7aab57e4a73d6b9a0b4}{is\+Empty} (int $\ast$array, size\+\_\+t size)
-\item 
-int \hyperlink{main_8c_a295cb61448f1a5abe8b4ac0de16a4531}{should\+Mutate} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Determines if array is empty. \end{DoxyCompactList}\item 
 int \hyperlink{main_8c_a221d185be3302082e06b9e004bb18c4b}{random\+Number} (int min, int max)
-\item 
-void \hyperlink{main_8c_a0121cac97074b5d3dcdf66ee0194b24d}{swapn} (void $\ast$a, void $\ast$b, size\+\_\+t n)
-\item 
+\begin{DoxyCompactList}\small\item\em Generates a random number. \end{DoxyCompactList}\item 
 void \hyperlink{main_8c_a7dcfd4b7d4dab4c330a6d8ffee6927f8}{prepend} (char $\ast$s, const char $\ast$t)
-\item 
+\begin{DoxyCompactList}\small\item\em Prepends string to other string. \end{DoxyCompactList}\item 
 void \hyperlink{main_8c_a76299b86e144434260dcab80323ec9da}{strip} (char $\ast$s)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Strips all unneccesary system characters this allow c to read file more consistently across systems. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -147,31 +143,51 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \index{main.\+c@{main.\+c}!F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+L\+A\+S\+S\+\_\+\+M\+I\+N\+\_\+\+H\+O\+U\+RS@{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+L\+A\+S\+S\+\_\+\+M\+I\+N\+\_\+\+H\+O\+U\+RS}}
 \index{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+L\+A\+S\+S\+\_\+\+M\+I\+N\+\_\+\+H\+O\+U\+RS@{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+L\+A\+S\+S\+\_\+\+M\+I\+N\+\_\+\+H\+O\+U\+RS}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+L\+A\+S\+S\+\_\+\+M\+I\+N\+\_\+\+H\+O\+U\+RS}{FITNESS\_FOR\_CLASS\_MIN\_HOURS}}
-{\footnotesize\ttfamily \#define F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+L\+A\+S\+S\+\_\+\+M\+I\+N\+\_\+\+H\+O\+U\+RS~7}
+{\footnotesize\ttfamily \#define F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+L\+A\+S\+S\+\_\+\+M\+I\+N\+\_\+\+H\+O\+U\+RS~10}
+
+
+
+Definition at line 51 of file main.\+c.
 
 \hypertarget{main_8c_a0076e8fc35e45f2c3fd989fcdd8f12ca}{}\label{main_8c_a0076e8fc35e45f2c3fd989fcdd8f12ca} 
 \index{main.\+c@{main.\+c}!F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+O\+N\+F\+L\+I\+C\+TS@{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+O\+N\+F\+L\+I\+C\+TS}}
 \index{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+O\+N\+F\+L\+I\+C\+TS@{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+O\+N\+F\+L\+I\+C\+TS}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+O\+N\+F\+L\+I\+C\+TS}{FITNESS\_FOR\_CONFLICTS}}
-{\footnotesize\ttfamily \#define F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+O\+N\+F\+L\+I\+C\+TS~300}
+{\footnotesize\ttfamily \#define F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+C\+O\+N\+F\+L\+I\+C\+TS~600}
+
+
+
+Definition at line 48 of file main.\+c.
 
 \hypertarget{main_8c_ae65072d513aa77432355aa0442f39844}{}\label{main_8c_ae65072d513aa77432355aa0442f39844} 
 \index{main.\+c@{main.\+c}!F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+N\+U\+L\+L\+\_\+\+H\+O\+U\+RS@{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+N\+U\+L\+L\+\_\+\+H\+O\+U\+RS}}
 \index{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+N\+U\+L\+L\+\_\+\+H\+O\+U\+RS@{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+N\+U\+L\+L\+\_\+\+H\+O\+U\+RS}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+N\+U\+L\+L\+\_\+\+H\+O\+U\+RS}{FITNESS\_FOR\_NULL\_HOURS}}
-{\footnotesize\ttfamily \#define F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+N\+U\+L\+L\+\_\+\+H\+O\+U\+RS~100}
+{\footnotesize\ttfamily \#define F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+N\+U\+L\+L\+\_\+\+H\+O\+U\+RS~110}
+
+
+
+Definition at line 49 of file main.\+c.
 
 \hypertarget{main_8c_ab854bc7b6b5bf615ad98800f66594432}{}\label{main_8c_ab854bc7b6b5bf615ad98800f66594432} 
 \index{main.\+c@{main.\+c}!F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+P\+R\+E\+P\+A\+R\+A\+T\+I\+O\+N\+\_\+\+T\+I\+ME@{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+P\+R\+E\+P\+A\+R\+A\+T\+I\+O\+N\+\_\+\+T\+I\+ME}}
 \index{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+P\+R\+E\+P\+A\+R\+A\+T\+I\+O\+N\+\_\+\+T\+I\+ME@{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+P\+R\+E\+P\+A\+R\+A\+T\+I\+O\+N\+\_\+\+T\+I\+ME}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+P\+R\+E\+P\+A\+R\+A\+T\+I\+O\+N\+\_\+\+T\+I\+ME}{FITNESS\_FOR\_PREPARATION\_TIME}}
-{\footnotesize\ttfamily \#define F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+P\+R\+E\+P\+A\+R\+A\+T\+I\+O\+N\+\_\+\+T\+I\+ME~100}
+{\footnotesize\ttfamily \#define F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+P\+R\+E\+P\+A\+R\+A\+T\+I\+O\+N\+\_\+\+T\+I\+ME~20}
+
+
+
+Definition at line 50 of file main.\+c.
 
 \hypertarget{main_8c_a00d7f25780951db2d554678f369cbf0c}{}\label{main_8c_a00d7f25780951db2d554678f369cbf0c} 
 \index{main.\+c@{main.\+c}!F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+T\+E\+A\+C\+H\+E\+R\+H\+O\+U\+RS@{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+T\+E\+A\+C\+H\+E\+R\+H\+O\+U\+RS}}
 \index{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+T\+E\+A\+C\+H\+E\+R\+H\+O\+U\+RS@{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+T\+E\+A\+C\+H\+E\+R\+H\+O\+U\+RS}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+T\+E\+A\+C\+H\+E\+R\+H\+O\+U\+RS}{FITNESS\_FOR\_TEACHERHOURS}}
-{\footnotesize\ttfamily \#define F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+T\+E\+A\+C\+H\+E\+R\+H\+O\+U\+RS~1}
+{\footnotesize\ttfamily \#define F\+I\+T\+N\+E\+S\+S\+\_\+\+F\+O\+R\+\_\+\+T\+E\+A\+C\+H\+E\+R\+H\+O\+U\+RS~20}
+
+
+
+Definition at line 52 of file main.\+c.
 
 \hypertarget{main_8c_a4b33f47944fb3cd104207fb2a4c917be}{}\label{main_8c_a4b33f47944fb3cd104207fb2a4c917be} 
 \index{main.\+c@{main.\+c}!K\+I\+L\+L\+\_\+\+S\+H\+I\+T\+\_\+\+G\+EN@{K\+I\+L\+L\+\_\+\+S\+H\+I\+T\+\_\+\+G\+EN}}
@@ -179,11 +195,19 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{K\+I\+L\+L\+\_\+\+S\+H\+I\+T\+\_\+\+G\+EN}{KILL\_SHIT\_GEN}}
 {\footnotesize\ttfamily \#define K\+I\+L\+L\+\_\+\+S\+H\+I\+T\+\_\+\+G\+EN~4000}
 
+
+
+Definition at line 46 of file main.\+c.
+
 \hypertarget{main_8c_aa322a61b17e1d56852d53d5ef6a728c6}{}\label{main_8c_aa322a61b17e1d56852d53d5ef6a728c6} 
 \index{main.\+c@{main.\+c}!M\+A\+X\+\_\+\+C\+L\+A\+S\+S\+ES@{M\+A\+X\+\_\+\+C\+L\+A\+S\+S\+ES}}
 \index{M\+A\+X\+\_\+\+C\+L\+A\+S\+S\+ES@{M\+A\+X\+\_\+\+C\+L\+A\+S\+S\+ES}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+C\+L\+A\+S\+S\+ES}{MAX\_CLASSES}}
 {\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+C\+L\+A\+S\+S\+ES~10}
+
+
+
+Definition at line 34 of file main.\+c.
 
 \hypertarget{main_8c_a5410d56f6be78460a8455c68a796687c}{}\label{main_8c_a5410d56f6be78460a8455c68a796687c} 
 \index{main.\+c@{main.\+c}!M\+A\+X\+\_\+\+I\+N\+D\+I\+V\+I\+D\+U\+A\+LS@{M\+A\+X\+\_\+\+I\+N\+D\+I\+V\+I\+D\+U\+A\+LS}}
@@ -191,11 +215,19 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+I\+N\+D\+I\+V\+I\+D\+U\+A\+LS}{MAX\_INDIVIDUALS}}
 {\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+I\+N\+D\+I\+V\+I\+D\+U\+A\+LS~35}
 
+
+
+Definition at line 37 of file main.\+c.
+
 \hypertarget{main_8c_a40953fb1d014188b77bbf6d21d0b3e6c}{}\label{main_8c_a40953fb1d014188b77bbf6d21d0b3e6c} 
 \index{main.\+c@{main.\+c}!M\+A\+X\+\_\+\+L\+A\+B\+E\+L\+\_\+\+L\+E\+N\+G\+TH@{M\+A\+X\+\_\+\+L\+A\+B\+E\+L\+\_\+\+L\+E\+N\+G\+TH}}
 \index{M\+A\+X\+\_\+\+L\+A\+B\+E\+L\+\_\+\+L\+E\+N\+G\+TH@{M\+A\+X\+\_\+\+L\+A\+B\+E\+L\+\_\+\+L\+E\+N\+G\+TH}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+L\+A\+B\+E\+L\+\_\+\+L\+E\+N\+G\+TH}{MAX\_LABEL\_LENGTH}}
 {\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+L\+A\+B\+E\+L\+\_\+\+L\+E\+N\+G\+TH~12}
+
+
+
+Definition at line 29 of file main.\+c.
 
 \hypertarget{main_8c_a152499a7a91751df0c7f203a60a88003}{}\label{main_8c_a152499a7a91751df0c7f203a60a88003} 
 \index{main.\+c@{main.\+c}!M\+A\+X\+\_\+\+L\+E\+C\+T\+U\+R\+ES@{M\+A\+X\+\_\+\+L\+E\+C\+T\+U\+R\+ES}}
@@ -203,11 +235,19 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+L\+E\+C\+T\+U\+R\+ES}{MAX\_LECTURES}}
 {\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+L\+E\+C\+T\+U\+R\+ES~45}
 
+
+
+Definition at line 42 of file main.\+c.
+
 \hypertarget{main_8c_a1791ad1ee4e87d6d65a80cb97c936f12}{}\label{main_8c_a1791ad1ee4e87d6d65a80cb97c936f12} 
 \index{main.\+c@{main.\+c}!M\+A\+X\+\_\+\+M\+U\+T\+A\+T\+I\+O\+NS@{M\+A\+X\+\_\+\+M\+U\+T\+A\+T\+I\+O\+NS}}
 \index{M\+A\+X\+\_\+\+M\+U\+T\+A\+T\+I\+O\+NS@{M\+A\+X\+\_\+\+M\+U\+T\+A\+T\+I\+O\+NS}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+M\+U\+T\+A\+T\+I\+O\+NS}{MAX\_MUTATIONS}}
 {\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+M\+U\+T\+A\+T\+I\+O\+NS~10}
+
+
+
+Definition at line 44 of file main.\+c.
 
 \hypertarget{main_8c_a0c397a708cec89c74029582574516b30}{}\label{main_8c_a0c397a708cec89c74029582574516b30} 
 \index{main.\+c@{main.\+c}!M\+A\+X\+\_\+\+N\+A\+M\+E\+\_\+\+L\+E\+N\+G\+TH@{M\+A\+X\+\_\+\+N\+A\+M\+E\+\_\+\+L\+E\+N\+G\+TH}}
@@ -215,11 +255,19 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+N\+A\+M\+E\+\_\+\+L\+E\+N\+G\+TH}{MAX\_NAME\_LENGTH}}
 {\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+N\+A\+M\+E\+\_\+\+L\+E\+N\+G\+TH~255}
 
+
+
+Definition at line 28 of file main.\+c.
+
 \hypertarget{main_8c_a251d94cd24a2ca3369fc3f8eca8c19ae}{}\label{main_8c_a251d94cd24a2ca3369fc3f8eca8c19ae} 
 \index{main.\+c@{main.\+c}!M\+A\+X\+\_\+\+R\+O\+O\+MS@{M\+A\+X\+\_\+\+R\+O\+O\+MS}}
 \index{M\+A\+X\+\_\+\+R\+O\+O\+MS@{M\+A\+X\+\_\+\+R\+O\+O\+MS}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+R\+O\+O\+MS}{MAX\_ROOMS}}
 {\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+R\+O\+O\+MS~10}
+
+
+
+Definition at line 33 of file main.\+c.
 
 \hypertarget{main_8c_ae955f276de63586aaf0c290d32652706}{}\label{main_8c_ae955f276de63586aaf0c290d32652706} 
 \index{main.\+c@{main.\+c}!M\+A\+X\+\_\+\+S\+U\+B\+J\+E\+C\+TS@{M\+A\+X\+\_\+\+S\+U\+B\+J\+E\+C\+TS}}
@@ -227,11 +275,19 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+S\+U\+B\+J\+E\+C\+TS}{MAX\_SUBJECTS}}
 {\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+S\+U\+B\+J\+E\+C\+TS~20}
 
+
+
+Definition at line 32 of file main.\+c.
+
 \hypertarget{main_8c_a3fb996f20bbe5e89b2dce6ccbf876132}{}\label{main_8c_a3fb996f20bbe5e89b2dce6ccbf876132} 
 \index{main.\+c@{main.\+c}!M\+A\+X\+\_\+\+T\+E\+A\+C\+H\+E\+RS@{M\+A\+X\+\_\+\+T\+E\+A\+C\+H\+E\+RS}}
 \index{M\+A\+X\+\_\+\+T\+E\+A\+C\+H\+E\+RS@{M\+A\+X\+\_\+\+T\+E\+A\+C\+H\+E\+RS}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+T\+E\+A\+C\+H\+E\+RS}{MAX\_TEACHERS}}
 {\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+T\+E\+A\+C\+H\+E\+RS~20}
+
+
+
+Definition at line 35 of file main.\+c.
 
 \hypertarget{main_8c_a8ecfad8582ffc007d17db72ef4901fd3}{}\label{main_8c_a8ecfad8582ffc007d17db72ef4901fd3} 
 \index{main.\+c@{main.\+c}!M\+A\+X\+\_\+\+T\+I\+M\+E\+T\+A\+B\+L\+ES@{M\+A\+X\+\_\+\+T\+I\+M\+E\+T\+A\+B\+L\+ES}}
@@ -239,11 +295,19 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+T\+I\+M\+E\+T\+A\+B\+L\+ES}{MAX\_TIMETABLES}}
 {\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+T\+I\+M\+E\+T\+A\+B\+L\+ES~10}
 
+
+
+Definition at line 36 of file main.\+c.
+
 \hypertarget{main_8c_a59bcbb5f6896e44dfd79fa63508cfec3}{}\label{main_8c_a59bcbb5f6896e44dfd79fa63508cfec3} 
 \index{main.\+c@{main.\+c}!M\+A\+X\+\_\+\+Y\+E\+AR@{M\+A\+X\+\_\+\+Y\+E\+AR}}
 \index{M\+A\+X\+\_\+\+Y\+E\+AR@{M\+A\+X\+\_\+\+Y\+E\+AR}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+Y\+E\+AR}{MAX\_YEAR}}
 {\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+Y\+E\+AR~10}
+
+
+
+Definition at line 30 of file main.\+c.
 
 \hypertarget{main_8c_a1f4c56bb7354117af6cec64e7236d54e}{}\label{main_8c_a1f4c56bb7354117af6cec64e7236d54e} 
 \index{main.\+c@{main.\+c}!M\+I\+N\+U\+T\+E\+S\+\_\+\+I\+N\+\_\+\+H\+O\+UR@{M\+I\+N\+U\+T\+E\+S\+\_\+\+I\+N\+\_\+\+H\+O\+UR}}
@@ -251,17 +315,29 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{M\+I\+N\+U\+T\+E\+S\+\_\+\+I\+N\+\_\+\+H\+O\+UR}{MINUTES\_IN\_HOUR}}
 {\footnotesize\ttfamily \#define M\+I\+N\+U\+T\+E\+S\+\_\+\+I\+N\+\_\+\+H\+O\+UR~60}
 
+
+
+Definition at line 41 of file main.\+c.
+
 \hypertarget{main_8c_af8cbd9406d158c8b8f262963e9470d80}{}\label{main_8c_af8cbd9406d158c8b8f262963e9470d80} 
 \index{main.\+c@{main.\+c}!M\+U\+T\+A\+T\+I\+O\+N\+\_\+\+C\+H\+A\+N\+CE@{M\+U\+T\+A\+T\+I\+O\+N\+\_\+\+C\+H\+A\+N\+CE}}
 \index{M\+U\+T\+A\+T\+I\+O\+N\+\_\+\+C\+H\+A\+N\+CE@{M\+U\+T\+A\+T\+I\+O\+N\+\_\+\+C\+H\+A\+N\+CE}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{M\+U\+T\+A\+T\+I\+O\+N\+\_\+\+C\+H\+A\+N\+CE}{MUTATION\_CHANCE}}
 {\footnotesize\ttfamily \#define M\+U\+T\+A\+T\+I\+O\+N\+\_\+\+C\+H\+A\+N\+CE~5}
 
+
+
+Definition at line 43 of file main.\+c.
+
 \hypertarget{main_8c_a5af961e06e04545c3e025f69232743e4}{}\label{main_8c_a5af961e06e04545c3e025f69232743e4} 
 \index{main.\+c@{main.\+c}!N\+U\+M\+\_\+\+O\+F\+\_\+\+G\+EN@{N\+U\+M\+\_\+\+O\+F\+\_\+\+G\+EN}}
 \index{N\+U\+M\+\_\+\+O\+F\+\_\+\+G\+EN@{N\+U\+M\+\_\+\+O\+F\+\_\+\+G\+EN}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{N\+U\+M\+\_\+\+O\+F\+\_\+\+G\+EN}{NUM\_OF\_GEN}}
-{\footnotesize\ttfamily \#define N\+U\+M\+\_\+\+O\+F\+\_\+\+G\+EN~30000 /$\ast$ Max amount of generations to run for $\ast$/}
+{\footnotesize\ttfamily \#define N\+U\+M\+\_\+\+O\+F\+\_\+\+G\+EN~8000}
+
+
+
+Definition at line 45 of file main.\+c.
 
 \hypertarget{main_8c_a7ad0ff505fc5b41d49ed6581454ba1f9}{}\label{main_8c_a7ad0ff505fc5b41d49ed6581454ba1f9} 
 \index{main.\+c@{main.\+c}!S\+C\+H\+O\+O\+L\+\_\+\+D\+A\+Y\+S\+\_\+\+Y\+E\+AR@{S\+C\+H\+O\+O\+L\+\_\+\+D\+A\+Y\+S\+\_\+\+Y\+E\+AR}}
@@ -269,11 +345,19 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{S\+C\+H\+O\+O\+L\+\_\+\+D\+A\+Y\+S\+\_\+\+Y\+E\+AR}{SCHOOL\_DAYS\_YEAR}}
 {\footnotesize\ttfamily \#define S\+C\+H\+O\+O\+L\+\_\+\+D\+A\+Y\+S\+\_\+\+Y\+E\+AR~200}
 
+
+
+Definition at line 39 of file main.\+c.
+
 \hypertarget{main_8c_a65f5fcd4660fcf5c3ec102a0e35a9478}{}\label{main_8c_a65f5fcd4660fcf5c3ec102a0e35a9478} 
 \index{main.\+c@{main.\+c}!W\+E\+E\+K\+\_\+\+L\+E\+N\+G\+TH@{W\+E\+E\+K\+\_\+\+L\+E\+N\+G\+TH}}
 \index{W\+E\+E\+K\+\_\+\+L\+E\+N\+G\+TH@{W\+E\+E\+K\+\_\+\+L\+E\+N\+G\+TH}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{W\+E\+E\+K\+\_\+\+L\+E\+N\+G\+TH}{WEEK\_LENGTH}}
 {\footnotesize\ttfamily \#define W\+E\+E\+K\+\_\+\+L\+E\+N\+G\+TH~5}
+
+
+
+Definition at line 40 of file main.\+c.
 
 
 
@@ -341,11 +425,37 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{calc\+Fitness\+On\+Population()}{calcFitnessOnPopulation()}}
 {\footnotesize\ttfamily void calc\+Fitness\+On\+Population (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
 
+
+
+Calculates the fitness on population. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em population\+Params} & The population parameters \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 362 of file main.\+c.
+
 \hypertarget{main_8c_a241593c34e596f03584fb7214a753f10}{}\label{main_8c_a241593c34e596f03584fb7214a753f10} 
 \index{main.\+c@{main.\+c}!crossover\+Population@{crossover\+Population}}
 \index{crossover\+Population@{crossover\+Population}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{crossover\+Population()}{crossoverPopulation()}}
 {\footnotesize\ttfamily void crossover\+Population (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
+
+
+
+The crossover workflow function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em population\+Params} & The population parameters \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 426 of file main.\+c.
 
 \hypertarget{main_8c_abe7d9036f014124f049c8f3432886e74}{}\label{main_8c_abe7d9036f014124f049c8f3432886e74} 
 \index{main.\+c@{main.\+c}!generate\+Initial\+Population@{generate\+Initial\+Population}}
@@ -353,11 +463,33 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{generate\+Initial\+Population()}{generateInitialPopulation()}}
 {\footnotesize\ttfamily int generate\+Initial\+Population (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
 
+
+
+Definition at line 441 of file main.\+c.
+
 \hypertarget{main_8c_ae958dfbc5be0b7aab57e4a73d6b9a0b4}{}\label{main_8c_ae958dfbc5be0b7aab57e4a73d6b9a0b4} 
 \index{main.\+c@{main.\+c}!is\+Empty@{is\+Empty}}
 \index{is\+Empty@{is\+Empty}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{is\+Empty()}{isEmpty()}}
 {\footnotesize\ttfamily int is\+Empty (\begin{DoxyParamCaption}\item[{int $\ast$}]{array,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Determines if array is empty. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em array} & The array \\
+\hline
+\mbox{\tt in}  & {\em size} & The size\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if empty, False otherwise. 
+\end{DoxyReturn}
+
+
+Definition at line 459 of file main.\+c.
 
 \hypertarget{main_8c_abf9e6b7e6f15df4b525a2e7705ba3089}{}\label{main_8c_abf9e6b7e6f15df4b525a2e7705ba3089} 
 \index{main.\+c@{main.\+c}!main@{main}}
@@ -365,11 +497,28 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{main()}{main()}}
 {\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char const $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
 
+
+
+Definition at line 152 of file main.\+c.
+
 \hypertarget{main_8c_a9e92356203e5ce2544ad1817aa62163e}{}\label{main_8c_a9e92356203e5ce2544ad1817aa62163e} 
 \index{main.\+c@{main.\+c}!merge\+Population@{merge\+Population}}
 \index{merge\+Population@{merge\+Population}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{merge\+Population()}{mergePopulation()}}
 {\footnotesize\ttfamily void merge\+Population (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
+
+
+
+meger population, since crossover produces a new array containing childrens and we want an array of parents+childrens for the other GA functions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em population\+Params} & The population parameters \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 408 of file main.\+c.
 
 \hypertarget{main_8c_adef02ce7cc49fda732bf007f0f5208b9}{}\label{main_8c_adef02ce7cc49fda732bf007f0f5208b9} 
 \index{main.\+c@{main.\+c}!mutate\+Population@{mutate\+Population}}
@@ -377,11 +526,39 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{mutate\+Population()}{mutatePopulation()}}
 {\footnotesize\ttfamily void mutate\+Population (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
 
+
+
+Mutate Population. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em population\+Params} & The population parameters \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 393 of file main.\+c.
+
 \hypertarget{main_8c_a7dcfd4b7d4dab4c330a6d8ffee6927f8}{}\label{main_8c_a7dcfd4b7d4dab4c330a6d8ffee6927f8} 
 \index{main.\+c@{main.\+c}!prepend@{prepend}}
 \index{prepend@{prepend}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{prepend()}{prepend()}}
 {\footnotesize\ttfamily void prepend (\begin{DoxyParamCaption}\item[{char $\ast$}]{s,  }\item[{const char $\ast$}]{t }\end{DoxyParamCaption})}
+
+
+
+Prepends string to other string. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em s} & The target string \\
+\hline
+\mbox{\tt in}  & {\em t} & The string that needs to be prepended the target \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 487 of file main.\+c.
 
 \hypertarget{main_8c_a221d185be3302082e06b9e004bb18c4b}{}\label{main_8c_a221d185be3302082e06b9e004bb18c4b} 
 \index{main.\+c@{main.\+c}!random\+Number@{random\+Number}}
@@ -389,27 +566,42 @@ int \hyperlink{main_8c_af9346191d451d4221822369744f702a5}{conflict\+Only} = 0
 \subsubsection{\texorpdfstring{random\+Number()}{randomNumber()}}
 {\footnotesize\ttfamily int random\+Number (\begin{DoxyParamCaption}\item[{int}]{min,  }\item[{int}]{max }\end{DoxyParamCaption})}
 
-Generates a random number 
-\begin{DoxyParams}{Parameters}
-{\em min} & smallest possible number \\
+
+
+Generates a random number. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em min} & The minimum possible number \\
 \hline
-{\em max} & largest possible number \\
+\mbox{\tt in}  & {\em max} & The maximum possible number\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 random number between min and max 
 \end{DoxyReturn}
+
+
+Definition at line 476 of file main.\+c.
+
 \hypertarget{main_8c_a60d7b493a6c0e9ce6d4c46296f763301}{}\label{main_8c_a60d7b493a6c0e9ce6d4c46296f763301} 
 \index{main.\+c@{main.\+c}!selection@{selection}}
 \index{selection@{selection}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{selection()}{selection()}}
 {\footnotesize\ttfamily void selection (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
 
-\hypertarget{main_8c_a295cb61448f1a5abe8b4ac0de16a4531}{}\label{main_8c_a295cb61448f1a5abe8b4ac0de16a4531} 
-\index{main.\+c@{main.\+c}!should\+Mutate@{should\+Mutate}}
-\index{should\+Mutate@{should\+Mutate}!main.\+c@{main.\+c}}
-\subsubsection{\texorpdfstring{should\+Mutate()}{shouldMutate()}}
-{\footnotesize\ttfamily int should\+Mutate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+The selection function for the Genetic Algorithm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em population\+Params} & The population parameters \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 324 of file main.\+c.
 
 \hypertarget{main_8c_a76299b86e144434260dcab80323ec9da}{}\label{main_8c_a76299b86e144434260dcab80323ec9da} 
 \index{main.\+c@{main.\+c}!strip@{strip}}
@@ -417,21 +609,19 @@ random number between min and max
 \subsubsection{\texorpdfstring{strip()}{strip()}}
 {\footnotesize\ttfamily void strip (\begin{DoxyParamCaption}\item[{char $\ast$}]{s }\end{DoxyParamCaption})}
 
-\hypertarget{main_8c_a0121cac97074b5d3dcdf66ee0194b24d}{}\label{main_8c_a0121cac97074b5d3dcdf66ee0194b24d} 
-\index{main.\+c@{main.\+c}!swapn@{swapn}}
-\index{swapn@{swapn}!main.\+c@{main.\+c}}
-\subsubsection{\texorpdfstring{swapn()}{swapn()}}
-{\footnotesize\ttfamily void swapn (\begin{DoxyParamCaption}\item[{void $\ast$}]{a,  }\item[{void $\ast$}]{b,  }\item[{size\+\_\+t}]{n }\end{DoxyParamCaption})}
 
-Swaps the values of two variables 
+
+Strips all unneccesary system characters this allow c to read file more consistently across systems. 
+
+
 \begin{DoxyParams}{Parameters}
-{\em a} & first var \\
-\hline
-{\em b} & seconds var \\
-\hline
-{\em n} & size of variables \\
+{\em s} & the string \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 505 of file main.\+c.
+
 
 
 \subsection{Variable Documentation}
@@ -441,10 +631,17 @@ Swaps the values of two variables
 \subsubsection{\texorpdfstring{conflict\+Only}{conflictOnly}}
 {\footnotesize\ttfamily int conflict\+Only = 0}
 
+
+
+Definition at line 55 of file main.\+c.
+
 \hypertarget{main_8c_ac3e1795766a80ec63b157951b4b9a7d4}{}\label{main_8c_ac3e1795766a80ec63b157951b4b9a7d4} 
 \index{main.\+c@{main.\+c}!debug@{debug}}
 \index{debug@{debug}!main.\+c@{main.\+c}}
 \subsubsection{\texorpdfstring{debug}{debug}}
 {\footnotesize\ttfamily int debug = 0}
 
-A\+S\+S\+U\+M\+P\+T\+I\+O\+NS\+: every room has enough space for an entire class there are 10 different classyears 
+
+
+Definition at line 54 of file main.\+c.
+

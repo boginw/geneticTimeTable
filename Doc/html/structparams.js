@@ -1,7 +1,7 @@
 var structparams =
 [
-    [ "akkConflicts", "structparams.html#a65246c200b5a0a3b217127742e782a70", null ],
-    [ "akkFitnessPoints", "structparams.html#a396ffba445476cab3ea4da965ec8dfcd", null ],
+    [ "accConflicts", "structparams.html#a6d6078bdcb51ea92e024befc47fbe3b0", null ],
+    [ "accFitnessPoints", "structparams.html#aa9b36381502ef09962f85670e29a9b75", null ],
     [ "biggestConflicts", "structparams.html#aeceaf128c1a93e23f79533ff51d9ebd9", null ],
     [ "biggestNullHours", "structparams.html#a9b6eb91317b38a72b50eced2b8fbbafc", null ],
     [ "childrens", "structparams.html#abf705e1aa269afb40b47480fe463009f", null ],

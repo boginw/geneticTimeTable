@@ -1,3 +1,21 @@
+/*
+ * Group: B2-28a - <sw1b2-28a@student.aau.dk>
+ * University: Aalborg Universitet
+ * Semester: 1. semester
+ * Project: P1 - "Timetable generation for schools by using genetic algorithm"
+ * Date: 19/12/2016
+ *
+ * Students:
+ *         Jonas Ørstad Petersen          - <jape16@student.aau.dk>
+ *         Rune Skifter Kristensen        - <rskr16@student.aau.dk>
+ *         Lasse Ravn                     - <lrav16@student.aau.dk>
+ *         Bogi Napoleon Wennerström      - <bwenne16@student.aau.dk>
+ *         Frederik Øgaard Jensen         - <faje15@student.aau.dk>
+ *         Malte Zoëga Andreasen          - <mzan16@student.aau.dk>
+ *         Morten Hartvigsen              - <mhartv16@student.aau.dk>
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -7,38 +25,31 @@
 #include <math.h>
 #include <stdarg.h>
 
-#define MAX_NAME_LENGTH   255
-#define MAX_LABEL_LENGTH   12
-#define MAX_YEAR           10
+#define MAX_NAME_LENGTH                      255
+#define MAX_LABEL_LENGTH                      12
+#define MAX_YEAR                              10
 
-#define MAX_SUBJECTS       20
-#define MAX_ROOMS          10
-#define MAX_CLASSES        10
-#define MAX_TEACHERS       20
-#define MAX_TIMETABLES     10
-#define MAX_INDIVIDUALS    35
+#define MAX_SUBJECTS                          20
+#define MAX_ROOMS                             10
+#define MAX_CLASSES                           10
+#define MAX_TEACHERS                          20
+#define MAX_TIMETABLES                        10
+#define MAX_INDIVIDUALS                       35
 
-#define SCHOOL_DAYS_YEAR  200
-#define WEEK_LENGTH         5
-#define MINUTES_IN_HOUR    60
-#define MAX_LECTURES       45
-#define MUTATION_CHANCE     5
-#define MAX_MUTATIONS      10
-#define NUM_OF_GEN       8000 /* Max amount of generations to run for */
-#define KILL_SHIT_GEN    4000
-
+#define SCHOOL_DAYS_YEAR                     200
+#define WEEK_LENGTH                            5
+#define MINUTES_IN_HOUR                       60
+#define MAX_LECTURES                          45
+#define MUTATION_CHANCE                        5
+#define MAX_MUTATIONS                         10
+#define NUM_OF_GEN                          8000
+#define KILL_SHIT_GEN                       4000
 
 #define FITNESS_FOR_CONFLICTS                600
 #define FITNESS_FOR_NULL_HOURS               110
-#define FITNESS_FOR_PREPARATION_TIME         20
-#define FITNESS_FOR_CLASS_MIN_HOURS          10
-#define FITNESS_FOR_TEACHERHOURS             20
-
-/**
- * ASSUMPTIONS:
- *  every room has enough space for an entire class
- *  there are 10 different classyears
- */
+#define FITNESS_FOR_PREPARATION_TIME          20
+#define FITNESS_FOR_CLASS_MIN_HOURS           10
+#define FITNESS_FOR_TEACHERHOURS              20
 
 int debug = 0;
 int conflictOnly = 0;
@@ -66,10 +77,10 @@ typedef struct subject{
 typedef struct teacher{
 	int      id;
     char     name[MAX_NAME_LENGTH];
-    int      isClassleader; 
-    class*   leaderOfClass; 
-    subject* canTeach[MAX_SUBJECTS]; 
-    int      canTeachLength; 
+    int      isClassleader;
+    class*   leaderOfClass;
+    subject* canTeach[MAX_SUBJECTS];
+    int      canTeachLength;
     int      maxWorkHours;
 } teacher;
 
@@ -79,36 +90,36 @@ typedef struct datetime{
 } datetime;
 
 typedef struct lecture{
-    int     init; 
-    int     free; 
+    int     init;
+    int     free;
     int     conflictRoom;
     int     conflictTeacher;
-    room    *l_room; 
-    class   *l_class; 
-    subject *l_subject; 
-    teacher *l_teacher; 
-    datetime l_datetime; 
+    room    *l_room;
+    class   *l_class;
+    subject *l_subject;
+    teacher *l_teacher;
+    datetime l_datetime;
 } lecture;
 
 typedef struct timetable{
-    lecture lectures[MAX_LECTURES]; 
+    lecture lectures[MAX_LECTURES];
     int numOfConflicts;
-    int lectureLength; 
+    int lectureLength;
     class *forClass;
 } timetable;
 
 typedef struct individual{
-    timetable t[MAX_CLASSES]; 
-    int fitness; 
+    timetable t[MAX_CLASSES];
+    int fitness;
     int conflicts;
     int mutations;
     int nullHours;
 } individual;
 
 typedef struct params{
-    room       *rooms; 
-    subject    *subjects; 
-    class      *classes; 
+    room       *rooms;
+    subject    *subjects;
+    class      *classes;
     teacher    *teachers;
     individual *individuals;
     individual *childrens;
@@ -204,10 +215,9 @@ int main(int argc, char const *argv[]){
         printf("Seed: %d\n", seed);
     }
 
-    /* 
+    /*
      * Initializing variables by parsing dat.sched through fileParse.c functions
      */
-
     init(&populationParams);
 
 
@@ -306,6 +316,11 @@ int main(int argc, char const *argv[]){
     return 0;
 }
 
+/**
+ * @brief      The selection function for the Genetic Algorithm
+ *
+ * @param      populationParams  The population parameters
+ */
 void selection(params *populationParams){
     int i, *roulette, rouletteCount=0, p, rouletteSelector;
     int prop;
@@ -339,8 +354,11 @@ void selection(params *populationParams){
     free(roulette);
 }
 
-
-
+/**
+ * @brief      Calculates the fitness on population.
+ *
+ * @param      populationParams  The population parameters
+ */
 void calcFitnessOnPopulation(params *populationParams){
     int i;
     populationParams->accConflicts     = 0;
@@ -367,6 +385,11 @@ void calcFitnessOnPopulation(params *populationParams){
     setFitness(populationParams);
 }
 
+/**
+ * @brief      Mutate Population
+ *
+ * @param      populationParams  The population parameters
+ */
 void mutatePopulation(params *populationParams){
     int i;
     for(i = 0; i < populationParams->tempPopulationCount; i++){
@@ -376,6 +399,12 @@ void mutatePopulation(params *populationParams){
     }
 }
 
+/**
+ * @brief      meger population, since crossover produces a new array containing childrens
+ *             and we want an array of parents+childrens for the other GA functions.
+ *
+ * @param      populationParams  The population parameters
+ */
 void mergePopulation(params *populationParams){
     int i,j=0;
     for(i=0; i < populationParams->individualsCount; i++){
@@ -389,6 +418,11 @@ void mergePopulation(params *populationParams){
     populationParams->childrensCount = 0;
 }
 
+/**
+ * @brief      The crossover workflow function
+ *
+ * @param      populationParams  The population parameters
+ */
 void crossoverPopulation(params *populationParams){
    int i, countChildren = 0;
     for(i = 0; i < MAX_INDIVIDUALS - 1; i++){
@@ -414,12 +448,14 @@ int generateInitialPopulation(params *populationParams){
     return conflictsSum;
 }
 
-
-
-
-
-
-
+/**
+ * @brief      Determines if array is empty.
+ *
+ * @param      array  The array
+ * @param[in]  size   The size
+ *
+ * @return     True if empty, False otherwise.
+ */
 int isEmpty(int *array, size_t size){
     int i;
     int empty = 0;
@@ -430,9 +466,11 @@ int isEmpty(int *array, size_t size){
 }
 
 /**
- * Generates a random number
- * @param  min smallest possible number
- * @param  max largest possible number
+ * @brief      Generates a random number
+ *
+ * @param[in]  min   The minimum possible number
+ * @param[in]  max   The maximum possible number
+ *
  * @return     random number between min and max
  */
 int randomNumber(int min, int max){
@@ -440,6 +478,12 @@ int randomNumber(int min, int max){
     return i;
 }
 
+/**
+ * @brief      Prepends string to other string
+ *
+ * @param      s     The target string
+ * @param[in]  t     The string that needs to be prepended the target
+ */
 void prepend(char* s, const char* t){
     size_t len = strlen(t);
     size_t i;
@@ -452,6 +496,12 @@ void prepend(char* s, const char* t){
     }
 }
 
+/**
+ * @brief      Strips all unneccesary system characters
+ *             this allow c to read file more consistently across systems
+ *
+ * @param      s    the string
+ */
 void strip(char *s) {
     char *p2 = s;
     while(*s != '\0') {

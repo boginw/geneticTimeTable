@@ -22,13 +22,13 @@ int \hyperlink{headers_8c_a2df7e8dac172816cf2c5cb420116f35f}{find\+Subjects\+Fro
 \hyperlink{structclass}{class} \hyperlink{headers_8c_a19af3b30e978f68183c3826c1f1e30ae}{find\+Class} (char $\ast$class\+Name, \hyperlink{structclass}{class} classes\mbox{[}\hyperlink{main_8c_aa322a61b17e1d56852d53d5ef6a728c6}{M\+A\+X\+\_\+\+C\+L\+A\+S\+S\+ES}\mbox{]}, int class\+Count)
 \item 
 void \hyperlink{headers_8c_a241593c34e596f03584fb7214a753f10}{crossover\+Population} (\hyperlink{structparams}{params} $\ast$population\+Params)
-\item 
+\begin{DoxyCompactList}\small\item\em The crossover workflow function. \end{DoxyCompactList}\item 
 void \hyperlink{headers_8c_adef02ce7cc49fda732bf007f0f5208b9}{mutate\+Population} (\hyperlink{structparams}{params} $\ast$population\+Params)
-\item 
+\begin{DoxyCompactList}\small\item\em Mutate Population. \end{DoxyCompactList}\item 
 void \hyperlink{headers_8c_ac313f967048d86b190bcfecb747d8daa}{calc\+Fitness\+On\+Population} (\hyperlink{structparams}{params} $\ast$population\+Params)
-\item 
+\begin{DoxyCompactList}\small\item\em Calculates the fitness on population. \end{DoxyCompactList}\item 
 void \hyperlink{headers_8c_a60d7b493a6c0e9ce6d4c46296f763301}{selection} (\hyperlink{structparams}{params} $\ast$population\+Params)
-\item 
+\begin{DoxyCompactList}\small\item\em The selection function for the Genetic Algorithm. \end{DoxyCompactList}\item 
 void \hyperlink{headers_8c_ac849128945062cd65be0dc510b034f97}{print\+Lecture} (\hyperlink{structlecture}{lecture} l)
 \begin{DoxyCompactList}\small\item\em Prints core elements of a lecture. \end{DoxyCompactList}\item 
 char $\ast$ \hyperlink{headers_8c_ad3feb3d605e10a84270ac6bb7ada6c84}{auto\+Padding} (char $\ast$header, int width)
@@ -36,7 +36,7 @@ char $\ast$ \hyperlink{headers_8c_ad3feb3d605e10a84270ac6bb7ada6c84}{auto\+Paddi
 void \hyperlink{headers_8c_af82c81eb76ab0f756d6601421bf411d3}{print\+Time\+Table} (\hyperlink{structtimetable}{timetable} t, char($\ast$labels)\mbox{[}\hyperlink{main_8c_a40953fb1d014188b77bbf6d21d0b3e6c}{M\+A\+X\+\_\+\+L\+A\+B\+E\+L\+\_\+\+L\+E\+N\+G\+TH}\mbox{]})
 \begin{DoxyCompactList}\small\item\em Prints a complete timetable. \end{DoxyCompactList}\item 
 void \hyperlink{headers_8c_a9e92356203e5ce2544ad1817aa62163e}{merge\+Population} (\hyperlink{structparams}{params} $\ast$population\+Params)
-\item 
+\begin{DoxyCompactList}\small\item\em meger population, since crossover produces a new array containing childrens and we want an array of parents+childrens for the other GA functions. \end{DoxyCompactList}\item 
 \hyperlink{structlecture}{lecture} \hyperlink{headers_8c_a9d118eef60cf5e70e57f9e6f395b46d4}{random\+Lecture\+For\+Class\+And\+Subject} (\hyperlink{structparams}{params} $\ast$population\+Params, \hyperlink{structclass}{class} $\ast$cur\+Class, \hyperlink{structsubject}{subject} $\ast$cur\+Subject)
 \begin{DoxyCompactList}\small\item\em Generate a random lecture for a specific class and subject. \end{DoxyCompactList}\item 
 void \hyperlink{headers_8c_a99ebc1c22dc366c49404150f9765265c}{mutate} (\hyperlink{structindividual}{individual} $\ast$i, \hyperlink{structparams}{params} $\ast$population\+Params)
@@ -57,7 +57,7 @@ void \hyperlink{headers_8c_a5cf127d6ac71040989f925cf19bb7e16}{get\+Random\+Datet
 \begin{DoxyCompactList}\small\item\em Finds a random teacher for a given subject, it only returns a teacher who is actually able to teach the subject. \end{DoxyCompactList}\item 
 int \hyperlink{headers_8c_a73e512bd6f99a5448ed11e3aa677c9e7}{teacher\+Can\+Teach} (\hyperlink{structsubject}{subject} $\ast$$\ast$can\+Teach, int can\+Teach\+Length, char $\ast$subject\+Name)
 \begin{DoxyCompactList}\small\item\em Determines wether or not a given teacher can teach the given subject. \end{DoxyCompactList}\item 
-void \hyperlink{headers_8c_a57dec049f65edbdacf0a5de26a99313d}{conflicts\+And\+Preperation} (\hyperlink{structindividual}{individual} $\ast$ind, \hyperlink{structparams}{params} $\ast$population\+Params)
+void \hyperlink{headers_8c_aead18a8ad8114b200eb4ed94b23a662b}{fitness\+Conflicts\+Data} (\hyperlink{structindividual}{individual} $\ast$ind, \hyperlink{structparams}{params} $\ast$population\+Params)
 \begin{DoxyCompactList}\small\item\em Counts conflicts and prepare data for fitness function on a single individual. \end{DoxyCompactList}\item 
 \hyperlink{structindividual}{individual} \hyperlink{headers_8c_ad48b28bf8f09bfa16c68688780d00fef}{random\+Individual} (\hyperlink{structparams}{params} $\ast$population\+Params)
 \begin{DoxyCompactList}\small\item\em Generates a random individual. \end{DoxyCompactList}\item 
@@ -66,17 +66,17 @@ int \hyperlink{headers_8c_a1f7368a103edf0e2a1840e3512c9496b}{lecture\+On\+Date\+
 int \hyperlink{headers_8c_a46b5aa1295ee787e9624f78702ead9f8}{is\+Same\+Lecture\+Sequent} (\hyperlink{structlecture}{lecture} $\ast$l1, \hyperlink{structlecture}{lecture} $\ast$l2)
 \begin{DoxyCompactList}\small\item\em Determines if two sequent lectures are the same. \end{DoxyCompactList}\item 
 void \hyperlink{headers_8c_a76299b86e144434260dcab80323ec9da}{strip} (char $\ast$s)
-\item 
+\begin{DoxyCompactList}\small\item\em Strips all unneccesary system characters this allow c to read file more consistently across systems. \end{DoxyCompactList}\item 
 int \hyperlink{headers_8c_a221d185be3302082e06b9e004bb18c4b}{random\+Number} (int min, int max)
-\item 
+\begin{DoxyCompactList}\small\item\em Generates a random number. \end{DoxyCompactList}\item 
 void \hyperlink{headers_8c_a0121cac97074b5d3dcdf66ee0194b24d}{swapn} (void $\ast$a, void $\ast$b, size\+\_\+t n)
 \item 
 int \hyperlink{headers_8c_ae958dfbc5be0b7aab57e4a73d6b9a0b4}{is\+Empty} (int $\ast$array, size\+\_\+t size)
-\item 
+\begin{DoxyCompactList}\small\item\em Determines if array is empty. \end{DoxyCompactList}\item 
 int \hyperlink{headers_8c_a295cb61448f1a5abe8b4ac0de16a4531}{should\+Mutate} ()
 \item 
 void \hyperlink{headers_8c_a7dcfd4b7d4dab4c330a6d8ffee6927f8}{prepend} (char $\ast$s, const char $\ast$t)
-\item 
+\begin{DoxyCompactList}\small\item\em Prepends string to other string. \end{DoxyCompactList}\item 
 int \hyperlink{headers_8c_aa49911a7ddb9b956d4d50f7f2b24f752}{day\+Hour\+Qsort} (const void $\ast$a, const void $\ast$b)
 \begin{DoxyCompactList}\small\item\em Function for q\+Sort to sort for day and time it also sort so that all init = 0 comes last. \end{DoxyCompactList}\item 
 int \hyperlink{headers_8c_a1f6ecc382430f436c8a8c6079ac12787}{fitness\+Qsort} (const void $\ast$a, const void $\ast$b)
@@ -101,6 +101,10 @@ Mutates the individual by place two random lectures of same subject sequently in
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 391 of file genetics.\+c.
+
 \hypertarget{headers_8c_ae29485d68498b550f0904576b5537345}{}\label{headers_8c_ae29485d68498b550f0904576b5537345} 
 \index{headers.\+c@{headers.\+c}!add\+Spice@{add\+Spice}}
 \index{add\+Spice@{add\+Spice}!headers.\+c@{headers.\+c}}
@@ -118,6 +122,10 @@ Mutates the individual by change the teacher of a random lecture on a random tim
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 373 of file genetics.\+c.
+
 \hypertarget{headers_8c_a94978bcace066864f2cf7ac67d6d8ff9}{}\label{headers_8c_a94978bcace066864f2cf7ac67d6d8ff9} 
 \index{headers.\+c@{headers.\+c}!add\+Sugar@{add\+Sugar}}
 \index{add\+Sugar@{add\+Sugar}!headers.\+c@{headers.\+c}}
@@ -135,6 +143,10 @@ Mutates the individual by moving a random lecture in a random timetable to a pla
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 357 of file genetics.\+c.
+
 \hypertarget{headers_8c_ad3feb3d605e10a84270ac6bb7ada6c84}{}\label{headers_8c_ad3feb3d605e10a84270ac6bb7ada6c84} 
 \index{headers.\+c@{headers.\+c}!auto\+Padding@{auto\+Padding}}
 \index{auto\+Padding@{auto\+Padding}!headers.\+c@{headers.\+c}}
@@ -155,33 +167,29 @@ Returns a padded header instead of left alligned.
 \begin{DoxyReturn}{Returns}
 returns padded string 
 \end{DoxyReturn}
+
+
+Definition at line 9 of file print.\+c.
+
 \hypertarget{headers_8c_ac313f967048d86b190bcfecb747d8daa}{}\label{headers_8c_ac313f967048d86b190bcfecb747d8daa} 
 \index{headers.\+c@{headers.\+c}!calc\+Fitness\+On\+Population@{calc\+Fitness\+On\+Population}}
 \index{calc\+Fitness\+On\+Population@{calc\+Fitness\+On\+Population}!headers.\+c@{headers.\+c}}
 \subsubsection{\texorpdfstring{calc\+Fitness\+On\+Population()}{calcFitnessOnPopulation()}}
 {\footnotesize\ttfamily void calc\+Fitness\+On\+Population (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
 
-\hypertarget{headers_8c_a57dec049f65edbdacf0a5de26a99313d}{}\label{headers_8c_a57dec049f65edbdacf0a5de26a99313d} 
-\index{headers.\+c@{headers.\+c}!conflicts\+And\+Preperation@{conflicts\+And\+Preperation}}
-\index{conflicts\+And\+Preperation@{conflicts\+And\+Preperation}!headers.\+c@{headers.\+c}}
-\subsubsection{\texorpdfstring{conflicts\+And\+Preperation()}{conflictsAndPreperation()}}
-{\footnotesize\ttfamily void conflicts\+And\+Preperation (\begin{DoxyParamCaption}\item[{\hyperlink{structindividual}{individual} $\ast$}]{ind,  }\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
 
 
+Calculates the fitness on population. 
 
-Counts conflicts and prepare data for fitness function on a single individual. 
 
-Counts conflicts of rooms and teachers in a single individuals 
 \begin{DoxyParams}{Parameters}
-{\em ind} & individuals \\
-\hline
-{\em class\+Count} & amount of classes \\
-\hline
-{\em ind} & The ind \\
-\hline
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 362 of file main.\+c.
+
 \hypertarget{headers_8c_a83c46caff2fb5cab7859e0f3953581fd}{}\label{headers_8c_a83c46caff2fb5cab7859e0f3953581fd} 
 \index{headers.\+c@{headers.\+c}!count\+Lines@{count\+Lines}}
 \index{count\+Lines@{count\+Lines}!headers.\+c@{headers.\+c}}
@@ -203,11 +211,28 @@ Counts the number of lines.
 \begin{DoxyReturn}{Returns}
 Number of lines. 
 \end{DoxyReturn}
+
+
+Definition at line 185 of file file\+Parse.\+c.
+
 \hypertarget{headers_8c_a241593c34e596f03584fb7214a753f10}{}\label{headers_8c_a241593c34e596f03584fb7214a753f10} 
 \index{headers.\+c@{headers.\+c}!crossover\+Population@{crossover\+Population}}
 \index{crossover\+Population@{crossover\+Population}!headers.\+c@{headers.\+c}}
 \subsubsection{\texorpdfstring{crossover\+Population()}{crossoverPopulation()}}
 {\footnotesize\ttfamily void crossover\+Population (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
+
+
+
+The crossover workflow function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em population\+Params} & The population parameters \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 426 of file main.\+c.
 
 \hypertarget{headers_8c_aa49911a7ddb9b956d4d50f7f2b24f752}{}\label{headers_8c_aa49911a7ddb9b956d4d50f7f2b24f752} 
 \index{headers.\+c@{headers.\+c}!day\+Hour\+Qsort@{day\+Hour\+Qsort}}
@@ -229,6 +254,10 @@ Function for q\+Sort to sort for day and time it also sort so that all init = 0 
 \begin{DoxyReturn}{Returns}
 Whether a should come first or b 
 \end{DoxyReturn}
+
+
+Definition at line 25 of file schedule\+Control.\+c.
+
 \hypertarget{headers_8c_a19af3b30e978f68183c3826c1f1e30ae}{}\label{headers_8c_a19af3b30e978f68183c3826c1f1e30ae} 
 \index{headers.\+c@{headers.\+c}!find\+Class@{find\+Class}}
 \index{find\+Class@{find\+Class}!headers.\+c@{headers.\+c}}
@@ -255,6 +284,10 @@ Finds a random teacher for a given subject, it only returns a teacher who is act
 \begin{DoxyReturn}{Returns}
 Pointer to the teacher. 
 \end{DoxyReturn}
+
+
+Definition at line 473 of file genetics.\+c.
+
 \hypertarget{headers_8c_ad8e22e972f4a17199dd40441edc5ca6a}{}\label{headers_8c_ad8e22e972f4a17199dd40441edc5ca6a} 
 \index{headers.\+c@{headers.\+c}!find\+Room@{find\+Room}}
 \index{find\+Room@{find\+Room}!headers.\+c@{headers.\+c}}
@@ -285,6 +318,10 @@ Finds rooms form a string.
 \begin{DoxyReturn}{Returns}
 Number of rooms 
 \end{DoxyReturn}
+
+
+Definition at line 381 of file file\+Parse.\+c.
+
 \hypertarget{headers_8c_a2df7e8dac172816cf2c5cb420116f35f}{}\label{headers_8c_a2df7e8dac172816cf2c5cb420116f35f} 
 \index{headers.\+c@{headers.\+c}!find\+Subjects\+From\+String@{find\+Subjects\+From\+String}}
 \index{find\+Subjects\+From\+String@{find\+Subjects\+From\+String}!headers.\+c@{headers.\+c}}
@@ -309,6 +346,35 @@ Finds subjects form a string.
 \begin{DoxyReturn}{Returns}
 number of subjects 
 \end{DoxyReturn}
+
+
+Definition at line 414 of file file\+Parse.\+c.
+
+\hypertarget{headers_8c_aead18a8ad8114b200eb4ed94b23a662b}{}\label{headers_8c_aead18a8ad8114b200eb4ed94b23a662b} 
+\index{headers.\+c@{headers.\+c}!fitness\+Conflicts\+Data@{fitness\+Conflicts\+Data}}
+\index{fitness\+Conflicts\+Data@{fitness\+Conflicts\+Data}!headers.\+c@{headers.\+c}}
+\subsubsection{\texorpdfstring{fitness\+Conflicts\+Data()}{fitnessConflictsData()}}
+{\footnotesize\ttfamily void fitness\+Conflicts\+Data (\begin{DoxyParamCaption}\item[{\hyperlink{structindividual}{individual} $\ast$}]{ind,  }\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
+
+
+
+Counts conflicts and prepare data for fitness function on a single individual. 
+
+Counts conflicts of rooms and teachers in a single individuals 
+\begin{DoxyParams}{Parameters}
+{\em ind} & individuals \\
+\hline
+{\em class\+Count} & amount of classes \\
+\hline
+{\em ind} & The ind \\
+\hline
+{\em population\+Params} & The population parameters \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 79 of file genetics.\+c.
+
 \hypertarget{headers_8c_a1f6ecc382430f436c8a8c6079ac12787}{}\label{headers_8c_a1f6ecc382430f436c8a8c6079ac12787} 
 \index{headers.\+c@{headers.\+c}!fitness\+Qsort@{fitness\+Qsort}}
 \index{fitness\+Qsort@{fitness\+Qsort}!headers.\+c@{headers.\+c}}
@@ -329,11 +395,19 @@ Function for q\+Sort to sort for highest fitness.
 \begin{DoxyReturn}{Returns}
 Whether a should come first or b 
 \end{DoxyReturn}
+
+
+Definition at line 9 of file schedule\+Control.\+c.
+
 \hypertarget{headers_8c_abe7d9036f014124f049c8f3432886e74}{}\label{headers_8c_abe7d9036f014124f049c8f3432886e74} 
 \index{headers.\+c@{headers.\+c}!generate\+Initial\+Population@{generate\+Initial\+Population}}
 \index{generate\+Initial\+Population@{generate\+Initial\+Population}!headers.\+c@{headers.\+c}}
 \subsubsection{\texorpdfstring{generate\+Initial\+Population()}{generateInitialPopulation()}}
 {\footnotesize\ttfamily int generate\+Initial\+Population (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
+
+
+
+Definition at line 441 of file main.\+c.
 
 \hypertarget{headers_8c_a5cf127d6ac71040989f925cf19bb7e16}{}\label{headers_8c_a5cf127d6ac71040989f925cf19bb7e16} 
 \index{headers.\+c@{headers.\+c}!get\+Random\+Datetime\+With\+No\+Lecture@{get\+Random\+Datetime\+With\+No\+Lecture}}
@@ -354,6 +428,10 @@ Gets the a random datetime with no lecture.
 {\em hour} & The hour \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 512 of file genetics.\+c.
+
 \hypertarget{headers_8c_a99d8d8ba17f2b19348a4a337202a7005}{}\label{headers_8c_a99d8d8ba17f2b19348a4a337202a7005} 
 \index{headers.\+c@{headers.\+c}!init@{init}}
 \index{init@{init}!headers.\+c@{headers.\+c}}
@@ -372,6 +450,10 @@ Initates all the data from the dat.\+sched file.
 \begin{DoxyReturn}{Returns}
 1 
 \end{DoxyReturn}
+
+
+Definition at line 8 of file file\+Parse.\+c.
+
 \hypertarget{headers_8c_af9fd78aca1127b29f2587c2dc2a5b004}{}\label{headers_8c_af9fd78aca1127b29f2587c2dc2a5b004} 
 \index{headers.\+c@{headers.\+c}!inject\+SerumX@{inject\+SerumX}}
 \index{inject\+SerumX@{inject\+SerumX}!headers.\+c@{headers.\+c}}
@@ -389,11 +471,33 @@ Determines which mutation should be executed on the individual.
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 335 of file genetics.\+c.
+
 \hypertarget{headers_8c_ae958dfbc5be0b7aab57e4a73d6b9a0b4}{}\label{headers_8c_ae958dfbc5be0b7aab57e4a73d6b9a0b4} 
 \index{headers.\+c@{headers.\+c}!is\+Empty@{is\+Empty}}
 \index{is\+Empty@{is\+Empty}!headers.\+c@{headers.\+c}}
 \subsubsection{\texorpdfstring{is\+Empty()}{isEmpty()}}
 {\footnotesize\ttfamily int is\+Empty (\begin{DoxyParamCaption}\item[{int $\ast$}]{array,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Determines if array is empty. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em array} & The array \\
+\hline
+\mbox{\tt in}  & {\em size} & The size\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if empty, False otherwise. 
+\end{DoxyReturn}
+
+
+Definition at line 459 of file main.\+c.
 
 \hypertarget{headers_8c_a46b5aa1295ee787e9624f78702ead9f8}{}\label{headers_8c_a46b5aa1295ee787e9624f78702ead9f8} 
 \index{headers.\+c@{headers.\+c}!is\+Same\+Lecture\+Sequent@{is\+Same\+Lecture\+Sequent}}
@@ -415,6 +519,10 @@ Determines if two sequent lectures are the same.
 \begin{DoxyReturn}{Returns}
 True if same lecture sequent, False otherwise. 
 \end{DoxyReturn}
+
+
+Definition at line 285 of file genetics.\+c.
+
 \hypertarget{headers_8c_a1f7368a103edf0e2a1840e3512c9496b}{}\label{headers_8c_a1f7368a103edf0e2a1840e3512c9496b} 
 \index{headers.\+c@{headers.\+c}!lecture\+On\+Date\+Time@{lecture\+On\+Date\+Time}}
 \index{lecture\+On\+Date\+Time@{lecture\+On\+Date\+Time}!headers.\+c@{headers.\+c}}
@@ -437,11 +545,28 @@ Checks if a lacture exists on the given day and time.
 \begin{DoxyReturn}{Returns}
 index-\/key of lecture if found or -\/1 if no lecture where found 
 \end{DoxyReturn}
+
+
+Definition at line 111 of file schedule\+Control.\+c.
+
 \hypertarget{headers_8c_a9e92356203e5ce2544ad1817aa62163e}{}\label{headers_8c_a9e92356203e5ce2544ad1817aa62163e} 
 \index{headers.\+c@{headers.\+c}!merge\+Population@{merge\+Population}}
 \index{merge\+Population@{merge\+Population}!headers.\+c@{headers.\+c}}
 \subsubsection{\texorpdfstring{merge\+Population()}{mergePopulation()}}
 {\footnotesize\ttfamily void merge\+Population (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
+
+
+
+meger population, since crossover produces a new array containing childrens and we want an array of parents+childrens for the other GA functions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em population\+Params} & The population parameters \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 408 of file main.\+c.
 
 \hypertarget{headers_8c_a99ebc1c22dc366c49404150f9765265c}{}\label{headers_8c_a99ebc1c22dc366c49404150f9765265c} 
 \index{headers.\+c@{headers.\+c}!mutate@{mutate}}
@@ -460,11 +585,28 @@ Starts the mutation process by calling a random amount of mutations.
 {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 308 of file genetics.\+c.
+
 \hypertarget{headers_8c_adef02ce7cc49fda732bf007f0f5208b9}{}\label{headers_8c_adef02ce7cc49fda732bf007f0f5208b9} 
 \index{headers.\+c@{headers.\+c}!mutate\+Population@{mutate\+Population}}
 \index{mutate\+Population@{mutate\+Population}!headers.\+c@{headers.\+c}}
 \subsubsection{\texorpdfstring{mutate\+Population()}{mutatePopulation()}}
 {\footnotesize\ttfamily void mutate\+Population (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
+
+
+
+Mutate Population. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em population\+Params} & The population parameters \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 393 of file main.\+c.
 
 \hypertarget{headers_8c_a3379c15b1e6aa69e8146e5f9f47d1369}{}\label{headers_8c_a3379c15b1e6aa69e8146e5f9f47d1369} 
 \index{headers.\+c@{headers.\+c}!parse\+Room@{parse\+Room}}
@@ -484,6 +626,10 @@ Parses the room to data.
 \begin{DoxyReturn}{Returns}
 Returns the room. 
 \end{DoxyReturn}
+
+
+Definition at line 208 of file file\+Parse.\+c.
+
 \hypertarget{headers_8c_a336bbb88224917985aa82d932eeb5c36}{}\label{headers_8c_a336bbb88224917985aa82d932eeb5c36} 
 \index{headers.\+c@{headers.\+c}!parse\+Subject@{parse\+Subject}}
 \index{parse\+Subject@{parse\+Subject}!headers.\+c@{headers.\+c}}
@@ -506,11 +652,30 @@ parse the subject from data.
 \begin{DoxyReturn}{Returns}
 the subject 
 \end{DoxyReturn}
+
+
+Definition at line 227 of file file\+Parse.\+c.
+
 \hypertarget{headers_8c_a7dcfd4b7d4dab4c330a6d8ffee6927f8}{}\label{headers_8c_a7dcfd4b7d4dab4c330a6d8ffee6927f8} 
 \index{headers.\+c@{headers.\+c}!prepend@{prepend}}
 \index{prepend@{prepend}!headers.\+c@{headers.\+c}}
 \subsubsection{\texorpdfstring{prepend()}{prepend()}}
 {\footnotesize\ttfamily void prepend (\begin{DoxyParamCaption}\item[{char $\ast$}]{s,  }\item[{const char $\ast$}]{t }\end{DoxyParamCaption})}
+
+
+
+Prepends string to other string. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em s} & The target string \\
+\hline
+\mbox{\tt in}  & {\em t} & The string that needs to be prepended the target \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 487 of file main.\+c.
 
 \hypertarget{headers_8c_ac849128945062cd65be0dc510b034f97}{}\label{headers_8c_ac849128945062cd65be0dc510b034f97} 
 \index{headers.\+c@{headers.\+c}!print\+Lecture@{print\+Lecture}}
@@ -527,6 +692,10 @@ Prints core elements of a lecture.
 \mbox{\tt in}  & {\em l} & lecture to print \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 36 of file print.\+c.
+
 \hypertarget{headers_8c_af82c81eb76ab0f756d6601421bf411d3}{}\label{headers_8c_af82c81eb76ab0f756d6601421bf411d3} 
 \index{headers.\+c@{headers.\+c}!print\+Time\+Table@{print\+Time\+Table}}
 \index{print\+Time\+Table@{print\+Time\+Table}!headers.\+c@{headers.\+c}}
@@ -544,6 +713,10 @@ Prints a complete timetable.
  & {\em labels} & The labels \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 71 of file print.\+c.
+
 \hypertarget{headers_8c_ad48b28bf8f09bfa16c68688780d00fef}{}\label{headers_8c_ad48b28bf8f09bfa16c68688780d00fef} 
 \index{headers.\+c@{headers.\+c}!random\+Individual@{random\+Individual}}
 \index{random\+Individual@{random\+Individual}!headers.\+c@{headers.\+c}}
@@ -562,6 +735,10 @@ Generates a random individual.
 \begin{DoxyReturn}{Returns}
 The random individual 
 \end{DoxyReturn}
+
+
+Definition at line 50 of file schedule\+Control.\+c.
+
 \hypertarget{headers_8c_a9d118eef60cf5e70e57f9e6f395b46d4}{}\label{headers_8c_a9d118eef60cf5e70e57f9e6f395b46d4} 
 \index{headers.\+c@{headers.\+c}!random\+Lecture\+For\+Class\+And\+Subject@{random\+Lecture\+For\+Class\+And\+Subject}}
 \index{random\+Lecture\+For\+Class\+And\+Subject@{random\+Lecture\+For\+Class\+And\+Subject}!headers.\+c@{headers.\+c}}
@@ -584,27 +761,52 @@ Generate a random lecture for a specific class and subject.
 \begin{DoxyReturn}{Returns}
 The generated lecture. 
 \end{DoxyReturn}
+
+
+Definition at line 10 of file lecture\+Control.\+c.
+
 \hypertarget{headers_8c_a221d185be3302082e06b9e004bb18c4b}{}\label{headers_8c_a221d185be3302082e06b9e004bb18c4b} 
 \index{headers.\+c@{headers.\+c}!random\+Number@{random\+Number}}
 \index{random\+Number@{random\+Number}!headers.\+c@{headers.\+c}}
 \subsubsection{\texorpdfstring{random\+Number()}{randomNumber()}}
 {\footnotesize\ttfamily int random\+Number (\begin{DoxyParamCaption}\item[{int}]{min,  }\item[{int}]{max }\end{DoxyParamCaption})}
 
-Generates a random number 
-\begin{DoxyParams}{Parameters}
-{\em min} & smallest possible number \\
+
+
+Generates a random number. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em min} & The minimum possible number \\
 \hline
-{\em max} & largest possible number \\
+\mbox{\tt in}  & {\em max} & The maximum possible number\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 random number between min and max 
 \end{DoxyReturn}
+
+
+Definition at line 476 of file main.\+c.
+
 \hypertarget{headers_8c_a60d7b493a6c0e9ce6d4c46296f763301}{}\label{headers_8c_a60d7b493a6c0e9ce6d4c46296f763301} 
 \index{headers.\+c@{headers.\+c}!selection@{selection}}
 \index{selection@{selection}!headers.\+c@{headers.\+c}}
 \subsubsection{\texorpdfstring{selection()}{selection()}}
 {\footnotesize\ttfamily void selection (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
+
+
+
+The selection function for the Genetic Algorithm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em population\+Params} & The population parameters \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 324 of file main.\+c.
 
 \hypertarget{headers_8c_a295cb61448f1a5abe8b4ac0de16a4531}{}\label{headers_8c_a295cb61448f1a5abe8b4ac0de16a4531} 
 \index{headers.\+c@{headers.\+c}!should\+Mutate@{should\+Mutate}}
@@ -612,11 +814,28 @@ random number between min and max
 \subsubsection{\texorpdfstring{should\+Mutate()}{shouldMutate()}}
 {\footnotesize\ttfamily int should\+Mutate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
+
+
+Definition at line 294 of file genetics.\+c.
+
 \hypertarget{headers_8c_a76299b86e144434260dcab80323ec9da}{}\label{headers_8c_a76299b86e144434260dcab80323ec9da} 
 \index{headers.\+c@{headers.\+c}!strip@{strip}}
 \index{strip@{strip}!headers.\+c@{headers.\+c}}
 \subsubsection{\texorpdfstring{strip()}{strip()}}
 {\footnotesize\ttfamily void strip (\begin{DoxyParamCaption}\item[{char $\ast$}]{s }\end{DoxyParamCaption})}
+
+
+
+Strips all unneccesary system characters this allow c to read file more consistently across systems. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & the string \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 505 of file main.\+c.
 
 \hypertarget{headers_8c_a0121cac97074b5d3dcdf66ee0194b24d}{}\label{headers_8c_a0121cac97074b5d3dcdf66ee0194b24d} 
 \index{headers.\+c@{headers.\+c}!swapn@{swapn}}
@@ -624,15 +843,6 @@ random number between min and max
 \subsubsection{\texorpdfstring{swapn()}{swapn()}}
 {\footnotesize\ttfamily void swapn (\begin{DoxyParamCaption}\item[{void $\ast$}]{a,  }\item[{void $\ast$}]{b,  }\item[{size\+\_\+t}]{n }\end{DoxyParamCaption})}
 
-Swaps the values of two variables 
-\begin{DoxyParams}{Parameters}
-{\em a} & first var \\
-\hline
-{\em b} & seconds var \\
-\hline
-{\em n} & size of variables \\
-\hline
-\end{DoxyParams}
 \hypertarget{headers_8c_a73e512bd6f99a5448ed11e3aa677c9e7}{}\label{headers_8c_a73e512bd6f99a5448ed11e3aa677c9e7} 
 \index{headers.\+c@{headers.\+c}!teacher\+Can\+Teach@{teacher\+Can\+Teach}}
 \index{teacher\+Can\+Teach@{teacher\+Can\+Teach}!headers.\+c@{headers.\+c}}
@@ -655,6 +865,10 @@ Determines wether or not a given teacher can teach the given subject.
 \begin{DoxyReturn}{Returns}
 1 if trie, 0 otherwise 
 \end{DoxyReturn}
+
+
+Definition at line 490 of file genetics.\+c.
+
 \hypertarget{headers_8c_a607c7e15b989a428f2d82fead8ce15ca}{}\label{headers_8c_a607c7e15b989a428f2d82fead8ce15ca} 
 \index{headers.\+c@{headers.\+c}!weapon\+\_\+x@{weapon\+\_\+x}}
 \index{weapon\+\_\+x@{weapon\+\_\+x}!headers.\+c@{headers.\+c}}
@@ -674,3 +888,7 @@ The recursive function who makes sure that n-\/number of mutations is taken plac
  & {\em population\+Params} & The population parameters \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 320 of file genetics.\+c.
+
