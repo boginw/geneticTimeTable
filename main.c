@@ -25,22 +25,19 @@
 #define MUTATION_CHANCE     5
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
-#define NUM_OF_GEN      20000 /* Max amount of generations to run for */
-
-#define ROOM_CONFLICT       1
-#define TEACHER_CONFLICT    2
+#define NUM_OF_GEN      200000 /* Max amount of generations to run for */
 
 #define KILL_SHIT_GEN 3000
 
-#define FITNESS_FOR_TEACHERHOURS             1000
-#define FITNESS_FOR_CONFLICTS                300000
-#define FITNESS_FOR_NULL_HOURS               600000
-#define FITNESS_FOR_SAME_TEACHER_SUBJECT     100
-#define FITNESS_FOR_CLASS_MIN_HOURS          20000
-#define FITNESS_FOR_CLASS_SUBJECTS           1000
-#define FITNESS_FOR_TEACHER_SUBJECT          1000
-#define FITNESS_FOR_ROOM_REQ_SUBJECT         1000
-#define FITNESS_FOR_PREPARATION_TIME         600000
+#define FITNESS_FOR_TEACHERHOURS             100
+#define FITNESS_FOR_CONFLICTS                30000
+#define FITNESS_FOR_NULL_HOURS               60000
+#define FITNESS_FOR_SAME_TEACHER_SUBJECT     10
+#define FITNESS_FOR_CLASS_MIN_HOURS          2000
+#define FITNESS_FOR_CLASS_SUBJECTS           100
+#define FITNESS_FOR_TEACHER_SUBJECT          100
+#define FITNESS_FOR_ROOM_REQ_SUBJECT         100
+#define FITNESS_FOR_PREPARATION_TIME         60000
 
 /**
  * ASSUMPTIONS:
@@ -239,11 +236,11 @@ int main(int argc, char const *argv[]){
 
 
     if(argc > 2 && strcmp(argv[2],"--tests") == 0){
-        printf("\nRunning tests\n------------------------------\n");
-        printf("conflicts:              %s\n", testConflicts(&populationParams) ? "Passed" : "Failed");
-        printf("randomNumber:           %s\n", testRandomNumber() ? "Passed" : "Failed");
-        printf("isEmpty:                %s\n", testIsEmpty() ? "Passed" : "Failed");
-        exit(0);
+    	printf("\nRunning tests\n------------------------------\n");
+    	printf("conflicts:              %s\n", testConflicts(&populationParams) ? "Passed" : "Failed");
+    	printf("randomNumber:           %s\n", testRandomNumber()               ? "Passed" : "Failed");
+    	printf("isEmpty:                %s\n", testIsEmpty()                    ? "Passed" : "Failed");
+    	exit(0);
     }
 
 
@@ -358,11 +355,12 @@ void selection(params *populationParams){
     roulette = calloc(100, sizeof(int));
 
     for(i=0; i < populationParams->tempPopulationCount; i++){
-        if(populationParams->akkFitnessPoints == 0){
+        if(populationParams->akkFitnessPoints < 1){
             populationParams->akkFitnessPoints = 1;
         }
 
         prop = (((float)populationParams->tempPopulation[i].fitness) / (populationParams->akkFitnessPoints)) * 100;
+
         if(prop > 0){
             for(p = rouletteCount; p < rouletteCount+prop; p++){
                 roulette[p] = i;

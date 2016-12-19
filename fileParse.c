@@ -382,7 +382,7 @@ int findRoomsFromString(char *roomString, room* roomsFound[MAX_ROOMS], room* roo
     int i;
     int curChar = 0;
     int curRoom = 0;
-    char tmpName[20];
+    char tmpName[MAX_NAME_LENGTH];
 
 
     for (i = 1; i < len; i++){
