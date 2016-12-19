@@ -1,6 +1,10 @@
-
-
-
+/**
+ * @brief      Initates all the data from the dat.sched file.
+ *
+ * @param      populationParams  The population parameters
+ *
+ * @return     1
+ */
 int init(params *populationParams){
     FILE *dataFile;
     int i,j,lines,res;
@@ -168,12 +172,13 @@ int init(params *populationParams){
     return 1;
 }
 
-
 /**
- * Counts lines in a file
+ * @brief      Counts the number of lines.
  * @author    http://stackoverflow.com/q/12733105/1426327
- * @param  fp file pointer
- * @return    returns number of lines in file
+ *
+ * @param      fp  The file pointer
+ *
+ * @return     Number of lines.
  */
 int countLines(FILE *fp){
     int n=0;
@@ -191,16 +196,32 @@ int countLines(FILE *fp){
     return n+1;
 }
 
+/**
+ * @brief      Parses the room to data.
+ *
+ * @param      line  The line
+ *
+ * @return     Returns the room.
+ */
 room parseRoom(char *line){
     room returnRoom;
 
     strip(line);
 
     strcpy(returnRoom.name, line);
-    
+
     return returnRoom;
 }
 
+/**
+ * @brief      parse the subject from data.
+ *
+ * @param      line       The line
+ * @param      rooms      The rooms
+ * @param[in]  roomCount  The room count
+ *
+ * @return     the subject
+ */
 subject parseSubject(char *line, room* rooms, int roomCount){
     char *subjectBuffer;
     char *hoursBuffer;
@@ -231,23 +252,6 @@ subject parseSubject(char *line, room* rooms, int roomCount){
             returnSubject.perYear[i] = WEEK_LENGTH;
         }
     }else{
-        /*len = strlen(hoursBuffer);
-        for (i = 0; i < len; i++){
-            if(hoursBuffer[i] != ','){
-                curSub[curSubI] = hoursBuffer[i];
-                curSubI++;
-                if(i+2 == len){
-                    curSub[curSubI] = hoursBuffer[i+1];
-                    curSubI++;
-                    hoursBuffer[i+1] = ',';
-                }
-            }else{
-                curSub[curSubI] = '\0';
-                curSubI = 0;
-                returnSubject.perYear[year++] = atoi(curSub);
-            }
-        }*/
-
         sscanf(hoursBuffer,"%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
             &returnSubject.perYear[0],
             &returnSubject.perYear[1],
@@ -261,7 +265,7 @@ subject parseSubject(char *line, room* rooms, int roomCount){
             &returnSubject.perYear[9]
         );
         returnSubject.roomRequireLength = findRoomsFromString(subjectBuffer,returnSubject.roomRequire, rooms, roomCount);
-        returnSubject.totalHours = 
+        returnSubject.totalHours =
             returnSubject.perYear[0]+
             returnSubject.perYear[1]+
             returnSubject.perYear[2]+
@@ -279,6 +283,15 @@ subject parseSubject(char *line, room* rooms, int roomCount){
     return returnSubject;
 }
 
+/**
+ * @brief      Finds the room.
+ *
+ * @param      roomName   The room name
+ * @param      rooms      The rooms
+ * @param[in]  roomCount  The room count
+ *
+ * @return     the room pointer, if not found NULL
+ */
 room *findRoom(char *roomName, room *rooms, int roomCount){
     int i;
     for (i = 0; i < roomCount; i++){
@@ -290,6 +303,15 @@ room *findRoom(char *roomName, room *rooms, int roomCount){
     return NULL;
 }
 
+/**
+ * @brief      Finds the subject
+ *
+ * @param      subjectName   The subject name
+ * @param      subjects      The subjects
+ * @param[in]  subjectCount  The subject count
+ *
+ * @return     the subject pointer, if not found NULL
+ */
 subject *findSubject(char *subjectName, subject subjects[MAX_SUBJECTS], int subjectCount){
     int i;
     for (i = 0; i < subjectCount; i++){
@@ -301,6 +323,15 @@ subject *findSubject(char *subjectName, subject subjects[MAX_SUBJECTS], int subj
     return NULL;
 }
 
+/**
+ * @brief      Finds the class
+ *
+ * @param      className   The class name
+ * @param      classes     The classes
+ * @param[in]  classCount  The class count
+ *
+ * @return     the class pointer, if not found NULL
+ */
 class *findClass(char *className, class *classes, int classCount){
     int i;
     for (i = 0; i < classCount; i++){
@@ -313,6 +344,15 @@ class *findClass(char *className, class *classes, int classCount){
     return NULL;
 }
 
+/**
+ * @brief      Finds the teacher
+ *
+ * @param      teacherName   The teacher name
+ * @param      teachers      The teachers
+ * @param[in]  teacherCount  The teacher count
+ *
+ * @return     the teacher pointer, if not found NULL
+ */
 teacher *findTeacher(char *teacherName, teacher *teachers, int teacherCount){
     int i;
     for (i = 0; i < teacherCount; i++){
@@ -325,6 +365,16 @@ teacher *findTeacher(char *teacherName, teacher *teachers, int teacherCount){
     return NULL;
 }
 
+/**
+ * @brief      Finds rooms form a string
+ *
+ * @param      roomString  The room string
+ * @param      roomsFound  The rooms found
+ * @param      rooms       The rooms
+ * @param[in]  roomCount   The room count
+ *
+ * @return     Number of rooms
+ */
 int findRoomsFromString(char *roomString, room* roomsFound[MAX_ROOMS], room* rooms, int roomCount){
     int len = strlen(roomString);
     int i;
@@ -346,7 +396,16 @@ int findRoomsFromString(char *roomString, room* roomsFound[MAX_ROOMS], room* roo
     return curRoom;
 }
 
-
+/**
+ * @brief      Finds subjects form a string
+ *
+ * @param      subjectString  The subject string
+ * @param      subjectsFound  The subjects found
+ * @param      subjects       The subjects
+ * @param[in]  subjectCount   The subject count
+ *
+ * @return     number of subjects
+ */
 int findSubjectsFromString(char *subjectString, subject* subjectsFound[MAX_SUBJECTS], subject* subjects, int subjectCount){
     int len = strlen(subjectString);
     int i;

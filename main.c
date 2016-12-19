@@ -20,7 +20,7 @@
 
 #define SCHOOL_DAYS_YEAR  200
 #define WEEK_LENGTH         5
-#define MINUTES_IN_HOUR    60 
+#define MINUTES_IN_HOUR    60
 #define MAX_LECTURES       45
 #define MUTATION_CHANCE     5
 #define MAX_MUTATIONS       7
@@ -40,6 +40,7 @@
 #define FITNESS_FOR_CLASS_SUBJECTS           1000
 #define FITNESS_FOR_TEACHER_SUBJECT          1000
 #define FITNESS_FOR_ROOM_REQ_SUBJECT         1000
+#define FITNESS_FOR_PREPARATION_TIME         600000
 
 /**
  * ASSUMPTIONS:
@@ -260,7 +261,7 @@ int main(int argc, char const *argv[]){
 
         /* If no progress in x generations, generate new random individual */
         if(lastBestGen + KILL_SHIT_GEN < j){
-			printf("#%d: Killing worst individuals",++killingCount); 
+			printf("#%d: Killing worst individuals",++killingCount);
             for (i = 0; i < 200; i++){
            		printf(" ");
             }

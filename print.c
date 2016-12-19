@@ -1,10 +1,10 @@
-
-
 /**
- * Returns a padded header instead of left alligned
- * @param  header the text to padd to center
- * @param  width  width of the table
- * @return        returns padded string
+ * @brief      Returns a padded header instead of left alligned
+ *
+ * @param      header  the text to padd to center
+ * @param[in]  width   width of the table
+ *
+ * @return     returns padded string
  */
 char *autoPadding(char *header, int width){
     int i = 0;
@@ -29,8 +29,9 @@ char *autoPadding(char *header, int width){
 }
 
 /**
- * Prints core elements of a lecture
- * @param l lecture to print
+ * @brief      Prints core elements of a lecture
+ *
+ * @param[in]  l     lecture to print
  */
 void printLecture(lecture l){
 	char *requirements;
@@ -61,6 +62,12 @@ void printLecture(lecture l){
 	free(requirements);
 }
 
+/**
+ * @brief      Prints a complete timetable.
+ *
+ * @param[in]  t       The desired timetable.
+ * @param      labels  The labels
+ */
 void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 	char rows[MAX_LECTURES * 4 + 3][1024];
 	lecture tempLecture;
@@ -143,26 +150,13 @@ void printTimeTable(timetable t, char (*labels)[MAX_LABEL_LENGTH]){
 	}
 }
 
-char *initials(char *name){
-	char *inital;
-	int i=0;
-	int n=0;
-	inital = calloc(3,sizeof(char));
-	if(inital == NULL){
-		printf("Not enough ram, sorry...\n");
-    exit(EXIT_FAILURE);
-	}
-    while(name[i]!='\0'){
-       if(name[i]==' '){
-            i++;
-            inital[n++] = *(name+i);
-       }
-       i++;
-   }
-
-   return inital;
-}
-
+/**
+ * @brief      Outputs results to a csv.
+ *
+ * @param      ind         The ind
+ * @param[in]  classCount  The class count
+ * @param      labels      The labels
+ */
 void dumpCSV(individual *ind, int classCount, char (*labels)[MAX_LABEL_LENGTH]){
 	/*int c,l,d;
 	FILE *fp;
