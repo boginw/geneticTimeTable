@@ -22,22 +22,21 @@
 #define WEEK_LENGTH         5
 #define MINUTES_IN_HOUR    60
 #define MAX_LECTURES       45
-#define MUTATION_CHANCE     5
+#define MUTATION_CHANCE     3
 #define MAX_MUTATIONS       7
-#define FREE_LECTURE_CH    30
-#define NUM_OF_GEN      200000 /* Max amount of generations to run for */
+#define NUM_OF_GEN      20000 /* Max amount of generations to run for */
+#define KILL_SHIT_GEN    9000
 
-#define KILL_SHIT_GEN 3000
 
-#define FITNESS_FOR_TEACHERHOURS             100
-#define FITNESS_FOR_CONFLICTS                30000
-#define FITNESS_FOR_NULL_HOURS               60000
+#define FITNESS_FOR_CONFLICTS                700
+#define FITNESS_FOR_PREPARATION_TIME         10
+#define FITNESS_FOR_CLASS_MIN_HOURS          75
+#define FITNESS_FOR_NULL_HOURS               50
+#define FITNESS_FOR_TEACHERHOURS             10
 #define FITNESS_FOR_SAME_TEACHER_SUBJECT     10
-#define FITNESS_FOR_CLASS_MIN_HOURS          2000
-#define FITNESS_FOR_CLASS_SUBJECTS           100
-#define FITNESS_FOR_TEACHER_SUBJECT          100
-#define FITNESS_FOR_ROOM_REQ_SUBJECT         100
-#define FITNESS_FOR_PREPARATION_TIME         60000
+#define FITNESS_FOR_CLASS_SUBJECTS           10
+#define FITNESS_FOR_TEACHER_SUBJECT          10
+#define FITNESS_FOR_ROOM_REQ_SUBJECT         10
 
 /**
  * ASSUMPTIONS:
@@ -46,6 +45,7 @@
  */
 
 int debug = 0;
+int conflictOnly = 0;
 
 /* Selve rummet */
 typedef struct room{
@@ -354,27 +354,28 @@ void selection(params *populationParams){
     int prop;
     roulette = calloc(100, sizeof(int));
 
-    for(i=0; i < populationParams->tempPopulationCount; i++){
-        if(populationParams->akkFitnessPoints < 1){
+    for(i = 0; i < populationParams->tempPopulationCount; i++){
+        /*if(populationParams->akkFitnessPoints < 1){
             populationParams->akkFitnessPoints = 1;
-        }
+        }*/
 
         prop = (((float)populationParams->tempPopulation[i].fitness) / (populationParams->akkFitnessPoints)) * 100;
 
         if(prop > 0){
-            for(p = rouletteCount; p < rouletteCount + prop; p++){
+            for(p = rouletteCount; p < rouletteCount + prop && p < 100; p++){
                 roulette[p] = i;
             }
-        }
 
-        rouletteCount += prop;
+        	rouletteCount += prop;
+        }
+        
     }
 
     for(i = 0; i < MAX_INDIVIDUALS; i++){
-        rouletteSelector = roulette[randomNumber(0,rouletteCount)];
+        rouletteSelector = roulette[randomNumber(0,rouletteCount - 1)];
         populationParams->individuals[i] = populationParams->tempPopulation[rouletteSelector];
     }
-    memset(populationParams->tempPopulation, '\0', (populationParams->tempPopulationCount*sizeof(individual)));
+    memset(populationParams->tempPopulation, '\0', (populationParams->tempPopulationCount * sizeof(individual)));
     populationParams->tempPopulationCount = 0;
     populationParams->akkFitnessPoints    = 0;
     qsort(populationParams->individuals, populationParams->individualsCount, sizeof(individual), fitnessQsort);
@@ -391,7 +392,7 @@ void calcFitnessOnPopulation(params *populationParams){
     populationParams->nullHoursAcc     = 0;
 
     for(i = 0; i < populationParams->tempPopulationCount; i++){
-    	printf("%d\n", populationParams->tempPopulationCount);
+
 		conflictsAndPreperation(&populationParams->tempPopulation[i], populationParams);
         populationParams->akkConflicts     += populationParams->tempPopulation[i].conflicts;
     	populationParams->akkFitnessPoints += populationParams->tempPopulation[i].fitness;
@@ -432,7 +433,7 @@ void mergePopulation(params *populationParams){
 }
 
 void crossoverPopulation(params *populationParams){
-   int i, countChildren=0;
+   int i, countChildren = 0;
     for(i = 0; i < MAX_INDIVIDUALS - 1; i++){
         crossover(
             &populationParams->childrens[i],

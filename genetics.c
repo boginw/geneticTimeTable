@@ -25,7 +25,7 @@ void crossover(individual *child1, individual *child2, const individual *p1, con
     for (c = 0; c < populationParams->classCount; c++){
         for(i = crossover_points; i > 0; i--){
             while( 1 ){
-                p = randomNumber(0,MAX_LECTURES-1);
+                p = randomNumber(0, MAX_LECTURES-1);
                 if( !cp[ p ] ){
                     cp[ p ] = 1;
                     break;
@@ -102,10 +102,15 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
     int nullHoursAcc = 0;
     int accHourCount = 0;
 
-    int *teacherTotalHours  = calloc(populationParams->teacherCount, sizeof(int));
-    int *teacherPreperation = calloc(populationParams->teacherCount, sizeof(int));
-    int *differentTeachers  = calloc(populationParams->subjectCount, sizeof(int));
+    int *teacherTotalHours;
+    int *teacherPreperation;
+    int *differentTeachers;
 
+    teacherTotalHours  = calloc(populationParams->teacherCount, sizeof(int));
+    teacherPreperation = calloc(populationParams->teacherCount, sizeof(int));
+    differentTeachers  = calloc(populationParams->subjectCount, sizeof(int));
+
+    /*printf("\n");*/
     /* Reset fitness points */
     ind->fitness = 0;
 
@@ -164,7 +169,6 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
 
                 /* If previous lecture is the same */
                 if(lecture1 > 0 && isSameLectureSequent(&ind->t[class1].lectures[lecture1], &ind->t[class1].lectures[lecture1 - 1])){
-
                     /* Last lecture is the same, so add half hour */
                     teacherPreperation[ind->t[class1].lectures[lecture1].l_teacher->id] +=  5;
                 }else{
@@ -179,6 +183,7 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
                         ind->t[class1].lectures[lecture1].l_datetime.hour + 1  != ind->t[class1].lectures[lecture1 + 1].l_datetime.hour){
 
                     nullHoursAcc += 1;
+                    penalty = penalty * 0.9;
                 }
 
                 /* Don't check last timetable for conflicts */
@@ -224,41 +229,51 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
         }
     }
 
-    /* Calculate points for subject requirements */
-    ind->fitness += FITNESS_FOR_CLASS_MIN_HOURS * (1 - (tempSubjectSum - requiredSubjectCounter) / tempSubjectSum);
+    if(!conflictOnly){
 
-    /* Calculate points from actual work hours */
-    for (teacherIndex = 0; teacherIndex < populationParams->teacherCount; teacherIndex++){
-        tempMaxHours = populationParams->teachers[teacherIndex].maxWorkHours;
 
-        tempTotalWorkHours = (          teacherTotalHours[teacherIndex]        * lectionTime     ) +
-                             ( ((float) teacherPreperation[teacherIndex] / 10) * preperationTime );
+        /* Calculate points for subject requirements */
+        ind->fitness += FITNESS_FOR_CLASS_MIN_HOURS * (1 - abs(tempSubjectSum - requiredSubjectCounter) / tempSubjectSum);
 
-        tempWorkHoursPreperationNormalized = (tempMaxHours - (tempTotalWorkHours / MINUTES_IN_HOUR)) / tempMaxHours;
+        /* Calculate points from actual work hours */
+        for (teacherIndex = 0; teacherIndex < populationParams->teacherCount; teacherIndex++){
+            if(teacherPreperation[teacherIndex] > 0){
+                tempMaxHours = populationParams->teachers[teacherIndex].maxWorkHours;
 
-        ind->fitness += FITNESS_FOR_PREPARATION_TIME / ((float) teacherPreperation[teacherIndex] / 10);
-        ind->fitness += FITNESS_FOR_TEACHERHOURS * (1 - tempWorkHoursPreperationNormalized);
+                tempTotalWorkHours = (          teacherTotalHours[teacherIndex]        * lectionTime     ) +
+                                     ( ((float) teacherPreperation[teacherIndex] / 10) * preperationTime );
+
+                tempWorkHoursPreperationNormalized = 
+                    abs(tempMaxHours - (tempTotalWorkHours / MINUTES_IN_HOUR)) / tempMaxHours;
+
+                ind->fitness += FITNESS_FOR_PREPARATION_TIME / (teacherPreperation[teacherIndex] / 10.0);
+                ind->fitness += FITNESS_FOR_TEACHERHOURS * (1 - tempWorkHoursPreperationNormalized);
+            }
+        }
+        
+        ind->fitness += FITNESS_FOR_CLASS_MIN_HOURS * (1 - (abs((float)tempSubjectSum - accHourCount) / tempSubjectSum));
+
+
+        /* Penalty for fitness */
+        ind->fitness = ind->fitness * penalty;
+
+        /* Save conflicts */
+        ind->conflicts = conflicts;
+
+        /* Save acc null hours */
+        ind->nullHours = nullHoursAcc;
+
     }
-    
-    ind->fitness += FITNESS_FOR_CLASS_MIN_HOURS * (1 - (tempSubjectSum - accHourCount) / tempSubjectSum);
-
-
-    /* Penalty for fitness */
-    ind->fitness = ind->fitness * penalty;
-
-    /* Save conflicts */
-    ind->conflicts = conflicts;
-
-    /* Save acc null hours */
-    ind->nullHours = nullHoursAcc;
 
     free(teacherTotalHours);
-    free(teacherPreperation);
     free(differentTeachers);
 
     if(ind->fitness <= 0){
+        printf("Teacher count: %d\n", populationParams->teacherCount);
+        printf("%f\n", (float) FITNESS_FOR_PREPARATION_TIME / (teacherPreperation[teacherIndex] / 10.0));
         printf("%d\n", ind->fitness);
     }
+    free(teacherPreperation);
 }
 
 /**
@@ -421,7 +436,6 @@ void addEverythingNice(individual *i, params *populationParams){
            && currentLecture->l_subject == i->t[rndClass].lectures[j].l_subject){
 
             if(prevOrNext != -1 && currentLecture->init == 1){
-                printf("rndClass: %d, rndLec: %d\n", rndClass, rndLec);
 
                 tempDate.dayOfWeek = i->t[rndClass].lectures[prevOrNext].l_datetime.dayOfWeek;
                 tempDate.hour      = i->t[rndClass].lectures[prevOrNext].l_datetime.hour;
@@ -513,11 +527,11 @@ void setFitness(params *populationParams){
     int i, fitnessRatio, nullHoursRatio;
     int accFitness = 0;
     int accNullHours = 0;
-    int maxConflicts = populationParams->biggestConflicts;
-    int maxNullHours = populationParams->biggestNullHours;
+    int maxConflicts = populationParams->akkConflicts;
+    int maxNullHours = populationParams->nullHoursAcc;
 
 
-    for (i = 0; i < populationParams->tempPopulationCount; i++){
+    /*for (i = 0; i < populationParams->tempPopulationCount; i++){
         accFitness   += (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
         accNullHours += (((maxNullHours - populationParams->tempPopulation[i].nullHours) / (float) maxNullHours)) * 100;
     }
@@ -525,7 +539,6 @@ void setFitness(params *populationParams){
     for (i = 0; i < populationParams->tempPopulationCount; i++){
         fitnessRatio = (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
         fitnessRatio = fitnessRatio / (float) accFitness * FITNESS_FOR_CONFLICTS;
-
 
         nullHoursRatio = (((maxNullHours - populationParams->tempPopulation[i].nullHours) / (float) maxNullHours)) * 100;
         nullHoursRatio = nullHoursRatio / (float) accNullHours * FITNESS_FOR_NULL_HOURS;
@@ -535,23 +548,28 @@ void setFitness(params *populationParams){
         populationParams->akkFitnessPoints += (float) fitnessRatio;
         populationParams->akkFitnessPoints += (float) nullHoursRatio;
 
+
+
         if(fitnessRatio < 0){
             printf("An error should be fixed... To dangorous to continue.\n");
             exit(0);
         }
-    }
-    /*int i, biggest;
+    }*/
+
+
+    int biggestConflicts;
     if(populationParams->biggestConflicts > 0){
-        biggest = populationParams->biggestConflicts;
+        biggestConflicts = populationParams->biggestConflicts;
     }else{
-        biggest = 1;
+        biggestConflicts = 1;
     }
 
     for (i = 0; i < populationParams->tempPopulationCount; i++){
-        populationParams->tempPopulation[i].fitness = (((biggest - populationParams->tempPopulation[i].conflicts) / (float) biggest)) * 100000;
-        populationParams->tempPopulation[i].fitness += 100;
-        populationParams->akkFitnessPoints += populationParams->tempPopulation[i].fitness;
-    }*/
+        fitnessRatio = 
+            (((biggestConflicts - populationParams->tempPopulation[i].conflicts) / (float) biggestConflicts)) * FITNESS_FOR_CONFLICTS;
+        populationParams->tempPopulation[i].fitness += fitnessRatio;
+        populationParams->akkFitnessPoints          += fitnessRatio;
+    }
 
     /* SF - Udregn en fitness-værdi baseret på samme lærer i samme fag for en klasse */
     /* Modificér EM til at få det til at virke */

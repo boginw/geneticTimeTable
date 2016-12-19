@@ -151,9 +151,10 @@ int init(params *populationParams){
                 strcat(requirements,populationParams->teachers[i].canTeach[j]->name);
             }
 
-            printf("%2d => %15s, isClassleader: %s, %s\n",
+            printf("%2d => %15s, work: %d, isClassleader: %s, %s\n",
                 i+1,
                 populationParams->teachers[i].name,
+                populationParams->teachers[i].maxWorkHours,
                 (populationParams->teachers[i].isClassleader ? populationParams->teachers[i].leaderOfClass->name : "no"),
                 requirements
             );
