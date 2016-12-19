@@ -22,21 +22,17 @@
 #define WEEK_LENGTH         5
 #define MINUTES_IN_HOUR    60
 #define MAX_LECTURES       45
-#define MUTATION_CHANCE     3
-#define MAX_MUTATIONS       7
-#define NUM_OF_GEN      20000 /* Max amount of generations to run for */
-#define KILL_SHIT_GEN    9000
+#define MUTATION_CHANCE     5
+#define MAX_MUTATIONS      10
+#define NUM_OF_GEN      30000 /* Max amount of generations to run for */
+#define KILL_SHIT_GEN    4000
 
 
-#define FITNESS_FOR_CONFLICTS                700
-#define FITNESS_FOR_PREPARATION_TIME         10
-#define FITNESS_FOR_CLASS_MIN_HOURS          75
-#define FITNESS_FOR_NULL_HOURS               50
-#define FITNESS_FOR_TEACHERHOURS             10
-#define FITNESS_FOR_SAME_TEACHER_SUBJECT     10
-#define FITNESS_FOR_CLASS_SUBJECTS           10
-#define FITNESS_FOR_TEACHER_SUBJECT          10
-#define FITNESS_FOR_ROOM_REQ_SUBJECT         10
+#define FITNESS_FOR_CONFLICTS                300
+#define FITNESS_FOR_NULL_HOURS               100
+#define FITNESS_FOR_PREPARATION_TIME         100
+#define FITNESS_FOR_CLASS_MIN_HOURS          7
+#define FITNESS_FOR_TEACHERHOURS             1
 
 /**
  * ASSUMPTIONS:

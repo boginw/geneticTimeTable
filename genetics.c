@@ -183,7 +183,6 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
                         ind->t[class1].lectures[lecture1].l_datetime.hour + 1  != ind->t[class1].lectures[lecture1 + 1].l_datetime.hour){
 
                     nullHoursAcc += 1;
-                    penalty = penalty * 0.9;
                 }
 
                 /* Don't check last timetable for conflicts */
@@ -263,16 +262,19 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
         /* Save acc null hours */
         ind->nullHours = nullHoursAcc;
 
+        ind->fitness += FITNESS_FOR_NULL_HOURS / nullHoursAcc;
+    }
+
+
+
+
+
+    if(ind->fitness <= 0){
+        ind->fitness = 1;
     }
 
     free(teacherTotalHours);
     free(differentTeachers);
-
-    if(ind->fitness <= 0){
-        printf("Teacher count: %d\n", populationParams->teacherCount);
-        printf("%f\n", (float) FITNESS_FOR_PREPARATION_TIME / (teacherPreperation[teacherIndex] / 10.0));
-        printf("%d\n", ind->fitness);
-    }
     free(teacherPreperation);
 }
 
