@@ -36,10 +36,11 @@ void addEverythingNice(individual *i, params *populationParams);
 void getRandomDatetimeWithNoLecture(timetable *t, int *day, int*hour);
 teacher *findRandomTeacherForSubject(lecture *l, params *populationParams);
 int teacherCanTeach(subject **canTeach, int canTeachLength, char *subjectName);
-void conflictsAndPreperation(individual *ind, params *populationParams);
+void fitnessConflictsData(individual *ind, params *populationParams);
 individual randomIndividual(params *populationParams);
 int lectureOnDateTime(timetable t, int day, int hour);
 int isSameLectureSequent(lecture *l1, lecture *l2);
+int shouldMutate();
 
 /* COMPARE QSORT FUNCTIONS */
 int dayHourQsort(const void * a, const void * b);

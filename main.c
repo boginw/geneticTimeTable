@@ -24,15 +24,15 @@
 #define MAX_LECTURES       45
 #define MUTATION_CHANCE     5
 #define MAX_MUTATIONS      10
-#define NUM_OF_GEN      30000 /* Max amount of generations to run for */
+#define NUM_OF_GEN       8000 /* Max amount of generations to run for */
 #define KILL_SHIT_GEN    4000
 
 
-#define FITNESS_FOR_CONFLICTS                300
-#define FITNESS_FOR_NULL_HOURS               100
-#define FITNESS_FOR_PREPARATION_TIME         100
-#define FITNESS_FOR_CLASS_MIN_HOURS          7
-#define FITNESS_FOR_TEACHERHOURS             1
+#define FITNESS_FOR_CONFLICTS                600
+#define FITNESS_FOR_NULL_HOURS               110
+#define FITNESS_FOR_PREPARATION_TIME         20
+#define FITNESS_FOR_CLASS_MIN_HOURS          10
+#define FITNESS_FOR_TEACHERHOURS             20
 
 /**
  * ASSUMPTIONS:
@@ -43,88 +43,76 @@
 int debug = 0;
 int conflictOnly = 0;
 
-/* Selve rummet */
 typedef struct room{
-    char name[MAX_NAME_LENGTH]; /* Rummets navn */
+    char name[MAX_NAME_LENGTH];
 } room;
 
-/* Selve klassen */
 typedef struct class{
-    int    year; /* 1b = 1 */
-    char   name[MAX_NAME_LENGTH]; /* klassenavn ex. 1b */
-    room*  classRoom; /* pointer til room struct */
-    int    maxWorkHoursPerDay; /* Maks antal timer man må gå i skole pr dag ! */
+    int    year; /* 1B = 1 */
+    char   name[MAX_NAME_LENGTH];
+    room*  classRoom;
+    int    maxWorkHoursPerDay;
 } class;
 
-/* Selve faget */
 typedef struct subject{
 	int   id;
-    char  name[MAX_NAME_LENGTH]; /* navn på faget */
-    int   perYear[MAX_YEAR]; /* timer krævet pr år */
-    room* roomRequire[MAX_ROOMS]; /* array af pointers til kompatible rum, hvis tomt klasse lokale */
-    int   roomRequireLength; /* Antal rum i arrayet oven over */
-    int   totalHours; /* løbende akkumuleret timer */
+    char  name[MAX_NAME_LENGTH];
+    int   perYear[MAX_YEAR];
+    room* roomRequire[MAX_ROOMS];
+    int   roomRequireLength;
+    int   totalHours;
 } subject;
 
-/* Selve læren */
 typedef struct teacher{
 	int      id;
-    char     name[MAX_NAME_LENGTH]; /* Lærens navn */
-    int      isClassleader; /* boolean klasselærer eller ej */
-    class*   leaderOfClass; /* pointer til klassen de er klasselærer for */
-    subject* canTeach[MAX_SUBJECTS]; /* array af pointers til kompatible fag */
-    int      canTeachLength; /* Antal pointers i canTeach array'et */
-    int      maxWorkHours; /* Maks antal arbejdstimer pr uge */
+    char     name[MAX_NAME_LENGTH];
+    int      isClassleader; 
+    class*   leaderOfClass; 
+    subject* canTeach[MAX_SUBJECTS]; 
+    int      canTeachLength; 
+    int      maxWorkHours;
 } teacher;
 
-/* Timestamp
- * Således at hour=0 => første lektions tidpunkt på dagens altså 08.00-08.45
- * osv....
- * Se dat.sched ## TIMEINTERVALS ## for at se lektions intervalerne
- */
 typedef struct datetime{
     int dayOfWeek;
     int hour;
 } datetime;
 
-/* Selve lektoren */
 typedef struct lecture{
-    int     init; /* boolean værdi afgører om den er i et skema eller ej */
-    int     free; /* hvorvidt om det er en fri time */
+    int     init; 
+    int     free; 
     int     conflictRoom;
     int     conflictTeacher;
-    room    *l_room; /* pointer til det rum selve lektionen foregår i */
-    class   *l_class; /* pointer til den pågældende klasse som skal have lektionen */
-    subject *l_subject; /* pointer til faget lektionen omhandler */
-    teacher *l_teacher; /* pointer til den lærer der skal undervise */
-    datetime l_datetime; /* hvilken dag og lektions nummer det skal foregå i */
+    room    *l_room; 
+    class   *l_class; 
+    subject *l_subject; 
+    teacher *l_teacher; 
+    datetime l_datetime; 
 } lecture;
 
-/* Selve skemaet for en enkelt klasse */
 typedef struct timetable{
-    lecture lectures[MAX_LECTURES]; /* array af lektioner til dagen */
-    int numOfConflicts; /**/
-    int lectureLength; /* antal lektioner på den pågældende dag */
-    class *forClass; /* pointer til den pågældene klasse. */
+    lecture lectures[MAX_LECTURES]; 
+    int numOfConflicts;
+    int lectureLength; 
+    class *forClass;
 } timetable;
 
-/* Individet (STAVEFEJL ER GRATIS !) */
 typedef struct individual{
-    timetable t[MAX_CLASSES]; /* Et array af klasseskemaer for en hel skole */
-    int fitness; /* fitness værdien for individet */
-    int conflicts; /* antal konflikter på tværs af skolen i individet. */
-    int mutations; /* antal mutationer foretaget */
+    timetable t[MAX_CLASSES]; 
+    int fitness; 
+    int conflicts;
+    int mutations;
     int nullHours;
 } individual;
 
 typedef struct params{
-    room       *rooms; /* Array af rum, bliver deklaret men IKKE initieret */
-    subject    *subjects; /* Array af fag, bliver deklaret men IKKE initieret */
-    class      *classes; /* Array af klasser, bliver deklaret men IKKE initieret */
-    teacher    *teachers; /* Array af lærer, bliver deklaret men IKKE initieret */
-    individual *individuals; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
-    individual *childrens; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
-    individual *tempPopulation; /* Array af individer (også kendt som populationen), bliver deklaret men IKKE initieret */
+    room       *rooms; 
+    subject    *subjects; 
+    class      *classes; 
+    teacher    *teachers;
+    individual *individuals;
+    individual *childrens;
+    individual *tempPopulation;
 
     int roomCount;
     int subjectCount;
@@ -133,8 +121,8 @@ typedef struct params{
     int individualsCount;
     int childrensCount;
     int tempPopulationCount;
-    long int akkFitnessPoints;
-    long int akkConflicts;
+    long int accFitnessPoints;
+    long int accConflicts;
     long int nullHoursAcc;
     int biggestConflicts;
     int biggestNullHours;
@@ -142,12 +130,9 @@ typedef struct params{
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH];
 } params;
 
-void strip(char *s);
 int randomNumber(int min, int max);
-void swapn(void *a, void *b, size_t n);
-int factorial(int n);
 int isEmpty(int *array, size_t size);
-int shouldMutate();
+void strip(char *s);
 void prepend(char* s, const char* t);
 
 #include "headers.c"
@@ -162,7 +147,7 @@ int main(int argc, char const *argv[]){
     /* VARIABLES BEGIN */
     params populationParams;
     int i,j; /* iteration counters */
-    int seed = time(NULL) * 100; /* Token til at genskabe samme resultater på andre maskiner */
+    int seed = time(NULL) * 100;
 
     char progressLine[50] = ">";
     int curProg = 1;
@@ -195,8 +180,8 @@ int main(int argc, char const *argv[]){
     populationParams.individualsCount       = MAX_INDIVIDUALS;
     populationParams.childrensCount         = 0;
     populationParams.tempPopulationCount    = 0;
-    populationParams.akkFitnessPoints       = 0;
-    populationParams.akkConflicts           = 0;
+    populationParams.accFitnessPoints       = 0;
+    populationParams.accConflicts           = 0;
     populationParams.biggestConflicts       = 0;
 
     roulette = calloc(100, sizeof(int));
@@ -208,11 +193,11 @@ int main(int argc, char const *argv[]){
     }
 
     /* VARIABLES END */
-    srand(seed); /* Generationen af selve token til genbrug */
+    srand(seed);
 
 
     /*
-     * Tjekker efter debug mode
+     * Checks for debug mode
      */
     if(argc > 1){
         if(strcmp(argv[1],"--debug") == 0){
@@ -224,8 +209,8 @@ int main(int argc, char const *argv[]){
         printf("Seed: %d\n", seed);
     }
 
-    /*
-     * Initierer variablerner, ved at parse dat.sched igennem filParse.c funktionerne
+    /* 
+     * Initializing variables by parsing dat.sched through fileParse.c functions
      */
 
     init(&populationParams);
@@ -256,22 +241,13 @@ int main(int argc, char const *argv[]){
 
         /* If no progress in x generations, generate new random individual */
         if(lastBestGen + KILL_SHIT_GEN < j){
-			printf("#%d: Killing worst individuals",++killingCount);
-            for (i = 0; i < 200; i++){
-           		printf(" ");
-            }
-            printf("\n");
+			printf("#%d: Killing worst individuals\n",++killingCount);
             for (i = 0 ; i < MAX_INDIVIDUALS - 5; i++){
                 populationParams.individuals[MAX_INDIVIDUALS - 1 - i] = randomIndividual(&populationParams);
             }
 
             lastBestGen = j;
         }
-
-        /* Replace shit individuals */
-        /*for (i = MAX_INDIVIDUALS - 1; i > MAX_INDIVIDUALS/1.5; i--){
-            populationParams.individuals[i] = randomIndividual(&populationParams);
-        }*/
 
         if(populationParams.individuals[0].fitness > highestFitnessScore){
             highestFitnessScore = populationParams.individuals[0].fitness;
@@ -294,22 +270,12 @@ int main(int argc, char const *argv[]){
                 NUM_OF_GEN
             );
 
-            for (i = 0; i < 200; i++){
+            for (i = 0; i < 105; i++){
                 printf("\b");
             }
         }
-
-        /*if(populationParams.individuals[0].conflicts == 0){
-        	bestIndividual = populationParams.individuals[0];
-
-			conflictsAndPreperation(&bestIndividual, &populationParams);
-			if(bestIndividual.conflicts == 0){
-        		break;
-			}
-        }*/
     }
 
-    /* Uncomment for demo of schedules */
     for (i = 0; i < populationParams.classCount; i++){
         printf("\nClass %s, conflicts: %d\n", bestIndividual.t[i].forClass->name, bestIndividual.t[i].numOfConflicts);
         printTimeTable(bestIndividual.t[i], populationParams.intervalLabels);
@@ -351,11 +317,11 @@ void selection(params *populationParams){
     roulette = calloc(100, sizeof(int));
 
     for(i = 0; i < populationParams->tempPopulationCount; i++){
-        /*if(populationParams->akkFitnessPoints < 1){
-            populationParams->akkFitnessPoints = 1;
-        }*/
+        if(populationParams->accFitnessPoints < 1){
+            populationParams->accFitnessPoints = 1;
+        }
 
-        prop = (((float)populationParams->tempPopulation[i].fitness) / (populationParams->akkFitnessPoints)) * 100;
+        prop = (((float)populationParams->tempPopulation[i].fitness) / (populationParams->accFitnessPoints)) * 100;
 
         if(prop > 0){
             for(p = rouletteCount; p < rouletteCount + prop && p < 100; p++){
@@ -373,7 +339,7 @@ void selection(params *populationParams){
     }
     memset(populationParams->tempPopulation, '\0', (populationParams->tempPopulationCount * sizeof(individual)));
     populationParams->tempPopulationCount = 0;
-    populationParams->akkFitnessPoints    = 0;
+    populationParams->accFitnessPoints    = 0;
     qsort(populationParams->individuals, populationParams->individualsCount, sizeof(individual), fitnessQsort);
     free(roulette);
 }
@@ -382,16 +348,16 @@ void selection(params *populationParams){
 
 void calcFitnessOnPopulation(params *populationParams){
     int i;
-    populationParams->akkConflicts     = 0;
-    populationParams->akkFitnessPoints = 0;
+    populationParams->accConflicts     = 0;
+    populationParams->accFitnessPoints = 0;
     populationParams->biggestConflicts = 0;
     populationParams->nullHoursAcc     = 0;
 
     for(i = 0; i < populationParams->tempPopulationCount; i++){
 
-		conflictsAndPreperation(&populationParams->tempPopulation[i], populationParams);
-        populationParams->akkConflicts     += populationParams->tempPopulation[i].conflicts;
-    	populationParams->akkFitnessPoints += populationParams->tempPopulation[i].fitness;
+		fitnessConflictsData(&populationParams->tempPopulation[i], populationParams);
+        populationParams->accConflicts     += populationParams->tempPopulation[i].conflicts;
+    	populationParams->accFitnessPoints += populationParams->tempPopulation[i].fitness;
     	populationParams->nullHoursAcc     += populationParams->tempPopulation[i].nullHours;
 
 
@@ -447,7 +413,6 @@ int generateInitialPopulation(params *populationParams){
     int i, conflictsSum=0;
     /* Create initial population */
     for (i = 0; i < MAX_INDIVIDUALS; i++){
-        /* For hvert individ op til maks antal individer */
         populationParams->individuals[i] = randomIndividual(populationParams);
         conflictsSum += populationParams->individuals[i].conflicts;
     }
@@ -469,14 +434,6 @@ int isEmpty(int *array, size_t size){
     return empty == size;
 }
 
-
-int shouldMutate(){
-    int randomnumber;
-    randomnumber = rand() % 100;
-
-    return randomnumber < MUTATION_CHANCE;
-}
-
 /**
  * Generates a random number
  * @param  min smallest possible number
@@ -486,45 +443,6 @@ int shouldMutate(){
 int randomNumber(int min, int max){
     int i =(rand() % (max + 1 - min)) + min;
     return i;
-}
-
-/**
- * Swaps the values of two variables
- * @param a first var
- * @param b seconds var
- * @param n size of variables
- */
-void swapn(void *a, void *b, size_t n) {
-    size_t i;
-    char *x = (char *)a,
-         *y = (char *)b;
-
-    if (a == b) {
-        return;
-    }
-
-
-    for (i = 0; i < n; i++) {
-        *x ^= *y;
-        *y ^= *x;
-        *x ^= *y;
-        x++;
-        y++;
-    }
-}
-
-/**
- * Iterative factorial function
- * @param  n what to calculate on
- * @return   returns factorial of n
- */
-int factorial(int n){
-    int result = 1;
-    int i;
-    for (i = 2; i <= n; i++)    {
-        result *= i;
-    }
-    return result;
 }
 
 void prepend(char* s, const char* t){

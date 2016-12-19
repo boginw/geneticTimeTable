@@ -93,7 +93,7 @@ individual randomIndividual(params *populationParams){
 		qsort(&r_individual.t[c], MAX_LECTURES, sizeof(lecture), dayHourQsort);
 	}
 
-	conflictsAndPreperation(&r_individual, populationParams);
+	fitnessConflictsData(&r_individual, populationParams);
 
 	free(hoursPerWeek);
 	return r_individual;

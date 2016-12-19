@@ -58,8 +58,8 @@ void crossover(individual *child1, individual *child2, const individual *p1, con
         }
     }
 
-    conflictsAndPreperation(child1,populationParams);
-    conflictsAndPreperation(child2,populationParams);
+    fitnessConflictsData(child1,populationParams);
+    fitnessConflictsData(child2,populationParams);
     free(cp);
 }
 
@@ -76,7 +76,7 @@ void crossover(individual *child1, individual *child2, const individual *p1, con
  * @param      ind               The ind
  * @param      populationParams  The population parameters
  */
-void conflictsAndPreperation(individual *ind, params *populationParams){
+void fitnessConflictsData(individual *ind, params *populationParams){
     int class1,   class2,
         lecture1, lecture2,
         day,      hour,
@@ -110,7 +110,6 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
     teacherPreperation = calloc(populationParams->teacherCount, sizeof(int));
     differentTeachers  = calloc(populationParams->subjectCount, sizeof(int));
 
-    /*printf("\n");*/
     /* Reset fitness points */
     ind->fitness = 0;
 
@@ -265,10 +264,7 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
         ind->fitness += FITNESS_FOR_NULL_HOURS / nullHoursAcc;
     }
 
-
-
-
-
+    /* Safe-guard */
     if(ind->fitness <= 0){
         ind->fitness = 1;
     }
@@ -294,6 +290,14 @@ int isSameLectureSequent(lecture *l1, lecture *l2){
            (l1->l_subject            == l2->l_subject) &&
            (l1->l_teacher            == l2->l_teacher);
 }
+
+int shouldMutate(){
+    int randomnumber;
+    randomnumber = rand() % 100;
+
+    return randomnumber < MUTATION_CHANCE;
+}
+
 
 /**
  * @brief      Starts the mutation process by calling a random amount of mutations.
@@ -522,43 +526,7 @@ void getRandomDatetimeWithNoLecture(timetable *t, int *day, int*hour){
  * @param      populationParams  The population parameters
  */
 void setFitness(params *populationParams){
-    /*int i, j, k, l, m, fitnessRatio, count1, count2, res_i, klasse;
-    float value1, value2, res_f;
-    double mellem_resultat;*/
-
-    int i, fitnessRatio, nullHoursRatio;
-    int accFitness = 0;
-    int accNullHours = 0;
-    int maxConflicts = populationParams->akkConflicts;
-    int maxNullHours = populationParams->nullHoursAcc;
-
-
-    /*for (i = 0; i < populationParams->tempPopulationCount; i++){
-        accFitness   += (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
-        accNullHours += (((maxNullHours - populationParams->tempPopulation[i].nullHours) / (float) maxNullHours)) * 100;
-    }
-
-    for (i = 0; i < populationParams->tempPopulationCount; i++){
-        fitnessRatio = (((maxConflicts - populationParams->tempPopulation[i].conflicts) / (float) maxConflicts)) * 100;
-        fitnessRatio = fitnessRatio / (float) accFitness * FITNESS_FOR_CONFLICTS;
-
-        nullHoursRatio = (((maxNullHours - populationParams->tempPopulation[i].nullHours) / (float) maxNullHours)) * 100;
-        nullHoursRatio = nullHoursRatio / (float) accNullHours * FITNESS_FOR_NULL_HOURS;
-
-        populationParams->tempPopulation[i].fitness += (float) fitnessRatio;
-        populationParams->tempPopulation[i].fitness += (float) nullHoursRatio;
-        populationParams->akkFitnessPoints += (float) fitnessRatio;
-        populationParams->akkFitnessPoints += (float) nullHoursRatio;
-
-
-
-        if(fitnessRatio < 0){
-            printf("An error should be fixed... To dangorous to continue.\n");
-            exit(0);
-        }
-    }*/
-
-
+    int i, fitnessRatio;
     int biggestConflicts;
     if(populationParams->biggestConflicts > 0){
         biggestConflicts = populationParams->biggestConflicts;
@@ -570,49 +538,6 @@ void setFitness(params *populationParams){
         fitnessRatio = 
             (((biggestConflicts - populationParams->tempPopulation[i].conflicts) / (float) biggestConflicts)) * FITNESS_FOR_CONFLICTS;
         populationParams->tempPopulation[i].fitness += fitnessRatio;
-        populationParams->akkFitnessPoints          += fitnessRatio;
+        populationParams->accFitnessPoints          += fitnessRatio;
     }
-
-    /* SF - Udregn en fitness-værdi baseret på samme lærer i samme fag for en klasse */
-    /* Modificér EM til at få det til at virke */
-    /*for (i = 0; i < populationParams->tempPopulationCount; i++) {
-        mellem_resultat = 0.0;
-        for (j = 0; j < populationParams->classCount; j++) {
-            count1 = 0;
-            for (k = 0; k < populationParams->subjectCount; k++) {
-                for (l = 0; l < populationParams->teacherCount; l++) {
-                    count2 = 0;
-                    res_i  = 0;
-                    for (m = 0; m < populationParams->tempPopulation[i].t[j].lectureLength; m++) {
-                        if (populationParams->tempPopulation[i].t[j].lectures[m].init == 1) {
-                            if (populationParams->tempPopulation[i].t[j].lectures[m].l_subject == &populationParams->subjects[k]) {
-                                count2++;
-                                if (populationParams->tempPopulation[i].t[j].lectures[m].l_teacher == &populationParams->teachers[l]) {
-                                    res_i++;
-                                }
-                            }
-                        } else {
-                            continue;
-                        }
-                    }
-                    if (res_i > count1) {
-                        count1 = res_i;
-                    }
-                }
-                if (count2 != 0) {
-                    value1 = (float) count1;
-                    value2 = (float) count2;
-                    mellem_resultat += value1 / value2 * FLOAT_MULTIPLIER;
-                }
-            }
-            value1 = mellem_resultat;
-            value2 = (float) populationParams->subjectCount;
-            mellem_resultat = value1 / value2;
-        }
-        value1 = mellem_resultat;
-        value2 = (float) populationParams->classCount;
-        populationParams->tempPopulation[i].fitness += (int) (value1 / value2);
-        populationParams->akkFitnessPoints += (int) (value1 / value2);
-    }*/
-
 }
