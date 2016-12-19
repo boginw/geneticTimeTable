@@ -142,14 +142,6 @@ typedef struct params{
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH];
 } params;
 
-void strip(char *s);
-int randomNumber(int min, int max);
-void swapn(void *a, void *b, size_t n);
-int factorial(int n);
-int isEmpty(int *array, size_t size);
-int shouldMutate();
-void prepend(char* s, const char* t);
-
 #include "headers.c"
 #include "fileParse.c"
 #include "lectureControl.c"
@@ -364,7 +356,7 @@ void selection(params *populationParams){
 
         	rouletteCount += prop;
         }
-        
+
     }
 
     for(i = 0; i < MAX_INDIVIDUALS; i++){
@@ -511,20 +503,6 @@ void swapn(void *a, void *b, size_t n) {
         x++;
         y++;
     }
-}
-
-/**
- * Iterative factorial function
- * @param  n what to calculate on
- * @return   returns factorial of n
- */
-int factorial(int n){
-    int result = 1;
-    int i;
-    for (i = 2; i <= n; i++)    {
-        result *= i;
-    }
-    return result;
 }
 
 void prepend(char* s, const char* t){

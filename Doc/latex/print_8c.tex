@@ -1,0 +1,87 @@
+\hypertarget{print_8c}{}\section{print.\+c File Reference}
+\label{print_8c}\index{print.\+c@{print.\+c}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ \hyperlink{print_8c_ad3feb3d605e10a84270ac6bb7ada6c84}{auto\+Padding} (char $\ast$header, int width)
+\begin{DoxyCompactList}\small\item\em Returns a padded header instead of left alligned. \end{DoxyCompactList}\item 
+void \hyperlink{print_8c_ac849128945062cd65be0dc510b034f97}{print\+Lecture} (\hyperlink{structlecture}{lecture} l)
+\begin{DoxyCompactList}\small\item\em Prints core elements of a lecture. \end{DoxyCompactList}\item 
+void \hyperlink{print_8c_af82c81eb76ab0f756d6601421bf411d3}{print\+Time\+Table} (\hyperlink{structtimetable}{timetable} t, char($\ast$labels)\mbox{[}\hyperlink{main_8c_a40953fb1d014188b77bbf6d21d0b3e6c}{M\+A\+X\+\_\+\+L\+A\+B\+E\+L\+\_\+\+L\+E\+N\+G\+TH}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Prints a complete timetable. \end{DoxyCompactList}\item 
+void \hyperlink{print_8c_aa350bf2fc3bcd56e7adb2c46a02491ef}{dump\+C\+SV} (\hyperlink{structindividual}{individual} $\ast$ind, int class\+Count, char($\ast$labels)\mbox{[}\hyperlink{main_8c_a40953fb1d014188b77bbf6d21d0b3e6c}{M\+A\+X\+\_\+\+L\+A\+B\+E\+L\+\_\+\+L\+E\+N\+G\+TH}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Outputs results to a csv. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{print_8c_ad3feb3d605e10a84270ac6bb7ada6c84}{}\label{print_8c_ad3feb3d605e10a84270ac6bb7ada6c84} 
+\index{print.\+c@{print.\+c}!auto\+Padding@{auto\+Padding}}
+\index{auto\+Padding@{auto\+Padding}!print.\+c@{print.\+c}}
+\subsubsection{\texorpdfstring{auto\+Padding()}{autoPadding()}}
+{\footnotesize\ttfamily char$\ast$ auto\+Padding (\begin{DoxyParamCaption}\item[{char $\ast$}]{header,  }\item[{int}]{width }\end{DoxyParamCaption})}
+
+
+
+Returns a padded header instead of left alligned. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em header} & the text to padd to center \\
+\hline
+\mbox{\tt in}  & {\em width} & width of the table\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns padded string 
+\end{DoxyReturn}
+\hypertarget{print_8c_aa350bf2fc3bcd56e7adb2c46a02491ef}{}\label{print_8c_aa350bf2fc3bcd56e7adb2c46a02491ef} 
+\index{print.\+c@{print.\+c}!dump\+C\+SV@{dump\+C\+SV}}
+\index{dump\+C\+SV@{dump\+C\+SV}!print.\+c@{print.\+c}}
+\subsubsection{\texorpdfstring{dump\+C\+S\+V()}{dumpCSV()}}
+{\footnotesize\ttfamily void dump\+C\+SV (\begin{DoxyParamCaption}\item[{\hyperlink{structindividual}{individual} $\ast$}]{ind,  }\item[{int}]{class\+Count,  }\item[{char($\ast$)}]{labels\mbox{[}\+M\+A\+X\+\_\+\+L\+A\+B\+E\+L\+\_\+\+L\+E\+N\+G\+T\+H\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Outputs results to a csv. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em ind} & The ind \\
+\hline
+\mbox{\tt in}  & {\em class\+Count} & The class count \\
+\hline
+ & {\em labels} & The labels \\
+\hline
+\end{DoxyParams}
+\hypertarget{print_8c_ac849128945062cd65be0dc510b034f97}{}\label{print_8c_ac849128945062cd65be0dc510b034f97} 
+\index{print.\+c@{print.\+c}!print\+Lecture@{print\+Lecture}}
+\index{print\+Lecture@{print\+Lecture}!print.\+c@{print.\+c}}
+\subsubsection{\texorpdfstring{print\+Lecture()}{printLecture()}}
+{\footnotesize\ttfamily void print\+Lecture (\begin{DoxyParamCaption}\item[{\hyperlink{structlecture}{lecture}}]{l }\end{DoxyParamCaption})}
+
+
+
+Prints core elements of a lecture. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em l} & lecture to print \\
+\hline
+\end{DoxyParams}
+\hypertarget{print_8c_af82c81eb76ab0f756d6601421bf411d3}{}\label{print_8c_af82c81eb76ab0f756d6601421bf411d3} 
+\index{print.\+c@{print.\+c}!print\+Time\+Table@{print\+Time\+Table}}
+\index{print\+Time\+Table@{print\+Time\+Table}!print.\+c@{print.\+c}}
+\subsubsection{\texorpdfstring{print\+Time\+Table()}{printTimeTable()}}
+{\footnotesize\ttfamily void print\+Time\+Table (\begin{DoxyParamCaption}\item[{\hyperlink{structtimetable}{timetable}}]{t,  }\item[{char($\ast$)}]{labels\mbox{[}\+M\+A\+X\+\_\+\+L\+A\+B\+E\+L\+\_\+\+L\+E\+N\+G\+T\+H\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Prints a complete timetable. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em t} & The desired timetable. \\
+\hline
+ & {\em labels} & The labels \\
+\hline
+\end{DoxyParams}

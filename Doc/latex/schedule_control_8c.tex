@@ -1,0 +1,96 @@
+\hypertarget{schedule_control_8c}{}\section{schedule\+Control.\+c File Reference}
+\label{schedule_control_8c}\index{schedule\+Control.\+c@{schedule\+Control.\+c}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{schedule_control_8c_a1f6ecc382430f436c8a8c6079ac12787}{fitness\+Qsort} (const void $\ast$a, const void $\ast$b)
+\begin{DoxyCompactList}\small\item\em Function for q\+Sort to sort for highest fitness. \end{DoxyCompactList}\item 
+int \hyperlink{schedule_control_8c_aa49911a7ddb9b956d4d50f7f2b24f752}{day\+Hour\+Qsort} (const void $\ast$a, const void $\ast$b)
+\begin{DoxyCompactList}\small\item\em Function for q\+Sort to sort for day and time it also sort so that all init = 0 comes last. \end{DoxyCompactList}\item 
+\hyperlink{structindividual}{individual} \hyperlink{schedule_control_8c_ad48b28bf8f09bfa16c68688780d00fef}{random\+Individual} (\hyperlink{structparams}{params} $\ast$population\+Params)
+\begin{DoxyCompactList}\small\item\em Generates a random individual. \end{DoxyCompactList}\item 
+int \hyperlink{schedule_control_8c_a1f7368a103edf0e2a1840e3512c9496b}{lecture\+On\+Date\+Time} (\hyperlink{structtimetable}{timetable} t, int day, int hour)
+\begin{DoxyCompactList}\small\item\em Checks if a lacture exists on the given day and time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{schedule_control_8c_aa49911a7ddb9b956d4d50f7f2b24f752}{}\label{schedule_control_8c_aa49911a7ddb9b956d4d50f7f2b24f752} 
+\index{schedule\+Control.\+c@{schedule\+Control.\+c}!day\+Hour\+Qsort@{day\+Hour\+Qsort}}
+\index{day\+Hour\+Qsort@{day\+Hour\+Qsort}!schedule\+Control.\+c@{schedule\+Control.\+c}}
+\subsubsection{\texorpdfstring{day\+Hour\+Qsort()}{dayHourQsort()}}
+{\footnotesize\ttfamily int day\+Hour\+Qsort (\begin{DoxyParamCaption}\item[{const void $\ast$}]{a,  }\item[{const void $\ast$}]{b }\end{DoxyParamCaption})}
+
+
+
+Function for q\+Sort to sort for day and time it also sort so that all init = 0 comes last. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em a} & First individuals to compare \\
+\hline
+\mbox{\tt in}  & {\em b} & Second individuals to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Whether a should come first or b 
+\end{DoxyReturn}
+\hypertarget{schedule_control_8c_a1f6ecc382430f436c8a8c6079ac12787}{}\label{schedule_control_8c_a1f6ecc382430f436c8a8c6079ac12787} 
+\index{schedule\+Control.\+c@{schedule\+Control.\+c}!fitness\+Qsort@{fitness\+Qsort}}
+\index{fitness\+Qsort@{fitness\+Qsort}!schedule\+Control.\+c@{schedule\+Control.\+c}}
+\subsubsection{\texorpdfstring{fitness\+Qsort()}{fitnessQsort()}}
+{\footnotesize\ttfamily int fitness\+Qsort (\begin{DoxyParamCaption}\item[{const void $\ast$}]{a,  }\item[{const void $\ast$}]{b }\end{DoxyParamCaption})}
+
+
+
+Function for q\+Sort to sort for highest fitness. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em a} & First individuals to compare \\
+\hline
+\mbox{\tt in}  & {\em b} & Second individuals to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Whether a should come first or b 
+\end{DoxyReturn}
+\hypertarget{schedule_control_8c_a1f7368a103edf0e2a1840e3512c9496b}{}\label{schedule_control_8c_a1f7368a103edf0e2a1840e3512c9496b} 
+\index{schedule\+Control.\+c@{schedule\+Control.\+c}!lecture\+On\+Date\+Time@{lecture\+On\+Date\+Time}}
+\index{lecture\+On\+Date\+Time@{lecture\+On\+Date\+Time}!schedule\+Control.\+c@{schedule\+Control.\+c}}
+\subsubsection{\texorpdfstring{lecture\+On\+Date\+Time()}{lectureOnDateTime()}}
+{\footnotesize\ttfamily int lecture\+On\+Date\+Time (\begin{DoxyParamCaption}\item[{\hyperlink{structtimetable}{timetable}}]{t,  }\item[{int}]{day,  }\item[{int}]{hour }\end{DoxyParamCaption})}
+
+
+
+Checks if a lacture exists on the given day and time. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em t} & Timetable \\
+\hline
+\mbox{\tt in}  & {\em day} & The day \\
+\hline
+\mbox{\tt in}  & {\em hour} & The hour\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+index-\/key of lecture if found or -\/1 if no lecture where found 
+\end{DoxyReturn}
+\hypertarget{schedule_control_8c_ad48b28bf8f09bfa16c68688780d00fef}{}\label{schedule_control_8c_ad48b28bf8f09bfa16c68688780d00fef} 
+\index{schedule\+Control.\+c@{schedule\+Control.\+c}!random\+Individual@{random\+Individual}}
+\index{random\+Individual@{random\+Individual}!schedule\+Control.\+c@{schedule\+Control.\+c}}
+\subsubsection{\texorpdfstring{random\+Individual()}{randomIndividual()}}
+{\footnotesize\ttfamily \hyperlink{structindividual}{individual} random\+Individual (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
+
+
+
+Generates a random individual. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em population\+Params} & The population parameters\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The random individual 
+\end{DoxyReturn}

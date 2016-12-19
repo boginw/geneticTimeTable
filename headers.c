@@ -40,6 +40,12 @@ void conflictsAndPreperation(individual *ind, params *populationParams);
 individual randomIndividual(params *populationParams);
 int lectureOnDateTime(timetable t, int day, int hour);
 int isSameLectureSequent(lecture *l1, lecture *l2);
+void strip(char *s);
+int randomNumber(int min, int max);
+void swapn(void *a, void *b, size_t n);
+int isEmpty(int *array, size_t size);
+int shouldMutate();
+void prepend(char* s, const char* t);
 
 /* COMPARE QSORT FUNCTIONS */
 int dayHourQsort(const void * a, const void * b);
