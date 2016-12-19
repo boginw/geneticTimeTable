@@ -130,11 +130,6 @@ typedef struct params{
     char intervalLabels[MAX_LECTURES][MAX_LABEL_LENGTH];
 } params;
 
-int randomNumber(int min, int max);
-int isEmpty(int *array, size_t size);
-void strip(char *s);
-void prepend(char* s, const char* t);
-
 #include "headers.c"
 #include "fileParse.c"
 #include "lectureControl.c"
@@ -330,7 +325,7 @@ void selection(params *populationParams){
 
         	rouletteCount += prop;
         }
-        
+
     }
 
     for(i = 0; i < MAX_INDIVIDUALS; i++){

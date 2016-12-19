@@ -1,0 +1,243 @@
+\hypertarget{file_parse_8c}{}\section{file\+Parse.\+c File Reference}
+\label{file_parse_8c}\index{file\+Parse.\+c@{file\+Parse.\+c}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{file_parse_8c_a99d8d8ba17f2b19348a4a337202a7005}{init} (\hyperlink{structparams}{params} $\ast$population\+Params)
+\begin{DoxyCompactList}\small\item\em Initates all the data from the dat.\+sched file. \end{DoxyCompactList}\item 
+int \hyperlink{file_parse_8c_a83c46caff2fb5cab7859e0f3953581fd}{count\+Lines} (F\+I\+LE $\ast$fp)
+\begin{DoxyCompactList}\small\item\em Counts the number of lines. \end{DoxyCompactList}\item 
+\hyperlink{structroom}{room} \hyperlink{file_parse_8c_a3379c15b1e6aa69e8146e5f9f47d1369}{parse\+Room} (char $\ast$line)
+\begin{DoxyCompactList}\small\item\em Parses the room to data. \end{DoxyCompactList}\item 
+\hyperlink{structsubject}{subject} \hyperlink{file_parse_8c_a336bbb88224917985aa82d932eeb5c36}{parse\+Subject} (char $\ast$line, \hyperlink{structroom}{room} $\ast$rooms, int room\+Count)
+\begin{DoxyCompactList}\small\item\em parse the subject from data. \end{DoxyCompactList}\item 
+\hyperlink{structroom}{room} $\ast$ \hyperlink{file_parse_8c_aa00f2f650458386fb324b65639ad2de7}{find\+Room} (char $\ast$room\+Name, \hyperlink{structroom}{room} $\ast$rooms, int room\+Count)
+\begin{DoxyCompactList}\small\item\em Finds the room. \end{DoxyCompactList}\item 
+\hyperlink{structsubject}{subject} $\ast$ \hyperlink{file_parse_8c_a4da7a6ee777da6220499e59ee0716810}{find\+Subject} (char $\ast$subject\+Name, \hyperlink{structsubject}{subject} subjects\mbox{[}\hyperlink{main_8c_ae955f276de63586aaf0c290d32652706}{M\+A\+X\+\_\+\+S\+U\+B\+J\+E\+C\+TS}\mbox{]}, int subject\+Count)
+\begin{DoxyCompactList}\small\item\em Finds the subject. \end{DoxyCompactList}\item 
+\hyperlink{structclass}{class} \hyperlink{file_parse_8c_a1142789ae4dc145971b553ed3a94c533}{find\+Class} (char $\ast$class\+Name, \hyperlink{structclass}{class} $\ast$classes, int class\+Count)
+\begin{DoxyCompactList}\small\item\em Finds the class. \end{DoxyCompactList}\item 
+\hyperlink{structteacher}{teacher} $\ast$ \hyperlink{file_parse_8c_ac2255d0ccfc0267d7047167aa78a67c4}{find\+Teacher} (char $\ast$teacher\+Name, \hyperlink{structteacher}{teacher} $\ast$teachers, int teacher\+Count)
+\begin{DoxyCompactList}\small\item\em Finds the teacher. \end{DoxyCompactList}\item 
+int \hyperlink{file_parse_8c_af783ee295f2b082d705b17ea2f24eaba}{find\+Rooms\+From\+String} (char $\ast$room\+String, \hyperlink{structroom}{room} $\ast$rooms\+Found\mbox{[}\hyperlink{main_8c_a251d94cd24a2ca3369fc3f8eca8c19ae}{M\+A\+X\+\_\+\+R\+O\+O\+MS}\mbox{]}, \hyperlink{structroom}{room} $\ast$rooms, int room\+Count)
+\begin{DoxyCompactList}\small\item\em Finds rooms form a string. \end{DoxyCompactList}\item 
+int \hyperlink{file_parse_8c_a2df7e8dac172816cf2c5cb420116f35f}{find\+Subjects\+From\+String} (char $\ast$subject\+String, \hyperlink{structsubject}{subject} $\ast$subjects\+Found\mbox{[}\hyperlink{main_8c_ae955f276de63586aaf0c290d32652706}{M\+A\+X\+\_\+\+S\+U\+B\+J\+E\+C\+TS}\mbox{]}, \hyperlink{structsubject}{subject} $\ast$subjects, int subject\+Count)
+\begin{DoxyCompactList}\small\item\em Finds subjects form a string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{file_parse_8c_a83c46caff2fb5cab7859e0f3953581fd}{}\label{file_parse_8c_a83c46caff2fb5cab7859e0f3953581fd} 
+\index{file\+Parse.\+c@{file\+Parse.\+c}!count\+Lines@{count\+Lines}}
+\index{count\+Lines@{count\+Lines}!file\+Parse.\+c@{file\+Parse.\+c}}
+\subsubsection{\texorpdfstring{count\+Lines()}{countLines()}}
+{\footnotesize\ttfamily int count\+Lines (\begin{DoxyParamCaption}\item[{F\+I\+LE $\ast$}]{fp }\end{DoxyParamCaption})}
+
+
+
+Counts the number of lines. 
+
+\begin{DoxyAuthor}{Author}
+\href{http://stackoverflow.com/q/12733105/1426327}{\tt http\+://stackoverflow.\+com/q/12733105/1426327}
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em fp} & The file pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Number of lines. 
+\end{DoxyReturn}
+\hypertarget{file_parse_8c_a1142789ae4dc145971b553ed3a94c533}{}\label{file_parse_8c_a1142789ae4dc145971b553ed3a94c533} 
+\index{file\+Parse.\+c@{file\+Parse.\+c}!find\+Class@{find\+Class}}
+\index{find\+Class@{find\+Class}!file\+Parse.\+c@{file\+Parse.\+c}}
+\subsubsection{\texorpdfstring{find\+Class()}{findClass()}}
+{\footnotesize\ttfamily \hyperlink{structclass}{class} find\+Class (\begin{DoxyParamCaption}\item[{char $\ast$}]{class\+Name,  }\item[{\hyperlink{structclass}{class} $\ast$ classes}]{,  }\item[{int}]{class\+Count }\end{DoxyParamCaption})}
+
+
+
+Finds the class. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em class\+Name} & The class name \\
+\hline
+ & {\em classes} & The classes \\
+\hline
+\mbox{\tt in}  & {\em class\+Count} & The class count\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the class pointer, if not found N\+U\+LL 
+\end{DoxyReturn}
+\hypertarget{file_parse_8c_aa00f2f650458386fb324b65639ad2de7}{}\label{file_parse_8c_aa00f2f650458386fb324b65639ad2de7} 
+\index{file\+Parse.\+c@{file\+Parse.\+c}!find\+Room@{find\+Room}}
+\index{find\+Room@{find\+Room}!file\+Parse.\+c@{file\+Parse.\+c}}
+\subsubsection{\texorpdfstring{find\+Room()}{findRoom()}}
+{\footnotesize\ttfamily \hyperlink{structroom}{room}$\ast$ find\+Room (\begin{DoxyParamCaption}\item[{char $\ast$}]{room\+Name,  }\item[{\hyperlink{structroom}{room} $\ast$}]{rooms,  }\item[{int}]{room\+Count }\end{DoxyParamCaption})}
+
+
+
+Finds the room. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em room\+Name} & The room name \\
+\hline
+ & {\em rooms} & The rooms \\
+\hline
+\mbox{\tt in}  & {\em room\+Count} & The room count\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the room pointer, if not found N\+U\+LL 
+\end{DoxyReturn}
+\hypertarget{file_parse_8c_af783ee295f2b082d705b17ea2f24eaba}{}\label{file_parse_8c_af783ee295f2b082d705b17ea2f24eaba} 
+\index{file\+Parse.\+c@{file\+Parse.\+c}!find\+Rooms\+From\+String@{find\+Rooms\+From\+String}}
+\index{find\+Rooms\+From\+String@{find\+Rooms\+From\+String}!file\+Parse.\+c@{file\+Parse.\+c}}
+\subsubsection{\texorpdfstring{find\+Rooms\+From\+String()}{findRoomsFromString()}}
+{\footnotesize\ttfamily int find\+Rooms\+From\+String (\begin{DoxyParamCaption}\item[{char $\ast$}]{room\+String,  }\item[{\hyperlink{structroom}{room} $\ast$}]{rooms\+Found\mbox{[}\+M\+A\+X\+\_\+\+R\+O\+O\+M\+S\mbox{]},  }\item[{\hyperlink{structroom}{room} $\ast$}]{rooms,  }\item[{int}]{room\+Count }\end{DoxyParamCaption})}
+
+
+
+Finds rooms form a string. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em room\+String} & The room string \\
+\hline
+ & {\em rooms\+Found} & The rooms found \\
+\hline
+ & {\em rooms} & The rooms \\
+\hline
+\mbox{\tt in}  & {\em room\+Count} & The room count\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Number of rooms 
+\end{DoxyReturn}
+\hypertarget{file_parse_8c_a4da7a6ee777da6220499e59ee0716810}{}\label{file_parse_8c_a4da7a6ee777da6220499e59ee0716810} 
+\index{file\+Parse.\+c@{file\+Parse.\+c}!find\+Subject@{find\+Subject}}
+\index{find\+Subject@{find\+Subject}!file\+Parse.\+c@{file\+Parse.\+c}}
+\subsubsection{\texorpdfstring{find\+Subject()}{findSubject()}}
+{\footnotesize\ttfamily \hyperlink{structsubject}{subject}$\ast$ find\+Subject (\begin{DoxyParamCaption}\item[{char $\ast$}]{subject\+Name,  }\item[{\hyperlink{structsubject}{subject}}]{subjects\mbox{[}\+M\+A\+X\+\_\+\+S\+U\+B\+J\+E\+C\+T\+S\mbox{]},  }\item[{int}]{subject\+Count }\end{DoxyParamCaption})}
+
+
+
+Finds the subject. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em subject\+Name} & The subject name \\
+\hline
+ & {\em subjects} & The subjects \\
+\hline
+\mbox{\tt in}  & {\em subject\+Count} & The subject count\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the subject pointer, if not found N\+U\+LL 
+\end{DoxyReturn}
+\hypertarget{file_parse_8c_a2df7e8dac172816cf2c5cb420116f35f}{}\label{file_parse_8c_a2df7e8dac172816cf2c5cb420116f35f} 
+\index{file\+Parse.\+c@{file\+Parse.\+c}!find\+Subjects\+From\+String@{find\+Subjects\+From\+String}}
+\index{find\+Subjects\+From\+String@{find\+Subjects\+From\+String}!file\+Parse.\+c@{file\+Parse.\+c}}
+\subsubsection{\texorpdfstring{find\+Subjects\+From\+String()}{findSubjectsFromString()}}
+{\footnotesize\ttfamily int find\+Subjects\+From\+String (\begin{DoxyParamCaption}\item[{char $\ast$}]{subject\+String,  }\item[{\hyperlink{structsubject}{subject} $\ast$}]{subjects\+Found\mbox{[}\+M\+A\+X\+\_\+\+S\+U\+B\+J\+E\+C\+T\+S\mbox{]},  }\item[{\hyperlink{structsubject}{subject} $\ast$}]{subjects,  }\item[{int}]{subject\+Count }\end{DoxyParamCaption})}
+
+
+
+Finds subjects form a string. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em subject\+String} & The subject string \\
+\hline
+ & {\em subjects\+Found} & The subjects found \\
+\hline
+ & {\em subjects} & The subjects \\
+\hline
+\mbox{\tt in}  & {\em subject\+Count} & The subject count\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+number of subjects 
+\end{DoxyReturn}
+\hypertarget{file_parse_8c_ac2255d0ccfc0267d7047167aa78a67c4}{}\label{file_parse_8c_ac2255d0ccfc0267d7047167aa78a67c4} 
+\index{file\+Parse.\+c@{file\+Parse.\+c}!find\+Teacher@{find\+Teacher}}
+\index{find\+Teacher@{find\+Teacher}!file\+Parse.\+c@{file\+Parse.\+c}}
+\subsubsection{\texorpdfstring{find\+Teacher()}{findTeacher()}}
+{\footnotesize\ttfamily \hyperlink{structteacher}{teacher}$\ast$ find\+Teacher (\begin{DoxyParamCaption}\item[{char $\ast$}]{teacher\+Name,  }\item[{\hyperlink{structteacher}{teacher} $\ast$}]{teachers,  }\item[{int}]{teacher\+Count }\end{DoxyParamCaption})}
+
+
+
+Finds the teacher. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em teacher\+Name} & The teacher name \\
+\hline
+ & {\em teachers} & The teachers \\
+\hline
+\mbox{\tt in}  & {\em teacher\+Count} & The teacher count\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the teacher pointer, if not found N\+U\+LL 
+\end{DoxyReturn}
+\hypertarget{file_parse_8c_a99d8d8ba17f2b19348a4a337202a7005}{}\label{file_parse_8c_a99d8d8ba17f2b19348a4a337202a7005} 
+\index{file\+Parse.\+c@{file\+Parse.\+c}!init@{init}}
+\index{init@{init}!file\+Parse.\+c@{file\+Parse.\+c}}
+\subsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily int init (\begin{DoxyParamCaption}\item[{\hyperlink{structparams}{params} $\ast$}]{population\+Params }\end{DoxyParamCaption})}
+
+
+
+Initates all the data from the dat.\+sched file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em population\+Params} & The population parameters\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 
+\end{DoxyReturn}
+\hypertarget{file_parse_8c_a3379c15b1e6aa69e8146e5f9f47d1369}{}\label{file_parse_8c_a3379c15b1e6aa69e8146e5f9f47d1369} 
+\index{file\+Parse.\+c@{file\+Parse.\+c}!parse\+Room@{parse\+Room}}
+\index{parse\+Room@{parse\+Room}!file\+Parse.\+c@{file\+Parse.\+c}}
+\subsubsection{\texorpdfstring{parse\+Room()}{parseRoom()}}
+{\footnotesize\ttfamily \hyperlink{structroom}{room} parse\+Room (\begin{DoxyParamCaption}\item[{char $\ast$}]{line }\end{DoxyParamCaption})}
+
+
+
+Parses the room to data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em line} & The line\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the room. 
+\end{DoxyReturn}
+\hypertarget{file_parse_8c_a336bbb88224917985aa82d932eeb5c36}{}\label{file_parse_8c_a336bbb88224917985aa82d932eeb5c36} 
+\index{file\+Parse.\+c@{file\+Parse.\+c}!parse\+Subject@{parse\+Subject}}
+\index{parse\+Subject@{parse\+Subject}!file\+Parse.\+c@{file\+Parse.\+c}}
+\subsubsection{\texorpdfstring{parse\+Subject()}{parseSubject()}}
+{\footnotesize\ttfamily \hyperlink{structsubject}{subject} parse\+Subject (\begin{DoxyParamCaption}\item[{char $\ast$}]{line,  }\item[{\hyperlink{structroom}{room} $\ast$}]{rooms,  }\item[{int}]{room\+Count }\end{DoxyParamCaption})}
+
+
+
+parse the subject from data. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em line} & The line \\
+\hline
+ & {\em rooms} & The rooms \\
+\hline
+\mbox{\tt in}  & {\em room\+Count} & The room count\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the subject 
+\end{DoxyReturn}

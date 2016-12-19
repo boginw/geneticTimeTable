@@ -1,0 +1,9 @@
+PWD /Users/sipman/Google Drev/AAU/1. Semester/P1/geneticTimeTable/Doc/latex
+INPUT /usr/local/texlive/2016/texmf.cnf
+INPUT /usr/local/texlive/2016/texmf-dist/web2c/texmf.cnf
+INPUT /usr/local/texlive/2016/texmf-var/web2c/pdftex/pdflatex.fmt
+INPUT main_8c.tex
+OUTPUT main_8c.log
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/map/fontname/texfonts.map
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
