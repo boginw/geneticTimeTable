@@ -54,6 +54,7 @@ individual randomIndividual(params *populationParams){
 	lecture r_lecture;
 	int *hoursPerWeek;
 	hoursPerWeek = calloc(populationParams->subjectCount, sizeof(int));
+
 	if(hoursPerWeek == NULL){
 		printf("Not enough ram, sorry...\n");
 		exit(EXIT_FAILURE);
@@ -74,7 +75,9 @@ individual randomIndividual(params *populationParams){
     		day = randomNumber(0,WEEK_LENGTH-1);
     		hour = randomNumber(0,MAX_LECTURES/WEEK_LENGTH-1);
         	subjectIndex = randomNumber(0,populationParams->subjectCount-1);
+
         	if(hoursPerWeek[subjectIndex] > 0 && lectureOnDateTime(r_individual.t[c], day, hour) < 0){
+
 	            r_lecture = randomLectureForClassAndSubject(
 	            	populationParams,
 	            	&populationParams->classes[c],
@@ -83,7 +86,6 @@ individual randomIndividual(params *populationParams){
 	            r_lecture.l_datetime.dayOfWeek = day;
 	            r_lecture.l_datetime.hour = hour;
 	            r_lecture.init = 1;
-	            r_individual.t[c].lectureLength += 1;
 	            hoursPerWeek[subjectIndex] -= 1;
 	            r_individual.t[c].lectures[r_individual.t[c].lectureLength++] = r_lecture;
 	        }

@@ -341,11 +341,9 @@ void addSpice(individual *i, params *populationParams){
     int rndClass = randomNumber(0, populationParams->classCount-1);
     int rndLec = randomNumber(0, i->t[rndClass].lectureLength-1);
     lecture *thelecture = &i->t[rndClass].lectures[rndLec];
-
     if(thelecture->init != 1){
         return;
     }
-
     thelecture->l_teacher = findRandomTeacherForSubject(thelecture, populationParams);
 }
 

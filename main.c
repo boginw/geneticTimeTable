@@ -213,6 +213,7 @@ int main(int argc, char const *argv[]){
         printf("Not enough ram, sorry...\n");
         exit(EXIT_FAILURE);
     }
+
     /* VARIABLES END */
     srand(seed); /* Generationen af selve token til genbrug */
 
@@ -238,12 +239,13 @@ int main(int argc, char const *argv[]){
 
 
     if(argc > 2 && strcmp(argv[2],"--tests") == 0){
-    	printf("\nRunning tests\n------------------------------\n");
-    	printf("conflicts:              %s\n", testConflicts(&populationParams) ? "Passed" : "Failed");
-    	printf("randomNumber:           %s\n", testRandomNumber() ? "Passed" : "Failed");
-    	printf("isEmpty:                %s\n", testIsEmpty() ? "Passed" : "Failed");
-    	exit(0);
+        printf("\nRunning tests\n------------------------------\n");
+        printf("conflicts:              %s\n", testConflicts(&populationParams) ? "Passed" : "Failed");
+        printf("randomNumber:           %s\n", testRandomNumber() ? "Passed" : "Failed");
+        printf("isEmpty:                %s\n", testIsEmpty() ? "Passed" : "Failed");
+        exit(0);
     }
+
 
     generateInitialPopulation(&populationParams);
     qsort(populationParams.individuals, MAX_INDIVIDUALS, sizeof(individual), fitnessQsort);
@@ -487,7 +489,8 @@ int shouldMutate(){
  * @return     random number between min and max
  */
 int randomNumber(int min, int max){
-    return (rand() % (max + 1 - min)) + min;
+    int i =(rand() % (max + 1 - min)) + min;
+    return i;
 }
 
 /**

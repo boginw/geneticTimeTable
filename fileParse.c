@@ -50,6 +50,7 @@ int init(params *populationParams){
                 populationParams->rooms[populationParams->roomCount] = parseRoom(buffer);
                 populationParams->roomCount +=1;
             }else if(strcmp(lastType,"SUBJECT") == 0){
+
                 populationParams->subjects[populationParams->subjectCount] = parseSubject(buffer, populationParams->rooms, populationParams->roomCount);
                 populationParams->subjects[populationParams->subjectCount].id = populationParams->subjectCount;
                 populationParams->subjectCount +=1;
@@ -244,11 +245,11 @@ subject parseSubject(char *line, room* rooms, int roomCount){
     );
 
     if(strcmp("ONCE_A_DAY",hoursBuffer)==0){
-        for (i = 0; i < MAX_YEAR; i++){
+        for (i = 0; i < MAX_YEAR-1; i++){
             returnSubject.perYear[i] = SCHOOL_DAYS_YEAR;
         }
     }else if(strcmp("ONCE_A_WEEK",hoursBuffer)==0){
-        for (i = 0; i < MAX_YEAR; i++){
+        for (i = 0; i < MAX_YEAR-1; i++){
             returnSubject.perYear[i] = WEEK_LENGTH;
         }
     }else{
@@ -264,19 +265,20 @@ subject parseSubject(char *line, room* rooms, int roomCount){
             &returnSubject.perYear[8],
             &returnSubject.perYear[9]
         );
-        returnSubject.roomRequireLength = findRoomsFromString(subjectBuffer,returnSubject.roomRequire, rooms, roomCount);
-        returnSubject.totalHours =
-            returnSubject.perYear[0]+
-            returnSubject.perYear[1]+
-            returnSubject.perYear[2]+
-            returnSubject.perYear[3]+
-            returnSubject.perYear[4]+
-            returnSubject.perYear[5]+
-            returnSubject.perYear[6]+
-            returnSubject.perYear[7]+
-            returnSubject.perYear[8]+
-            returnSubject.perYear[9];
     }
+    returnSubject.roomRequireLength = findRoomsFromString(subjectBuffer,returnSubject.roomRequire, rooms, roomCount);
+    returnSubject.totalHours =
+        returnSubject.perYear[0]+
+        returnSubject.perYear[1]+
+        returnSubject.perYear[2]+
+        returnSubject.perYear[3]+
+        returnSubject.perYear[4]+
+        returnSubject.perYear[5]+
+        returnSubject.perYear[6]+
+        returnSubject.perYear[7]+
+        returnSubject.perYear[8]+
+        returnSubject.perYear[9];
+
     free(subjectBuffer);
     free(hoursBuffer);
     free(curSub);
@@ -382,17 +384,19 @@ int findRoomsFromString(char *roomString, room* roomsFound[MAX_ROOMS], room* roo
     int curRoom = 0;
     char tmpName[20];
 
+
     for (i = 1; i < len; i++){
         if(roomString[i] != ';' && roomString[i] != ']'){
             tmpName[curChar++] = roomString[i];
         }else{
             tmpName[curChar] = '\0';
             curChar = 0;
-            if(strlen(tmpName) > 0)
-                roomsFound[curRoom++] = findRoom(tmpName,rooms,roomCount);
+            if(strlen(tmpName) > 0){
+                roomsFound[curRoom] = findRoom(tmpName,rooms,roomCount);
+                curRoom++;
+            }
         }
     }
-
     return curRoom;
 }
 
@@ -428,6 +432,5 @@ int findSubjectsFromString(char *subjectString, subject* subjectsFound[MAX_SUBJE
     }
 
     free(tmpName);
-
     return curSubj;
 }
