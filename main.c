@@ -25,10 +25,7 @@
 #define MUTATION_CHANCE     5
 #define MAX_MUTATIONS       7
 #define FREE_LECTURE_CH    30
-#define NUM_OF_GEN      20000 /* Max amount of generations to run for */
-
-#define ROOM_CONFLICT       1
-#define TEACHER_CONFLICT    2
+#define NUM_OF_GEN      200000 /* Max amount of generations to run for */
 
 #define KILL_SHIT_GEN 3000
 

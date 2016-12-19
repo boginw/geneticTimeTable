@@ -51,3 +51,5 @@ int lectureOnDateTime(timetable t, int day, int hour);
 int dayHourQsort(const void * a, const void * b);
 
 int isSameLectureSequent(lecture *l1, lecture *l2);
+
+int fitnessQsort(const void * a, const void * b);
