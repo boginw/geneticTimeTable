@@ -85,7 +85,7 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
         totalLectures = 0,
         conflicts = 0;
 
-    /* Put in dat.shed */
+    /* Put in dat.sched */
     int preperationTime = 20;
     int lectionTime     = 45;
 
@@ -127,9 +127,10 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
 
         /* Sum total lectures for subject for class per day */
         for (subjectIndex = 0; subjectIndex < populationParams->subjectCount; subjectIndex++){
-            tempSubjectSum += (int) ceil(populationParams->subjects[subjectIndex].perYear[curYear] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
-        
-}
+            tempSubjectSum += 
+                (int) ceil(populationParams->subjects[subjectIndex].perYear[curYear] / ((float)SCHOOL_DAYS_YEAR / (float)WEEK_LENGTH));
+        }
+
         for(lecture1 = 0; lecture1 < ind->t[class1].lectureLength; lecture1++){
 
             day  = ind->t[class1].lectures[lecture1].l_datetime.dayOfWeek;
@@ -239,7 +240,7 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
         ind->fitness += FITNESS_FOR_TEACHERHOURS * (1 - tempWorkHoursPreperationNormalized);
     }
     
-    /*ind->fitness += FITNESS_FOR_CLASS_MIN_HOURS * (1 - (tempSubjectSum - accHourCount) / tempSubjectSum);*/
+    ind->fitness += FITNESS_FOR_CLASS_MIN_HOURS * (1 - (tempSubjectSum - accHourCount) / tempSubjectSum);
 
 
     /* Penalty for fitness */
@@ -255,7 +256,7 @@ void conflictsAndPreperation(individual *ind, params *populationParams){
     free(teacherPreperation);
     free(differentTeachers);
 
-    if(ind->fitness < 0){
+    if(ind->fitness <= 0){
         printf("%d\n", ind->fitness);
     }
 }
@@ -372,7 +373,8 @@ void addEverythingNice(individual *i, params *populationParams){
     int rndLec   = randomNumber(0, i->t[rndClass].lectureLength-1);
     lecture *currentLecture = &i->t[rndClass].lectures[rndLec];
     lecture *selectedLecture;
-    int prevOrNext;
+    int prevOrNext = 0;
+    datetime tempDate;
 
     int nextLec = lectureOnDateTime(
             i->t[rndClass],
@@ -385,10 +387,10 @@ void addEverythingNice(individual *i, params *populationParams){
             currentLecture->l_datetime.hour - 1);
 
     if(currentLecture->l_datetime.hour == MAX_LECTURES / WEEK_LENGTH){
-        selectedLecture = &i->t[rndClass].lectures[prevLec];
+        prevOrNext = prevLec;
 
     }else if(currentLecture->l_datetime.hour == 0){
-        selectedLecture = &i->t[rndClass].lectures[nextLec];
+        prevOrNext = nextLec;
 
     }else{
         if(prevLec != -1 && nextLec != -1){
@@ -401,14 +403,16 @@ void addEverythingNice(individual *i, params *populationParams){
             prevOrNext = prevLec == -1 ? prevLec : nextLec;
 
         }
-
-        selectedLecture = &i->t[rndClass].lectures[prevOrNext];
     }
 
-    if(currentLecture->l_teacher == selectedLecture->l_teacher && currentLecture->l_subject == selectedLecture->l_subject){
-        return;
-    }
+    if(prevOrNext != -1){
 
+        selectedLecture = &i->t[rndClass].lectures[prevOrNext];      
+
+        if(currentLecture->l_teacher == selectedLecture->l_teacher && currentLecture->l_subject == selectedLecture->l_subject){
+            return;
+        }
+    }
 
     for (j = 0; j < i->t[rndClass].lectureLength; j++){
 
@@ -417,13 +421,20 @@ void addEverythingNice(individual *i, params *populationParams){
            && currentLecture->l_subject == i->t[rndClass].lectures[j].l_subject){
 
             if(prevOrNext != -1 && currentLecture->init == 1){
-                swapn(
-                    &i->t[rndClass].lectures[prevOrNext].l_datetime,
-                    &i->t[rndClass].lectures[j].l_datetime,
-                    sizeof(datetime)
-                );
+                printf("rndClass: %d, rndLec: %d\n", rndClass, rndLec);
+
+                tempDate.dayOfWeek = i->t[rndClass].lectures[prevOrNext].l_datetime.dayOfWeek;
+                tempDate.hour      = i->t[rndClass].lectures[prevOrNext].l_datetime.hour;
+
+                i->t[rndClass].lectures[prevOrNext].l_datetime.dayOfWeek = i->t[rndClass].lectures[j].l_datetime.dayOfWeek;
+                i->t[rndClass].lectures[prevOrNext].l_datetime.hour      = i->t[rndClass].lectures[j].l_datetime.hour;
+
+                i->t[rndClass].lectures[j].l_datetime.dayOfWeek = tempDate.dayOfWeek;
+                i->t[rndClass].lectures[j].l_datetime.hour      = tempDate.hour;
+
             }else{
-                i->t[rndClass].lectures[j].l_datetime = i->t[rndClass].lectures[prevOrNext].l_datetime;
+                i->t[rndClass].lectures[j].l_datetime.dayOfWeek = currentLecture->l_datetime.dayOfWeek;
+                i->t[rndClass].lectures[j].l_datetime.hour      = currentLecture->l_datetime.hour - 1;
             }
 
             break;

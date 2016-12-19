@@ -362,7 +362,7 @@ void selection(params *populationParams){
         prop = (((float)populationParams->tempPopulation[i].fitness) / (populationParams->akkFitnessPoints)) * 100;
 
         if(prop > 0){
-            for(p = rouletteCount; p < rouletteCount+prop; p++){
+            for(p = rouletteCount; p < rouletteCount + prop; p++){
                 roulette[p] = i;
             }
         }
@@ -370,7 +370,7 @@ void selection(params *populationParams){
         rouletteCount += prop;
     }
 
-    for(i=0; i < MAX_INDIVIDUALS-1; i++){
+    for(i = 0; i < MAX_INDIVIDUALS; i++){
         rouletteSelector = roulette[randomNumber(0,rouletteCount)];
         populationParams->individuals[i] = populationParams->tempPopulation[rouletteSelector];
     }
@@ -391,7 +391,7 @@ void calcFitnessOnPopulation(params *populationParams){
     populationParams->nullHoursAcc     = 0;
 
     for(i = 0; i < populationParams->tempPopulationCount; i++){
-
+    	printf("%d\n", populationParams->tempPopulationCount);
 		conflictsAndPreperation(&populationParams->tempPopulation[i], populationParams);
         populationParams->akkConflicts     += populationParams->tempPopulation[i].conflicts;
     	populationParams->akkFitnessPoints += populationParams->tempPopulation[i].fitness;
@@ -411,7 +411,7 @@ void calcFitnessOnPopulation(params *populationParams){
 
 void mutatePopulation(params *populationParams){
     int i;
-    for(i = 0; i < populationParams->tempPopulationCount-1; i++){
+    for(i = 0; i < populationParams->tempPopulationCount; i++){
         if(shouldMutate()){
             mutate(&populationParams->tempPopulation[i], populationParams);
         }
@@ -427,23 +427,23 @@ void mergePopulation(params *populationParams){
         j++;
     }
     populationParams->tempPopulationCount = j;
-    memset(populationParams->childrens, '\0', (populationParams->childrensCount*sizeof(individual)));
+    memset(populationParams->childrens, '\0', (populationParams->childrensCount * sizeof(individual)));
     populationParams->childrensCount = 0;
 }
 
 void crossoverPopulation(params *populationParams){
    int i, countChildren=0;
-    for(i = 0; i < MAX_INDIVIDUALS-1; i++){
+    for(i = 0; i < MAX_INDIVIDUALS - 1; i++){
         crossover(
-                    &populationParams->childrens[i],
-                    &populationParams->childrens[i+1],
-                    &populationParams->individuals[i],
-                    &populationParams->individuals[i+1],
-                    populationParams
-                );
+            &populationParams->childrens[i],
+            &populationParams->childrens[i + 1],
+            &populationParams->individuals[i],
+            &populationParams->individuals[i + 1],
+            populationParams
+        );
         countChildren++;
     }
-    populationParams->childrensCount = countChildren+1;
+    populationParams->childrensCount = countChildren;
 }
 
 int generateInitialPopulation(params *populationParams){
@@ -498,7 +498,7 @@ int randomNumber(int min, int max){
  * @param n size of variables
  */
 void swapn(void *a, void *b, size_t n) {
-    int i;
+    size_t i;
     char *x = (char *)a,
          *y = (char *)b;
 

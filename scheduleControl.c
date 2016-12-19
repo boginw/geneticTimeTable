@@ -110,7 +110,7 @@ individual randomIndividual(params *populationParams){
  */
 int lectureOnDateTime(timetable t, int day, int hour){
 	int l;
-	for (l = 0; l < MAX_LECTURES; l++){
+	for (l = 0; l < t.lectureLength; l++){
 		if(t.lectures[l].init == 1 && t.lectures[l].l_datetime.dayOfWeek == day && t.lectures[l].l_datetime.hour == hour){
 			return l;
 		}
