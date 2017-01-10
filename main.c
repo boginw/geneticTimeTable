@@ -45,10 +45,10 @@
 #define NUM_OF_GEN                          8000
 #define KILL_SHIT_GEN                       4000
 
-#define FITNESS_FOR_CONFLICTS                600
+#define FITNESS_FOR_CONFLICTS                650
 #define FITNESS_FOR_NULL_HOURS               110
 #define FITNESS_FOR_PREPARATION_TIME          20
-#define FITNESS_FOR_CLASS_MIN_HOURS           10
+#define FITNESS_FOR_CLASS_MIN_HOURS           30
 #define FITNESS_FOR_TEACHERHOURS              20
 
 int debug = 0;
